@@ -1,0 +1,54 @@
+<h1>It is {{=it.name}}!</h1>
+<h2>"undefined" and "null" will be just ignored.</h2>
+No one wants to print "undefined" on his page.{{#def.not_defined_variable}}{{=it.not_defined_variable}}
+<h2>Include files</h2>
+Easy to include partitial file with all the enviroment variables.
+{{##def.caption:partitial#}}
+{{it.color="green";}}
+{{include part.hot}}
+<h2>Def overrides</h2>
+The last def set overrides the previous ones:
+{{##def.override:
+    <emp>
+        Bad...
+    </emp>
+#}}
+{{##def.override:
+    <emp>
+        Good!
+    </emp>
+#}}
+{{#def.override}}
+<h2>Run-time heredoc-like blocks</h2>
+Create runtime heredoc-like blocks:
+{{-it.slide:
+    <div>
+        <em>Slide1</em> content.
+        <ul>
+            <li>One</li>
+            <li>Two</li>
+        </ul>
+    </div>
+-}}
+{{-it.bc:gray-}}
+{{#def.slide_printer}}
+{{-it.slide:
+    <div>
+        <em>Slide2</em> content.
+        <ul>
+            <li>Three</li>
+            <li>Four</li>
+        </ul>
+    </div>
+-}}
+{{-it.bc:silver-}}
+{{#def.slide_printer}}
+
+{{##def.slide_printer:
+    <div style="background-color:{{=it.bc}};-moz-border-radius:40px;border-radius:40px;padding-left:40px;">
+        {{=it.slide}}
+    </div>
+#}}
+<h2>Global user defined functions (helpers)</h2>
+Define them once and use in any template.
+1+2+3={{=helpers.sum([1,2,3])}}<br>
