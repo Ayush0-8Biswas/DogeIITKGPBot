@@ -114,7 +114,7 @@ if (time2 < "05:00:00") {
 //══════════[ Module Export ]══════════//
 
 module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
-	let myText1, myText2, media, resu;
+	let myText1, myText2, media, resu, pemilik;
 	let njay;
 	let bio_user;
 	let pporang;
@@ -303,9 +303,9 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			}
 			WhatsappAPI.sendMessage(id, buttonMessage, MessageType.buttonsMessage, options)
 		}
-
+		let mhan;
 		const sendButImage = async (id, text1, desc1, gam1, but = [], options = {}) => {
-			mhan = await WhatsappAPI.prepareMessage(from, kma, image)
+			mhan = await WhatsappAPI.prepareMessage(from, gam1, image)
 			const buttonMessages = {
 				imageMessage: mhan.message.imageMessage,
 				contentText: text1,
@@ -2199,8 +2199,8 @@ Can request, if interested please contact the developer`
 					{
 						quoted: fgi,
 					})
-				const devsound = fs.readFileSync('./media/botdev.mp3')
-				WhatsappAPI.sendMessage(from, devsound, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
+				// const devsound = fs.readFileSync('./media/botdev.mp3')
+				// WhatsappAPI.sendMessage(from, devsound, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 				break
 			case 'sc':
 			case 'script':
