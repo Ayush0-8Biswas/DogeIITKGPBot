@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://www.bing.com/th?id=OIP.LWRtuUhbrMuFp8R9AMJ0gAHaIS&w=236&h=264&c=8&rs=1&qlt=90&o=6&dpr=1.25&pid=3.1&rm=2 />
+  <img src="https://clipground.com/images/iit-logo-2.png />
 </p>
 
 <p align="center">
