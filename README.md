@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-<strong>Doge IITKGP Bot V3</strong>
+<strong>Doge IITKGP Bot</strong>
 </p>
 
 </div>
