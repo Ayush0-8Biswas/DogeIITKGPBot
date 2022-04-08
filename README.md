@@ -57,8 +57,8 @@ heroku/nodejs
 * Any text editor
 ## `Clone Repo & Installation dependencies`
 ```bash
-🦄 git clone https://github.com/DGXeon/DogeBot.git
-🦄 cd DogeBot3
+🦄 git clone https://github.com/Ayush0-8Biswas/DogeIITKGPBot.git
+🦄 cd DogeIITKGPBot
 🦄 npm start
 ```
 ## `For Termux/Ssh/Ubuntu`
@@ -74,8 +74,8 @@ heroku/nodejs
 🦄 pkg install ffmpeg -y 
 🦄 pkg install wget
 🦄 pkg install imagemagick -y
-🦄 git clone https://github.com/DGXeon/DogeBot2
-🦄 cd DogeBot3
+🦄 git clone https://github.com/Ayush0-8Biswas/DogeIITKGPBot.git
+🦄 cd DogeIITKGPBot
 🦄 ls
 🦄 rm -rf session.json
 🦄 npm start
