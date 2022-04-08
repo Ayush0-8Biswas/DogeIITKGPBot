@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="https://media.tenor.com/images/55708181ec0e8ffa9b63f71a6b2ac2bd/tenor.gif" alt="animated" />
+  <img src="https://www.edufever.com/wp-content/uploads/2020/04/image-11.png">
 </p>
 
 <p align="center">
-<strong>Doge Bot V3</strong>
+<strong>Doge IITKGP Bot</strong>
 </p>
 
 </div>
@@ -12,10 +12,12 @@
 <a href="##"><img title="PUBLIC-BOT" src="https://img.shields.io/static/v1?label=Language&message=English&color=blue"></a>
 </p>
 <p align="center">
-  <a href="https://github.com/DGXeon"><img title="Developer" src="https://img.shields.io/badge/Author-Xeon-blue.svg?style=for-the-badge&logo=github" /></a>
+  <a href="https://github.com/Ayush0-8Biswas"><img title="Developer" src="https://img.shields.io/badge/author-Ayush--Biswas-blue.svg?style=for-the-badge&logo=github" /></a>
+  <p align="center">
+  <a href="https://github.com/gwydion67"><img title="Developer" src="https://img.shields.io/badge/sub--Author%20-Gwydion%20-blue.svg?style=for-the-badge&logo=github" /></a>
 </p>
 <p align="center">
-<a href="#"><img title="Xeon" src="https://img.shields.io/static/v1?label=WHATSAPP&message=Automated-Bot&color=blue"></a>
+<a href="#"><img title="Ayush0-8Biswas" src="https://img.shields.io/static/v1?label=WHATSAPP&message=Automated-Bot&color=blue"></a>
 </p>
 
 # Setup For Deployment 👇
@@ -29,13 +31,13 @@
 
 ## `CHANGE SESSION`
 
-[`Click Here`](https://github.com/DGXeon/DogeBot2/blob/master/session.json#L1)
+[`Click Here`](https://github.com/Ayush0-8Biswas/DogeBot2/blob/master/session.json#L1)
 
 ## `SETTINGS`
 
-- CHANGE OWNER NUMBER [Here](https://github.com/DGXeon/DogeBot3/blob/master/setting/setting.json#L6)
-- CHANGE OWNER NAME [Here](https://github.com/DGXeon/DogeBot3/blob/master/setting/setting.json#L7)
-- CHANGE BOT NAME [Here](https://github.com/DGXeon/DogeBot3/blob/master/setting/setting.json#L8)
+- CHANGE OWNER NUMBER [Here](https://github.com/Ayush0-8Biswas/DogeBot3/blob/master/setting/setting.json#L6)
+- CHANGE OWNER NAME [Here](https://github.com/Ayush0-8Biswas/DogeBot3/blob/master/setting/setting.json#L7)
+- CHANGE BOT NAME [Here](https://github.com/Ayush0-8Biswas/DogeBot3/blob/master/setting/setting.json#L8)
 
 ## ` BUILDPACKS`
 
@@ -57,8 +59,8 @@ heroku/nodejs
 * Any text editor
 ## `Clone Repo & Installation dependencies`
 ```bash
-🦄 git clone https://github.com/DGXeon/DogeBot.git
-🦄 cd DogeBot3
+🦄 git clone https://github.com/Ayush0-8Biswas/DogeIITKGPBot.git
+🦄 cd DogeIITKGPBot
 🦄 npm start
 ```
 ## `For Termux/Ssh/Ubuntu`
@@ -74,8 +76,8 @@ heroku/nodejs
 🦄 pkg install ffmpeg -y 
 🦄 pkg install wget
 🦄 pkg install imagemagick -y
-🦄 git clone https://github.com/DGXeon/DogeBot2
-🦄 cd DogeBot3
+🦄 git clone https://github.com/Ayush0-8Biswas/DogeIITKGPBot.git
+🦄 cd DogeIITKGPBot
 🦄 ls
 🦄 rm -rf session.json
 🦄 npm start
@@ -87,16 +89,17 @@ heroku/nodejs
 ## Connect With Me
 My Personal Chat👇
 <p align="center">
- <a href="https://wa.me/+916909137213"><img alt="WhatsApp Personal Chat" src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=black"/></a>
+ <a href="https://wa.me/+919734192003"><img alt="WhatsApp Personal Chat" src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=black"/></a>
 </p>
 
 My Whatsapp Group👇
 <p align="center">
- <a href="https://chat.whatsapp.com/HYj9wu5Jrv6CROxyeQbHoS"><img alt="WhatsApp Group" src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=black"/></a>
+ <a href="https://chat.whatsapp.com/CbdyN1Xpv1dC6sKpeTQ00F"><img alt="WhatsApp Group" src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=black"/></a>
 </p>
 
-* [`My Youtube Channel`](https://youtube.com/channel/UCvAo9TZ0Pw9vrJ_0WYRyO3A)
 
 # Thanks To 👇
 * [`Baileys`](https://github.com/adiwajshing/Baileys)
 * [`Xeon`](https://github.com/DGXeon)
+* [`Ayush0-8Biswas`](https://github.com/Ayush0-8Biswas)
+* [`gwydion67`](https://github.com/gwydion67)
