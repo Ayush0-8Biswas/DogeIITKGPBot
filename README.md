@@ -13,6 +13,8 @@
 </p>
 <p align="center">
   <a href="https://github.com/Ayush0-8Biswas"><img title="Developer" src="https://img.shields.io/badge/author-Ayush--Biswas-blue.svg?style=for-the-badge&logo=github" /></a>
+  <p align="center">
+  <a href="https://github.com/gwydion67"><img title="Developer" src="https://img.shields.io/badge/sub--Author%20-Gwydion%20-blue.svg?style=for-the-badge&logo=github" /></a>
 </p>
 <p align="center">
 <a href="#"><img title="Ayush0-8Biswas" src="https://img.shields.io/static/v1?label=WHATSAPP&message=Automated-Bot&color=blue"></a>
