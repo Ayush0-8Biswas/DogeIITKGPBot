@@ -54,12 +54,6 @@ const { uploadimg, upload } = require('./lib/uploadimg')
 const { uploadImages } = require('./lib/uploadimage')
 const { mediafireDl } = require('./lib/mediafire.js')
 
-//══════════[ Leveling and Rpg ]══════════//
-
-let { isLimit, limitAdd, getLimit, giveLimit, addBalance, kurangBalance, getBalance } = require("./lib/limit");
-let { checkPetualangUser, addInventori, addBesi, sellBesi, getBesi, addDm, sellDm, getDm, addEmas, sellEmas, getEmas, addFish, sellFish, getFish } = require("./lib/rpgfunction");
-let { addLevelingId, addLevelingLevel, addLevelingXp, getLevelingId, getLevelingLevel, getLevelingXp } = require("./lib/lvlfunction");
-
 //══════════[ Setting ]══════════//
 
 self = setting.self
