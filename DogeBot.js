@@ -1,23 +1,11 @@
 const
 	{
-		WAConnection,
 		MessageType,
 		Presence,
-		MessageOptions,
 		Mimetype,
-		WALocationMessage,
-		WA_MESSAGE_STUB_TYPES,
-		WA_DEFAULT_EPHEMERAL,
-		ReconnectMode,
-		ProxyAgent,
 		GroupSettingChange,
-		waChatKey,
-		mentionedJid,
-		processTime,
 	} = require("@adiwajshing/baileys")
-// const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-// const ffmpeg = require('fluent-ffmpeg');
-// ffmpeg.setFfmpegPath(ffmpegPath);
+
 const fs = require("fs")
 const axios = require('axios')
 const hx = require('hxz-api')
@@ -41,7 +29,7 @@ const { removeBackgroundFromImageFile } = require('remove.bg')
 
 //══════════[ Lib ]══════════//
 
-const { fetchJosn, fetchText, fetchJson } = require('./lib/fetcher')
+const {fetchJson } = require('./lib/fetcher')
 const { color, bgcolor } = require('./lib/color')
 const { wait, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, start, info, success, close } = require('./lib/functions')
 const setting = JSON.parse(fs.readFileSync('./setting/setting.json'))
@@ -53,12 +41,6 @@ const { pinterest } = require('./lib/pinterest')
 const { uploadimg, upload } = require('./lib/uploadimg')
 const { uploadImages } = require('./lib/uploadimage')
 const { mediafireDl } = require('./lib/mediafire.js')
-
-//══════════[ Leveling and Rpg ]══════════//
-
-let { isLimit, limitAdd, getLimit, giveLimit, addBalance, kurangBalance, getBalance } = require("./lib/limit");
-let { checkPetualangUser, addInventori, addBesi, sellBesi, getBesi, addDm, sellDm, getDm, addEmas, sellEmas, getEmas, addFish, sellFish, getFish } = require("./lib/rpgfunction");
-let { addLevelingId, addLevelingLevel, addLevelingXp, getLevelingId, getLevelingLevel, getLevelingXp } = require("./lib/lvlfunction");
 
 //══════════[ Setting ]══════════//
 
@@ -102,7 +84,6 @@ const exif = new Exif()
 
 const _antilink = JSON.parse(fs.readFileSync('./database/antilink.json'))
 const _antivirtex = JSON.parse(fs.readFileSync('./database/antivirtex.json'))
-const bad = JSON.parse(fs.readFileSync('./database/bad.json'))
 const setik = JSON.parse(fs.readFileSync('./database/setik.json'))
 const vien = JSON.parse(fs.readFileSync('./database/vien.json'))
 const imagi = JSON.parse(fs.readFileSync('./database/imagi.json'))
@@ -113,34 +94,36 @@ const imagi = JSON.parse(fs.readFileSync('./database/imagi.json'))
 
 // Anime variables //
 
-let animename, animeResponse, animeList, animeReply
+let animeName, animeResponse, animeList, animeReply
 
 
 
 
 const time2 = moment().tz('Asia/Kolkata').format('HH:mm:ss')
+let timeString;
 if (time2 < "23:59:00") {
-	var ucapanWaktu = 'Good night 🌌'
+	timeString = 'Good night 🌌';
 }
 if (time2 < "19:00:00") {
-	var ucapanWaktu = 'Good afternoon 🌆'
+	timeString = 'Good afternoon 🌆';
 }
 if (time2 < "18:00:00") {
-	var ucapanWaktu = 'Good afternoon 🌇'
+	timeString = 'Good afternoon 🌇';
 }
 if (time2 < "15:00:00") {
-	var ucapanWaktu = 'Good afternoon 🏞'
+	timeString = 'Good afternoon 🏞';
 }
 if (time2 < "11:00:00") {
-	var ucapanWaktu = 'Good morning 🌅'
+	timeString = 'Good morning 🌅';
 }
 if (time2 < "05:00:00") {
-	var ucapanWaktu = 'Good night 🏙'
+	timeString = 'Good night 🏙';
 }
 
 //══════════[ Module Export ]══════════//
 
 module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
+	let bio_user;
 	try {
 		if (!mek.hasNewMessage) return
 		mek = mek.messages.all()[0]
@@ -150,7 +133,24 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 		mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
 		const content = JSON.stringify(mek.message)
 		const from = mek.key.remoteJid
-		const { text, extendedText, contact, contactsArray, groupInviteMessage, listMessage, buttonsMessage, location, liveLocation, image, video, sticker, document, audio, product, quotedMsg } = MessageType
+		const {
+			text,
+			extendedText,
+			contact,
+			contactsArray,
+			groupInviteMessage,
+			listMessage,
+			buttonsMessage,
+			location,
+			liveLocation,
+			image,
+			video,
+			sticker,
+			document,
+			audio,
+			product,
+			quotedMsg
+		} = MessageType
 		const myTimezone = moment.tz('Asia/Kolkata').format('dddd') + ', ' + moment.tz('Asia/Kolkata').format('LL')
 		const time = moment().tz('Asia/Kolkata').format("HH:mm:ss")
 		const timeMak = moment().tz('Asia/Kolkata').format("HH:mm:ss");
@@ -176,22 +176,19 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 		const groupName = isGroup ? groupMetadata.subject : ''
 		const groupId = isGroup ? groupMetadata.jid : ''
 		const groupMembers = isGroup ? groupMetadata.participants : ''
-		const groupDesc = isGroup ? groupMetadata.desc : ''
-		const groupOwner = isGroup ? groupMetadata.owner : ''
 		const groupAdmins = isGroup ? getGroupAdmins(groupMembers) : ''
 		const isBotGroupAdmins = groupAdmins.includes(botNumber) || false
 		const isGroupAdmins = groupAdmins.includes(sender) || false
 		m = simple.smsg(WAapi, mek)
 		var pes = (type === 'conversation' && mek.message.conversation) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text ? mek.message.extendedTextMessage.text : ''
-		const messagesD = pes.slice(0).trim().split(/ +/).shift().toLowerCase()
-		const conts = mek.key.fromMe ? WAapi.user.jid : WAapi.contacts[sender] || { notify: jid.replace(/@.+/, '') }
+		pes.slice(0).trim().split(/ +/).shift().toLowerCase();
+		const conts = mek.key.fromMe ? WAapi.user.jid : WAapi.contacts[sender] || {notify: jid.replace(/@.+/, '')}
 		const pushname = mek.key.fromMe ? WAapi.user.name : conts.notify || conts.vname || conts.name || '-'
 
 		const isAntiLink = isGroup ? _antilink.includes(from) : false
 		const isWelkom = isGroup ? _welkom.includes(from) : false
 		const isAntiVirtex = isGroup ? _antivirtex.includes(from) : false
 		const isOwner = ownerNumber.includes(sender)
-		const isMybot = isOwner || mek.key.fromMe
 		let bio_nya = await WAapi.getStatus(sender)
 		try {
 			bio_user = `${bio_nya.status}`
@@ -212,7 +209,7 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 			WAapi.sendMessage(from, hasil, type, options).catch(e => {
 				fetch(link).then((hasil) => {
 					WAapi.sendMessage(from, hasil, type, options).catch(e => {
-						WAapi.sendMessage(from, { url: link }, type, options).catch(e => {
+						WAapi.sendMessage(from, {url: link}, type, options).catch(e => {
 							reply
 							console.log(e)
 						})
@@ -241,7 +238,7 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 					`ffmpeg -i ${filess} -vcodec libwebp -filter:v fps=fps=20 -lossless 1 -loop 0 -preset default -an -vsync 0 -s 512:512 ${asw}`,
 					(err) => {
 						let media = fs.readFileSync(asw);
-						WAapi.sendMessage(to, media, MessageType.sticker, { quoted: mek });
+						WAapi.sendMessage(to, media, MessageType.sticker, {quoted: mek});
 						fs.unlinkSync(filess);
 						fs.unlinkSync(asw);
 					}
@@ -264,7 +261,7 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 				let palak = './temp' + names + '.webp'
 				exec(`ffmpeg -i ${ajg} -vcodec libwebp -filter:v fps=fps=20 -lossless 1 -loop 0 -preset default -an -vsync 0 -s 512:512 ${palak}`, (err) => {
 					let media = fs.readFileSync(palak)
-					WAapi.sendMessage(from, media, MessageType.sticker, { quoted: mek })
+					WAapi.sendMessage(from, media, MessageType.sticker, {quoted: mek})
 					fs.unlinkSync(ajg)
 					fs.unlinkSync(palak)
 				});
@@ -368,11 +365,20 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 		//══════════[ Fake ]══════════//
 
 		const listmsg = (from, title, desc, list) => {
-			let po = WAapi.prepareMessageFromContent(from, { "listMessage": { "title": title, "description": desc, "buttonText": "𝗠𝗘𝗡𝗨", "footerText": `${myTimezone}`, "listType": "SINGLE_SELECT", "sections": list } }, {})
-			return WAapi.relayWAMessage(po, { waitForAck: true })
+			let po = WAapi.prepareMessageFromContent(from, {
+				"listMessage": {
+					"title": title,
+					"description": desc,
+					"buttonText": "𝗠𝗘𝗡𝗨",
+					"footerText": `${myTimezone}`,
+					"listType": "SINGLE_SELECT",
+					"sections": list
+				}
+			}, {})
+			return WAapi.relayWAMessage(po, {waitForAck: true})
 		}
 		const reply = (teks) => {
-			WAapi.sendMessage(from, teks, text, { quoted: mek })
+			WAapi.sendMessage(from, teks, text, {quoted: mek})
 		}
 		const sendMess = (hehe, teks) => {
 			WAapi.sendMessage(hehe, teks, text)
@@ -381,17 +387,44 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 			return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%.+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%+.~#?&/=]*)/, 'gi'))
 		}
 		const mentions = (teks, memberr, id) => {
-			(id == null || id == undefined || id == false) ? WAapi.sendMessage(from, teks.trim(), extendedText, { contextInfo: { "mentionedJid": memberr } }) : WAapi.sendMessage(from, teks.trim(), extendedText, { quoted: mek, contextInfo: { "mentionedJid": memberr } })
+			(id == null || id == undefined || id == false) ? WAapi.sendMessage(from, teks.trim(), extendedText, {contextInfo: {"mentionedJid": memberr}}) : WAapi.sendMessage(from, teks.trim(), extendedText, {
+				quoted: mek,
+				contextInfo: {"mentionedJid": memberr}
+			})
 		}
 		const costum = (pesan, tipe, target, target2) => {
-			WAapi.sendMessage(from, pesan, tipe, { quoted: { key: { fromMe: false, participant: `${target}`, ...(from ? { remoteJid: from } : {}) }, message: { conversation: `${target2}` } } })
+			WAapi.sendMessage(from, pesan, tipe, {
+				quoted: {
+					key: {
+						fromMe: false,
+						participant: `${target}`, ...(from ? {remoteJid: from} : {})
+					}, message: {conversation: `${target2}`}
+				}
+			})
 		}
 		// const ftrol = { key: { participant: '0@s.whatsapp.net' }, message: { orderMessage: { itemCount: 5555, status: 1, surface: 1, message: `${ucapanWaktu} ${pushname}`, orderTitle: `${ucapanWaktu} ${pushname}`, thumbnail: thumb, sellerJid: '0@s.whatsapp.net' } } }
 		// const floc = { key: { participant: '0@s.whatsapp.net' }, message: { liveLocationMessage: { caption: `${ucapanWaktu} ${pushname}`, jpegThumbnail: thumb } } }
 		// const fvid = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "6289643739077-1613049930@g.us" } : {}) }, message: { "videoMessage": { "title": `${ucapanWaktu} ${pushname}`, "h": `${ucapanWaktu} ${pushname}`, 'duration': '99999', 'caption': `${ucapanWaktu} ${pushname}`, 'jpegThumbnail': thumb } } }
 		// const fvoc = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "6289643739077-1613049930@g.us" } : {}) }, message: { "audioMessage": { "mimetype": "audio/ogg; codecs=opus", "seconds": "99999", "ptt": "true" } } }
-		const fgi = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "6289643739077-1613049930@g.us" } : {}) }, message: { "videoMessage": { "title": `${ucapanWaktu} ${pushname}`, "h": `${ucapanWaktu} ${pushname}`, 'duration': '99999', 'gifPlayback': 'true', 'caption': `${ucapanWaktu} ${pushname}`, 'jpegThumbnail': thumb } } }
-		const textImg = (teks) => { return WAapi.sendMessage(from, teks, text, { quoted: fgi, thumbnail: fs.readFileSync('./media/dogetb.jpg') }) }
+		const fgi = {
+			key: {
+				fromMe: false,
+				participant: `0@s.whatsapp.net`, ...(from ? {remoteJid: "6289643739077-1613049930@g.us"} : {})
+			},
+			message: {
+				"videoMessage": {
+					"title": `${timeString} ${pushname}`,
+					"h": `${timeString} ${pushname}`,
+					'duration': '99999',
+					'gifPlayback': 'true',
+					'caption': `${timeString} ${pushname}`,
+					'jpegThumbnail': thumb
+				}
+			}
+		}
+		const textImg = (teks) => {
+			return WAapi.sendMessage(from, teks, text, {quoted: fgi, thumbnail: fs.readFileSync('./media/dogetb.jpg')})
+		}
 		// const fakeitem = (teks) => { WAapi.sendMessage(from, teks, text, { quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "6289523258649-1604595598@g.us" } : {}) }, message: { "orderMessage": { "orderId": "174238614569481", "thumbnail": fs.readFileSync("./media/dogetb.jpg"), "itemCount": 9999999999, "status": "INQUIRY", "surface": "CATALOG", "message": `${ucapanWaktu} ${pushname}`, "token": "AR6xBKbXZn0Xwmu76Ksyd7rnxI+Rx87HfinVlW4lwXa6JA==" } } }, contextInfo: { "forwardingScore": 999, "isForwarded": true }, sendEphemeral: true }) }
 
 		//══════════[ Storage ]══════════//
@@ -420,7 +453,12 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 				if (mime.split("/")[0] === "audio") {
 					mime = Mimetype.mp4Audio
 				}
-				WAapi.sendMessage(to, media, type, { quoted: fgi, mimetype: mime, caption: text, contextInfo: { "mentionedJid": mids } })
+				WAapi.sendMessage(to, media, type, {
+					quoted: fgi,
+					mimetype: mime,
+					caption: text,
+					contextInfo: {"mentionedJid": mids}
+				})
 
 				fs.unlinkSync(filename)
 			});
@@ -439,7 +477,10 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 			for (let i of members) {
 				ane.push(i.jid)
 			}
-			WAapi.sendMessage(from, { text: text, jpegThumbnail: fs.readFileSync('media/dogepic1.jpg') }, 'extendedTextMessage', { contextInfo: { "mentionedJid": ane } })
+			WAapi.sendMessage(from, {
+				text: text,
+				jpegThumbnail: fs.readFileSync('media/dogepic1.jpg')
+			}, 'extendedTextMessage', {contextInfo: {"mentionedJid": ane}})
 		}
 		const hideTagKontak = async function (from, nomor, nama) {
 			let vcard = 'BEGIN:VCARD\n' + 'VERSION:3.0\n' + 'FN:' + nama + '\n' + 'ORG:Kontak\n' + 'TEL;type=CELL;type=VOICE;waid=' + nomor + ':+' + nomor + '\n' + 'END:VCARD'
@@ -449,11 +490,17 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 			for (let i of members) {
 				ane.push(i.jid)
 			}
-			WAapi.sendMessage(from, { displayname: nama, vcard: vcard }, MessageType.contact, { contextInfo: { "mentionedJid": ane } })
+			WAapi.sendMessage(from, {
+				displayname: nama,
+				vcard: vcard
+			}, MessageType.contact, {contextInfo: {"mentionedJid": ane}})
 		}
 		const sendKontak = (from, nomor, nama) => {
 			const vcard = 'BEGIN:VCARD\n' + 'VERSION:3.0\n' + 'FN:' + nama + '\n' + `ORG:Developer ${botname}\n` + 'TEL;type=CELL;type=VOICE;waid=' + nomor + ':+' + nomor + '\n' + 'END:VCARD'
-			WAapi.sendMessage(from, { displayname: nama, vcard: vcard }, MessageType.contact, { quoted: mek, contextInfo: { forwardingScore: 508, isForwarded: true } })
+			WAapi.sendMessage(from, {displayname: nama, vcard: vcard}, MessageType.contact, {
+				quoted: mek,
+				contextInfo: {forwardingScore: 508, isForwarded: true}
+			})
 		}
 
 		//══════════[ Automatic Reply ]══════════//
@@ -461,19 +508,19 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 		for (let anji of setik) {
 			if (budy === anji) {
 				result = fs.readFileSync(`./media/sticker/${anji}.webp`)
-				WAapi.sendMessage(from, result, sticker, { quoted: mek })
+				WAapi.sendMessage(from, result, sticker, {quoted: mek})
 			}
 		}
 		for (let anju of vien) {
 			if (budy === anju) {
 				result = fs.readFileSync(`./media/vn/${anju}.mp3`)
-				WAapi.sendMessage(from, result, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+				WAapi.sendMessage(from, result, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 			}
 		}
 		for (let anjh of imagi) {
 			if (budy === anjh) {
 				result = fs.readFileSync(`./media/image/${anjh}.jpg`)
-				WAapi.sendMessage(from, result, image, { quoted: mek })
+				WAapi.sendMessage(from, result, image, {quoted: mek})
 			}
 		}
 
@@ -486,7 +533,9 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 			var kic = `${sender.split("@")[0]}@s.whatsapp.net`
 			reply(` *「 GROUP LINK DETECTED 」*\nYou sent the group chat link, sorry you will be kicked from the group`)
 			setTimeout(() => {
-				WAapi.groupRemove(from, [kic]).catch((e) => { reply(`BOTS MUST BE ADMIN`) })
+				WAapi.groupRemove(from, [kic]).catch((e) => {
+					reply(`BOTS MUST BE ADMIN`)
+				})
 			}, 0)
 		}
 
@@ -530,10 +579,10 @@ module.exports = DogeXeonOP = async (WAapi, mek, _welkom) => {
 
 				timestampe = speed();
 				latensie = speed() - timestampe
-				const { wa_version, os_version } = WAapi.user.phone
+				const {wa_version, os_version} = WAapi.user.phone
 				pemilik = `${owner}@s.whatsapp.net`
 				menu =
-					`*_${ucapanWaktu} @${senderr.split('@')[0]}_*
+					`*_${timeString} @${senderr.split('@')[0]}_*
 
 ❏「 TIME 」
 ${icon1} *Date* : ${myTimezone}
@@ -562,7 +611,26 @@ ${icon1} *Status* : ${isOwner ? 'Owner' : 'User'}`
 					`_Please Select Button Below_
 _If You Are A Mod User_
 _Please Type ${prefix}command_`
-				WAapi.sendMessage(from, { contentText: `${teks}`, footerText: `${menu}`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'MENU 🗃️' }, type: 1 }, { buttonId: `${prefix}sc`, buttonText: { displayText: 'SCRIPT 📝' }, type: 1 }, { buttonId: `${prefix}developer`, buttonText: { displayText: 'DEVELOPER 👨🏼‍💻' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [senderr, pemilik] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${teks}`,
+					footerText: `${menu}`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'MENU 🗃️'},
+						type: 1
+					}, {
+						buttonId: `${prefix}sc`,
+						buttonText: {displayText: 'SCRIPT 📝'},
+						type: 1
+					}, {buttonId: `${prefix}developer`, buttonText: {displayText: 'DEVELOPER 👨🏼‍💻'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [senderr, pemilik]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'command':
 
@@ -643,7 +711,10 @@ _Please Type ${prefix}command_`
 						}],
 					listType: 1
 				}
-				WAapi.sendMessage(from, listMsg, MessageType.listMessage, { contextInfo: { mentionedJid: [senderr] }, quoted: fgi })
+				WAapi.sendMessage(from, listMsg, MessageType.listMessage, {
+					contextInfo: {mentionedJid: [senderr]},
+					quoted: fgi
+				})
 				break
 			case 'allmenu':
 
@@ -686,7 +757,22 @@ ${icon2} ${prefix}groupinfo
 ${icon2} ${prefix}grouplink
 ${icon2} ${prefix}onlinelist
 ${icon2} ${prefix}resetgrouplink`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'downloadmenu':
 
@@ -708,7 +794,22 @@ ${icon2} ${prefix}instagram _video link_
 ${icon2} ${prefix}herodetail _hero name_
 ${icon2} ${prefix}herolist
 ${icon2} ${prefix}lyrics _song name_`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'makermenu':
 
@@ -857,10 +958,25 @@ ${icon2} ${prefix}makerkaneki _Text1&Text2_
 ${icon2} ${prefix}rem _Text1&Text2_
 ${icon2} ${prefix}lolimaker _Text1&Text2_
 ${icon2} ${prefix}gura _Text1&Text2_`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
-			
-	
+
+
 			case 'animemenu':
 
 				menu =
@@ -871,7 +987,22 @@ ${icon2} ${prefix}gogoanime _Text_
 ${icon2} ${prefix}anime-planet _Text_
 
 `
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'stickermenu':
 
@@ -890,7 +1021,22 @@ ${icon2} ${prefix}semoji _Emoji_
 ${icon2} ${prefix}stcmemepic _Up Txt|Down Txt_
 ${icon2} ${prefix}stcmeme _Up Txt|Down Txt_
 ${icon2} ${prefix}memegenerator _Text_`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'funmenu':
 
@@ -920,7 +1066,22 @@ ${icon2} ${prefix}beautycheck [tag]
 ${icon2} ${prefix}gaycheck [tag]
 ${icon2} ${prefix}lesbiancheck [tag]
 ${icon2} ${prefix}charactercheck [tag]`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'soundmenu':
 
@@ -1000,7 +1161,22 @@ ${icon2} ${prefix}sound71
 ${icon2} ${prefix}sound72
 ${icon2} ${prefix}sound73
 ${icon2} ${prefix}sound74`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'ocrmenu':
 
@@ -1010,7 +1186,22 @@ ${icon2} ${prefix}sound74`
 ${icon2} ${prefix}ninjaname _Name_
 ${icon2} ${prefix}stylishcoolname
 ${icon2} ${prefix}ssweb _URL_`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'convertmenu':
 
@@ -1035,7 +1226,22 @@ ${icon2} ${prefix}tomp3 _reply video_
 ${icon2} ${prefix}toimg _reply sticker_
 ${icon2} ${prefix}tourl _reply image/vid_
 ${icon2} ${prefix}tts _code text_`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'searchmenu':
 
@@ -1047,7 +1253,22 @@ ${icon2} ${prefix}ytsearch _Query_
 ${icon2} ${prefix}pinterest _Query_
 ${icon2} ${prefix}googleimg _Query_
 ${icon2} ${prefix}google _Query_`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'apkmenu':
 
@@ -1062,7 +1283,22 @@ ${icon2} ${prefix}toraccino _Apk Name_
 ${icon2} ${prefix}uapkpro _Apk Name_
 ${icon2} ${prefix}apkmody _Apk Name_
 ${icon2} ${prefix}apkshub _Apk Name_`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'othermenu':
 
@@ -1077,7 +1313,22 @@ ${icon2} ${prefix}owner
 ${icon2} ${prefix}developer
 ${icon2} ${prefix}script
 ${icon2} ${prefix}delete _Reply to bot messages_`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'ownermenu':
 
@@ -1108,14 +1359,29 @@ ${icon2} ${prefix}clearall
 ${icon2} ${prefix}leaveall
 ${icon2} ${prefix}public
 ${icon2} ${prefix}self`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone}_*`,
+					buttons: [{
+						buttonId: `${prefix}command`,
+						buttonText: {displayText: 'BACK ⬅️'},
+						type: 1
+					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [sender]}
+					}
+				}, 'buttonsMessage')
 				break
 
 			//══════════[ RENT DLL ]══════════//
 
 			case 'rentbot':
 				menu =
-					`*${ucapanWaktu} @${senderr.split('@')[0]}*
+					`*${timeString} @${senderr.split('@')[0]}*
 
 \`\`\`OPEN FOR RENT :\`\`\`
 ➪ *1 Week :* _100INR_
@@ -1131,7 +1397,22 @@ ${icon2} ${prefix}self`
 
 For those who want to buy script or interested in any of the above
 Can request, if interested please contact the developer`
-				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone} - ${time}_*`, buttons: [{ buttonId: `${prefix}payment`, buttonText: { displayText: 'PAYMENT 💸' }, type: 1 }, { buttonId: `${prefix}developer`, buttonText: { displayText: 'DEVELOPER 👨🏼‍💻' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [senderr] } } }, 'buttonsMessage')
+				WAapi.sendMessage(from, {
+					contentText: `${menu}`,
+					footerText: `*_${myTimezone} - ${time}_*`,
+					buttons: [{
+						buttonId: `${prefix}payment`,
+						buttonText: {displayText: 'PAYMENT 💸'},
+						type: 1
+					}, {buttonId: `${prefix}developer`, buttonText: {displayText: 'DEVELOPER 👨🏼‍💻'}, type: 1}],
+					headerType: 'LOCATION',
+					locationMessage: {
+						degreesLatitude: '',
+						degreesLongitude: '',
+						jpegThumbnail: fakeimage,
+						contextInfo: {mentionedJid: [senderr]}
+					}
+				}, 'buttonsMessage')
 				break
 			case 'bayar':
 			case 'payment':
@@ -1142,8 +1423,8 @@ Can request, if interested please contact the developer`
 • Note: Talk to the owner before payment
 • FamPay : _Please scan the qr above_`
 				but = [
-					{ buttonId: `${prefix}menu`, buttonText: { displayText: 'MENU 🗃️' }, type: 1 },
-					{ buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }
+					{buttonId: `${prefix}menu`, buttonText: {displayText: 'MENU 🗃️'}, type: 1},
+					{buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}
 				]
 				sendButImage(from, menunya, `*_${myTimezone} - ${time}_*`, gambar, but)
 				break
@@ -1197,7 +1478,7 @@ Please Choose Whether Document, Audio or Video Below`
 				res = await mediafireDl(teks)
 				result = `In process...`
 				reply(result)
-				sendFileFromUrl(res[0].link, document, { mimetype: res[0].mime, filename: res[0].nama, quoted: mek })
+				sendFileFromUrl(res[0].link, document, {mimetype: res[0].mime, filename: res[0].nama, quoted: mek})
 				break
 			case 'fire1':
 				if (args.length < 1) return reply('Where is the link? ')
@@ -1206,7 +1487,7 @@ Please Choose Whether Document, Audio or Video Below`
 				res = await mediafireDl(teks)
 				result = `In process...`
 				reply(result)
-				sendFileFromUrl(res[0].link, video, { quoted: mek, mimetype: 'video/mp4', filename: res[0].output })
+				sendFileFromUrl(res[0].link, video, {quoted: mek, mimetype: 'video/mp4', filename: res[0].output})
 				break
 			case 'fire2':
 				if (args.length < 1) return reply('Where is the link? ')
@@ -1216,7 +1497,7 @@ Please Choose Whether Document, Audio or Video Below`
 				result = `Media Fire Downloader
   Wait for the Process of Sending Media......`
 				reply(result)
-				sendFileFromUrl(res[0].link, audio, { quoted: mek, mimetype: 'video/mp3', filename: res[0].output })
+				sendFileFromUrl(res[0].link, audio, {quoted: mek, mimetype: 'video/mp3', filename: res[0].output})
 				break
 			case 'spotify': {
 				if (args.length == 0) return reply(`Example: ${prefix + command} https://open.spotify.com/track/0ZEYRVISCaqz5yamWZWzaA`)
@@ -1229,9 +1510,13 @@ Please Choose Whether Document, Audio or Video Below`
 				ini_txt += `Popularity : ${get_result.popularity}\n`
 				ini_txt += `Preview : ${get_result.preview_url}\n`
 				thumbnail = await getBuffer(get_result.thumbnail)
-				await WAapi.sendMessage(from, thumbnail, image, { quoted: mek, caption: ini_txt })
+				await WAapi.sendMessage(from, thumbnail, image, {quoted: mek, caption: ini_txt})
 				get_audio = await getBuffer(get_result.link)
-				await WAapi.sendMessage(from, get_audio, audio, { mimetype: 'audio/mpeg', filename: `${get_result.title}.mp3`, quoted: mek })
+				await WAapi.sendMessage(from, get_audio, audio, {
+					mimetype: 'audio/mpeg',
+					filename: `${get_result.title}.mp3`,
+					quoted: mek
+				})
 			}
 				break
 			case 'soundcloud':
@@ -1248,16 +1533,24 @@ Please Choose Whether Document, Audio or Video Below`
 					txt += `*• Url  :* ${data.url}\n\n`
 					txt += `*Please wait a moment, in the process of delivery...*`
 					sendFileFromUrl(from, data.thumbnail, txt, mek)
-					WAapi.sendMessage(from, await getBuffer(data.medias[0].url), audio, { quoted: mek, mimetype: 'audio/mp4' })
+					WAapi.sendMessage(from, await getBuffer(data.medias[0].url), audio, {
+						quoted: mek,
+						mimetype: 'audio/mp4'
+					})
 				})
 				break
-			case 'telesticker': case 'telegramsticker': case 'tstiker': {
+			case 'telesticker':
+			case 'telegramsticker':
+			case 'tstiker': {
 				if (!q) return reply(`Example: ${prefix + command} *https://t.me/addstickers/geestickerpack*`)
 				if (!q.includes('t.me')) return reply('This is not a telegram sticker link')
 				var telestc = await zee.Telesticker(`${q}`)
 				await reply(mess.wait)
 				for (let i = 0; i < (telestc.length < 10 ? telestc.length : 10); i++) {
-					WAapi.sendMessage(from, await getBuffer(telestc[i].url), sticker, { mimetype: 'image/webp', quoted: mek })
+					WAapi.sendMessage(from, await getBuffer(telestc[i].url), sticker, {
+						mimetype: 'image/webp',
+						quoted: mek
+					})
 				}
 			}
 				break
@@ -1269,12 +1562,12 @@ Please Choose Whether Document, Audio or Video Below`
 				let nowem = q
 				zee.Ttdownloader(nowem)
 					.then(result => {
-						const { wm, nowm, audio } = result
+						const {wm, nowm, audio} = result
 						axios.get(`https://tinyurl.com/api-create.php?url=${nowm}`)
 							.then(async (a) => {
 								me = `*Link* : ${a.data}`
 								noweem = await getBuffer(nowm)
-								WAapi.sendMessage(from, noweem, MessageType.video, { mimetype: 'video/mp4', quoted: mek })
+								WAapi.sendMessage(from, noweem, MessageType.video, {mimetype: 'video/mp4', quoted: mek})
 							})
 					}).catch((err) => reply(`Invalid link`))
 
@@ -1286,12 +1579,12 @@ Please Choose Whether Document, Audio or Video Below`
 				let wem = args.join(' ')
 				zee.Ttdownloader(wem)
 					.then(result => {
-						const { wm, nowm, audio } = result
+						const {wm, nowm, audio} = result
 						axios.get(`https://tinyurl.com/api-create.php?url=${nowm}`)
 							.then(async (a) => {
 								me = `*Link* : ${a.data}`
 								weem = await getBuffer(wm)
-								WAapi.sendMessage(from, weem, MessageType.video, { mimetype: 'video/mp4', quoted: mek })
+								WAapi.sendMessage(from, weem, MessageType.video, {mimetype: 'video/mp4', quoted: mek})
 							})
 					}).catch((err) => reply(`Invalid link`))
 
@@ -1305,11 +1598,15 @@ Please Choose Whether Document, Audio or Video Below`
 				let audi = q
 				zee.Ttdownloader(audi)
 					.then(result => {
-						const { wm, nowm, audio } = result
+						const {wm, nowm, audio} = result
 						axios.get(`https://tinyurl.com/api-create.php?url=${audio}`)
 							.then(async (a) => {
 								audnha = await getBuffer(audio)
-								WAapi.sendMessage(from, audnha, MessageType.document, { mimetype: 'audio/mp4', filename: `Tiktok Music.mp3`, quoted: mek })
+								WAapi.sendMessage(from, audnha, MessageType.document, {
+									mimetype: 'audio/mp4',
+									filename: `Tiktok Music.mp3`,
+									quoted: mek
+								})
 							})
 					}).catch((err) => reply(`Invalid link`))
 
@@ -1318,7 +1615,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'igdl':
 			case 'instagram':
 				if (!c) return reply('The link?')
-				var { igDownloader } = require('./lib/igdown')
+				var {igDownloader} = require('./lib/igdown')
 				res = await igDownloader(`${c}`).catch(e => {
 					reply(mess.error.api)
 				})
@@ -1381,8 +1678,8 @@ Please Choose Whether Document, Audio or Video Below`
 				ply1 = `*Title:* ${ini.title}\n*Channel:* ${ini.channel}\n*View:* ${ini.views}\n*Publish Time:* ${ini.published}`
 				ply2 = `Please Select Media Below`
 				but = [
-					{ buttonId: `${prefix}mp3 ${args.join(" ")}`, buttonText: { displayText: 'MUSIC 🎵' }, type: 1 },
-					{ buttonId: `${prefix}mp4 ${args.join(" ")}`, buttonText: { displayText: 'VIDEO 📽️' }, type: 1 }
+					{buttonId: `${prefix}mp3 ${args.join(" ")}`, buttonText: {displayText: 'MUSIC 🎵'}, type: 1},
+					{buttonId: `${prefix}mp4 ${args.join(" ")}`, buttonText: {displayText: 'VIDEO 📽️'}, type: 1}
 				]
 				sendButLocation(from, ply1, ply2, thmb, but)
 				break
@@ -1391,14 +1688,14 @@ Please Choose Whether Document, Audio or Video Below`
 				bo = args.join(" ")
 				ini = await fetchJson(`https://apikey-bear3.herokuapp.com/api/yt/playmp4?query=${bo}&apikey=${KingOfBearKey}`)
 				mp4 = await getBuffer(ini.url)
-				WAapi.sendMessage(from, mp4, video, { quoted: mek, caption: `Here is your video🐶` })
+				WAapi.sendMessage(from, mp4, video, {quoted: mek, caption: `Here is your video🐶`})
 				break
 			case 'mp3':
 				reply(mess.wait)
 				bo = args.join(" ")
 				ini = await fetchJson(`https://apikey-bear3.herokuapp.com/api/yt/playmp3?query=${bo}&apikey=${KingOfBearKey}`)
 				mp3 = await getBuffer(ini.url)
-				WAapi.sendMessage(from, mp3, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+				WAapi.sendMessage(from, mp3, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 				break
 			case 'ytmp3':
 
@@ -1407,7 +1704,7 @@ Please Choose Whether Document, Audio or Video Below`
 				anump3 = await fetchJson(`https://apidhani.herokuapp.com/api/download/ytmp3?url=${url}&apikey=${dhakey}`)
 				ytmp3 = await getBuffer(anump3.result.url)
 				reply(`_Audio is being processed, please wait a while longer_`)
-				WAapi.sendMessage(from, ytmp3, audio, { mimetype: "audio/mp4", quoted: mek })
+				WAapi.sendMessage(from, ytmp3, audio, {mimetype: "audio/mp4", quoted: mek})
 				break
 			case 'ytmp4':
 
@@ -1416,7 +1713,7 @@ Please Choose Whether Document, Audio or Video Below`
 				anump4 = await fetchJson(`https://apidhani.herokuapp.com/api/download/ytmp4?url=${url}&apikey=${dhakey}`)
 				ytmp4 = await getBuffer(anump4.result.url)
 				reply(`_The video is being processed, please wait a few more moments_`)
-				WAapi.sendMessage(from, ytmp4, video, { caption: `Done✓`, thumbnail: Buffer.alloc(0), quoted: mek })
+				WAapi.sendMessage(from, ytmp4, video, {caption: `Done✓`, thumbnail: Buffer.alloc(0), quoted: mek})
 				break
 
 			//══════════[ INTAKE FEATURES ]══════════//
@@ -1569,43 +1866,43 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'exo':
 				reply(mess.wait)
 				getBuffer(`https://api.lolhuman.xyz/api/random/${command}?apikey=${Lolhumanbykur}`).then((gambar) => {
-					WAapi.sendMessage(from, gambar, image, { quoted: mek })
+					WAapi.sendMessage(from, gambar, image, {quoted: mek})
 				})
 				break
 			case 'fox':
 				anufox = await fetchJson(`https://some-random-api.ml/img/fox`)
 				anu1 = await getBuffer(anufox.link)
-				WAapi.sendMessage(from, anu1, image, { caption: `Here you go!`, quoted: mek })
+				WAapi.sendMessage(from, anu1, image, {caption: `Here you go!`, quoted: mek})
 				break
 			case 'dog':
 				anudog = await fetchJson(`https://some-random-api.ml/img/dog`)
 				anu1 = await getBuffer(anudog.link)
-				WAapi.sendMessage(from, anu1, image, { caption: `Here you go!`, quoted: mek })
+				WAapi.sendMessage(from, anu1, image, {caption: `Here you go!`, quoted: mek})
 				break
 			case 'cat':
 				anucat = await fetchJson(`https://some-random-api.ml/img/cat`)
 				anu1 = await getBuffer(anucat.link)
-				WAapi.sendMessage(from, anu1, image, { caption: `Here you go!`, quoted: mek })
+				WAapi.sendMessage(from, anu1, image, {caption: `Here you go!`, quoted: mek})
 				break
 			case 'panda':
 				anupanda = await fetchJson(`https://some-random-api.ml/img/panda`)
 				anu1 = await getBuffer(anupanda.link)
-				WAapi.sendMessage(from, anu1, image, { caption: `Here you go!`, quoted: mek })
+				WAapi.sendMessage(from, anu1, image, {caption: `Here you go!`, quoted: mek})
 				break
 			case 'panda1':
 				anupandao = await fetchJson(`https://some-random-api.ml/img/red_panda`)
 				anu1 = await getBuffer(anupandao.link)
-				WAapi.sendMessage(from, anu1, image, { caption: `Here you go!`, quoted: mek })
+				WAapi.sendMessage(from, anu1, image, {caption: `Here you go!`, quoted: mek})
 				break
 			case 'bird':
 				anubird = await fetchJson(`https://some-random-api.ml/img/birb`)
 				anu1 = await getBuffer(anubird.link)
-				WAapi.sendMessage(from, anu1, image, { caption: `Here you go!`, quoted: mek })
+				WAapi.sendMessage(from, anu1, image, {caption: `Here you go!`, quoted: mek})
 				break
 			case 'koala':
 				anukoala = await fetchJson(`https://some-random-api.ml/img/koala`)
 				anu1 = await getBuffer(anukoala.link)
-				WAapi.sendMessage(from, anu1, image, { caption: `Here you go!`, quoted: mek })
+				WAapi.sendMessage(from, anu1, image, {caption: `Here you go!`, quoted: mek})
 				break
 			case 'ppcp':
 			case 'ppcouple':
@@ -1729,12 +2026,12 @@ Please Choose Whether Document, Audio or Video Below`
 			case "anime-planet":
 				reply(mess.wait)
 				if (args.length == 0) return reply('What are you searching?')
-				animename = args.join(" ")
+				animeName = args.join(" ")
 
-				animeResponse = await fetchJson(`https://violetics.pw/api/anime/${command}?apikey=${viokey}&manga=${encodeURIComponent(animename)}`)
+				animeResponse = await fetchJson(`https://violetics.pw/api/anime/${command}?apikey=${viokey}&manga=${encodeURIComponent(animeName)}`)
 				animeList = animeResponse.result
 				animeReply = ``
-				
+
 				for (let i of animeList) {
 					if (i.name) animeReply += `*Name* : ${i.name}\n`
 					if (i.title) animeReply += `*Title* : ${i.title}\n`;
@@ -1745,7 +2042,7 @@ Please Choose Whether Document, Audio or Video Below`
 				}
 				reply(animeReply)
 				break
-	
+
 			//══════════[ RANDOM VIDEO ]══════════//
 
 			case 'beatvn':
@@ -1784,7 +2081,11 @@ Please Choose Whether Document, Audio or Video Below`
 				if (args.length == 0) return reply(`Example: ${prefix + command} Xeon`)
 				ini_txt = args.join(" ")
 				getBuffer(`https://api.lolhuman.xyz/api/ephoto1/${command}?apikey=${lolkey}&text=${ini_txt}`).then((gambar) => {
-					WAapi.sendMessage(from, gambar, image, { thumbnail: Buffer.alloc(0), caption: `Here you go!`, quoted: mek })
+					WAapi.sendMessage(from, gambar, image, {
+						thumbnail: Buffer.alloc(0),
+						caption: `Here you go!`,
+						quoted: mek
+					})
 				})
 				break
 			case 'blackpink':
@@ -1909,7 +2210,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anuapidhani = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/${command}?apikey=${dhakey}&text=${teks}`)
 				oke = await getBuffer(anuapidhani.result)
-				WAapi.sendMessage(from, oke, image, { quoted: mek, caption: 'Here u go!😛' })
+				WAapi.sendMessage(from, oke, image, {quoted: mek, caption: 'Here u go!😛'})
 				break
 			case 'hartatahta':
 
@@ -1917,7 +2218,7 @@ Please Choose Whether Document, Audio or Video Below`
 				teks = args.join(" ")
 				reply(mess.wait)
 				harta = await getBuffer(`https://apidhani.herokuapp.com/api/maker/harta-tahta?apikey=${dhakey}&text=${teks}`)
-				WAapi.sendMessage(from, harta, image, { quoted: mek, caption: 'Here u go!😛' })
+				WAapi.sendMessage(from, harta, image, {quoted: mek, caption: 'Here u go!😛'})
 				break
 
 			//----> 2 TEXT <----//
@@ -1931,7 +2232,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anubit = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/8bit?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anubit.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'pornhub':
 
@@ -1942,7 +2243,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anuphub = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/pornhub?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anuphub.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'glitch':
 
@@ -1953,7 +2254,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anuglitch = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/glitch?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anuglitch.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'glitch2':
 
@@ -1964,7 +2265,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anug2 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/glitch2?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anug2.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'layered':
 
@@ -1975,7 +2276,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anulayered = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/layered?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anulayered.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case '3dsteel':
 
@@ -1986,7 +2287,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anu3dstl = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/3dsteel?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anu3dstl.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'realistic':
 
@@ -1997,7 +2298,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anurlstc = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/realistic?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anurlstc.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'lionlogo':
 
@@ -2008,7 +2309,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anullo = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/lionlogo?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anullo.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'ninjalogo':
 
@@ -2019,7 +2320,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anunlogo = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/ninjalogo?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anunlogo.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'wolf':
 
@@ -2030,7 +2331,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anuwolf = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/logowolf?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anuwolf.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'wolf2':
 
@@ -2041,7 +2342,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anuw2 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/logowolf2?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anuw2.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'halloween3':
 
@@ -2052,7 +2353,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anuh3 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/halloween3?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anuh3.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'marvel':
 
@@ -2063,7 +2364,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anumvl = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/marvelstudio?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anumvl.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'marvel2':
 
@@ -2074,7 +2375,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anumvl2 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/marvelstudio2?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anumvl2.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'cinematichorror':
 
@@ -2085,7 +2386,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anucmcr = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/cinematichorror?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anucmcr.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'avengers':
 
@@ -2096,7 +2397,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anuavgr = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/avengerslogo?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anuavgr.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'graffiti3':
 
@@ -2107,7 +2408,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anugrf3 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/coolwallgraffiti?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anugrf3.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'captainamerica':
 
@@ -2118,7 +2419,7 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				anucaptainca = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/captainamerica?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anucaptainca.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'girlneko':
 
@@ -2128,7 +2429,7 @@ Please Choose Whether Document, Audio or Video Below`
 				var F2 = F.split("&")[1];
 				reply(mess.wait)
 				girlneko = await getBuffer(`https://apidhani.herokuapp.com/api/maker/girlneko?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlneko, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, girlneko, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'sadboy':
 
@@ -2138,7 +2439,7 @@ Please Choose Whether Document, Audio or Video Below`
 				var F2 = F.split("&")[1];
 				reply(mess.wait)
 				girlneko2 = await getBuffer(`https://apidhani.herokuapp.com/api/maker/sadboy?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlneko2, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, girlneko2, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'makerkaneki':
 
@@ -2148,7 +2449,7 @@ Please Choose Whether Document, Audio or Video Below`
 				var F2 = F.split("&")[1];
 				reply(mess.wait)
 				girlneko8383 = await getBuffer(`https://apidhani.herokuapp.com/api/maker/kaneki?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlneko8383, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, girlneko8383, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'rem':
 
@@ -2158,7 +2459,7 @@ Please Choose Whether Document, Audio or Video Below`
 				var F2 = F.split("&")[1];
 				reply(mess.wait)
 				girlneko11111 = await getBuffer(`https://apidhani.herokuapp.com/api/maker/rem?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlneko11111, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, girlneko11111, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'lolimaker':
 
@@ -2168,7 +2469,7 @@ Please Choose Whether Document, Audio or Video Below`
 				var F2 = F.split("&")[1];
 				reply(mess.wait)
 				girlnekojkjk = await getBuffer(`https://apidhani.herokuapp.com/api/maker/lolimaker?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlnekojkjk, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, girlnekojkjk, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'gura':
 
@@ -2178,7 +2479,7 @@ Please Choose Whether Document, Audio or Video Below`
 				var F2 = F.split("&")[1];
 				reply(mess.wait)
 				girlnekoooo = await getBuffer(`https://apidhani.herokuapp.com/api/maker/gura?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlnekoooo, image, { caption: `Here u go!😛`, quoted: mek })
+				WAapi.sendMessage(from, girlnekoooo, image, {caption: `Here u go!😛`, quoted: mek})
 				break
 			case 'wolf3':
 
@@ -2186,7 +2487,11 @@ Please Choose Whether Document, Audio or Video Below`
 				F = body.slice(6)
 				reply(mess.wait)
 				anuwolf3 = await getBuffer(`${ApiZeks}/api/wolflogo?apikey=${zeksApikey}&text1=zeeoneofc&text2=${F}`)
-				WAapi.sendMessage(from, anuwolf3, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it?`, quoted: mek })
+				WAapi.sendMessage(from, anuwolf3, image, {
+					thumbnail: Buffer.alloc(0),
+					caption: `OK it's done\n\nHow is it?`,
+					quoted: mek
+				})
 				break
 			case 't3d':
 
@@ -2194,7 +2499,11 @@ Please Choose Whether Document, Audio or Video Below`
 				F = body.slice(5)
 				reply(mess.wait)
 				anut3d = await getBuffer(`${ApiZeks}/api/text3dbox?apikey=${zeksApikey}&text=${F}`)
-				WAapi.sendMessage(from, anut3d, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
+				WAapi.sendMessage(from, anut3d, image, {
+					thumbnail: Buffer.alloc(0),
+					caption: `OK it's done\n\nHow is it? `,
+					quoted: mek
+				})
 				break
 			case 'logoa':
 
@@ -2204,7 +2513,11 @@ Please Choose Whether Document, Audio or Video Below`
 				var F2 = F.split("|")[1];
 				reply(mess.wait)
 				anulogoa = await getBuffer(`${ApiZeks}/api/logoaveng?text1=${F1}&text2=${F2}&apikey=${zeksApikey}`)
-				WAapi.sendMessage(from, anulogoa, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
+				WAapi.sendMessage(from, anulogoa, image, {
+					thumbnail: Buffer.alloc(0),
+					caption: `OK it's done\n\nHow is it? `,
+					quoted: mek
+				})
 				break
 			case 'phlogo':
 
@@ -2214,7 +2527,11 @@ Please Choose Whether Document, Audio or Video Below`
 				var F2 = F.split("|")[1];
 				reply(mess.wait)
 				anuphlogo = await getBuffer(`${ApiZeks}/api/phlogo?text1=${F1}&text2=${F2}&apikey=${zeksApikey}`)
-				WAapi.sendMessage(from, anuphlogo, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
+				WAapi.sendMessage(from, anuphlogo, image, {
+					thumbnail: Buffer.alloc(0),
+					caption: `OK it's done\n\nHow is it? `,
+					quoted: mek
+				})
 				break
 			case 'marvel3':
 
@@ -2224,28 +2541,44 @@ Please Choose Whether Document, Audio or Video Below`
 				var F2 = F.split("|")[1];
 				reply(mess.wait)
 				anumrvl3 = await getBuffer(`${ApiZeks}/api/marvellogo?text1=${F1}&text2=${F2}&apikey=${zeksApikey}`)
-				WAapi.sendMessage(from, anumrvl3, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
+				WAapi.sendMessage(from, anumrvl3, image, {
+					thumbnail: Buffer.alloc(0),
+					caption: `OK it's done\n\nHow is it? `,
+					quoted: mek
+				})
 				break
 			case 'leavest':
 				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
 				F = body.slice(9)
 				reply(mess.wait)
 				anulvst = await getBuffer(`${ApiZeks}/api/leavest?text=${F}&apikey=${zeksApikey}`)
-				WAapi.sendMessage(from, anulvst, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
+				WAapi.sendMessage(from, anulvst, image, {
+					thumbnail: Buffer.alloc(0),
+					caption: `OK it's done\n\nHow is it? `,
+					quoted: mek
+				})
 				break
 			case 'notewrite':
 				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
 				F = body.slice(7)
 				reply(mess.wait)
 				anunw = await getBuffer(`${ApiZeks}/api/nulis?text=${F}&apikey=${zeksApikey}`)
-				WAapi.sendMessage(from, anunw, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
+				WAapi.sendMessage(from, anunw, image, {
+					thumbnail: Buffer.alloc(0),
+					caption: `OK it's done\n\nHow is it? `,
+					quoted: mek
+				})
 				break
 			case 'neon2':
 				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
 				F = body.slice(7)
 				reply(mess.wait)
 				anunion2 = await getBuffer(`${ApiZeks}/api/bneon?apikey=${zeksApikey}&text=${F}`)
-				WAapi.sendMessage(from, anunion2, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
+				WAapi.sendMessage(from, anunion2, image, {
+					thumbnail: Buffer.alloc(0),
+					caption: `OK it's done\n\nHow is it? `,
+					quoted: mek
+				})
 				break
 
 			//══════════[ OTHER FEATURES ]══════════//
@@ -2261,7 +2594,7 @@ Please Choose Whether Document, Audio or Video Below`
 					+ `ORG: Owner Of Doge Bot ;\n`
 					+ `TEL;type=CELL;type=VOICE;waid=${owner}:${owner}\n`
 					+ 'END:VCARD'.trim()
-				WAapi.sendMessage(from, { displayName: `The owner ${botname}`, vcard: vcard2 }, contact,
+				WAapi.sendMessage(from, {displayName: `The owner ${botname}`, vcard: vcard2}, contact,
 					{
 						quoted: fgi,
 					})
@@ -2279,12 +2612,12 @@ Please Choose Whether Document, Audio or Video Below`
 					+ `ORG: Developer Of Doge Bot ;\n`
 					+ `TEL;type=CELL;type=VOICE;waid=${developerNo}:${developerNo}\n`
 					+ 'END:VCARD'.trim()
-				WAapi.sendMessage(from, { displayName: `The owner ${botname}`, vcard: vcard2 }, contact,
+				WAapi.sendMessage(from, {displayName: `The owner ${botname}`, vcard: vcard2}, contact,
 					{
 						quoted: fgi,
 					})
 				const devsound = fs.readFileSync('./media/botdev.mp3')
-				WAapi.sendMessage(from, devsound, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+				WAapi.sendMessage(from, devsound, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 				break
 			case 'sc':
 			case 'script':
@@ -2293,8 +2626,8 @@ Please Choose Whether Document, Audio or Video Below`
 				scpic = fs.readFileSync('./media/scpic.jpg')
 				scsell = `*🐶𝗗𝗼𝗴𝗲 𝗕𝗼𝘁 𝗩𝟯 𝗦𝗰𝗿𝗶𝗽𝘁🐶*\n\n_• 𝒀𝒐𝒖𝑻𝒖𝒃𝒆: https://youtube.com/channel/UCvAo9TZ0Pw9vrJ_0WYRyO3A_\n_• 𝑮𝒊𝒕𝑯𝒖𝒃: https://github.com/DGXeon/DogeBot3_\n\n_𝙄𝙛 𝙮𝙤𝙪 𝙬𝙞𝙨𝙝 𝙩𝙤 𝙗𝙪𝙮 𝙪𝙣𝙚𝙣𝙘𝙧𝙮𝙥𝙩𝙚𝙙 𝙨𝙘𝙧𝙞𝙥𝙩 𝙘𝙡𝙞𝙘𝙠 𝙤𝙣 𝙩𝙝𝙚 𝙗𝙪𝙮 𝙨𝙘𝙧𝙞𝙥𝙩 𝙗𝙪𝙩𝙩𝙤𝙣 𝙗𝙚𝙡𝙤𝙬._`
 				but = [
-					{ buttonId: `${prefix}rentbot`, buttonText: { displayText: 'BUY SCRIPT 💵' }, type: 1 },
-					{ buttonId: `${prefix}developer`, buttonText: { displayText: 'DEVELOPER 👨🏼‍💻' }, type: 1 }
+					{buttonId: `${prefix}rentbot`, buttonText: {displayText: 'BUY SCRIPT 💵'}, type: 1},
+					{buttonId: `${prefix}developer`, buttonText: {displayText: 'DEVELOPER 👨🏼‍💻'}, type: 1}
 				]
 				sendButImage(from, scsell, `*_${myTimezone} - ${time}_*`, scpic, but)
 				break
@@ -2313,7 +2646,11 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'del':
 			case 'delete':
 
-				WAapi.deleteMessage(from, { id: mek.message.extendedTextMessage.contextInfo.stanzaId, remoteJid: from, fromMe: true })
+				WAapi.deleteMessage(from, {
+					id: mek.message.extendedTextMessage.contextInfo.stanzaId,
+					remoteJid: from,
+					fromMe: true
+				})
 				break
 
 			//══════════[ SEARCH FEATURES ]══════════//
@@ -2341,7 +2678,7 @@ Please Choose Whether Document, Audio or Video Below`
 					kant += (`❒「  YtSearch  」\n• Title : ${i.title}\n• Views : ${i.views}\n• Uploaded On : ${i.ago}\n• Duration : ${i.timestamp}\n• Channel : ${i.author.name}\n• Video Link : ${i.url}\n\n\n`)
 				}
 				var akhir = kant.trim()
-				sendFileFromUrl(res.all[0].image, image, { quoted: mek, caption: akhir })
+				sendFileFromUrl(res.all[0].image, image, {quoted: mek, caption: akhir})
 				break
 			case 'pinterest':
 				if (!c) return reply('what are you looking for?')
@@ -2357,7 +2694,7 @@ Please Choose Whether Document, Audio or Video Below`
 				if (args.length < 1) return reply('What are you looking for??')
 				teks = args.join(' ')
 				reply(mess.wait)
-				res = await ggs({ 'query': `${teks}` })
+				res = await ggs({'query': `${teks}`})
 				kant = ``
 				for (let i of res) {
 					kant += `*Title* : ${i.title}
@@ -2374,14 +2711,17 @@ Please Choose Whether Document, Audio or Video Below`
 				reply(mess.wait)
 				teks = args.join(' ')
 				res = await googleImage(teks, google)
-				function google(error, result) {
-					if (error) { return reply('_[ ! ] Api Error Or Result Not Found_') }
-					else {
-						var gugIm = result
-						var random = gugIm[Math.floor(Math.random() * gugIm.length)].url
-						sendFileFromUrl(random, image, { quoted: mek, caption: `*Search Result :* ${teks}` })
-					}
+
+			function google(error, result) {
+				if (error) {
+					return reply('_[ ! ] Api Error Or Result Not Found_')
+				} else {
+					var gugIm = result
+					var random = gugIm[Math.floor(Math.random() * gugIm.length)].url
+					sendFileFromUrl(random, image, {quoted: mek, caption: `*Search Result :* ${teks}`})
 				}
+			}
+
 				break
 
 			//══════════[ APK FEATURES ]══════════//
@@ -2389,7 +2729,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'uapkpro':
 				if (args.length == 0) return reply(`Example: ${prefix + command} Bgmi`)
 				query = args.join(' ')
-				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/uapkpro?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, { method: 'get' })
+				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/uapkpro?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the steamkpro.org platform and provide the result data 」\n\n'
 				for (var x of kontol) {
@@ -2403,7 +2743,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'toraccino':
 				if (args.length == 0) return reply(`Example: ${prefix + command} Bgmi`)
 				query = args.join(' ')
-				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/toraccino?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, { method: 'get' })
+				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/toraccino?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Searching for Applications through the website and sending a data which is the result of the search! 」\n\n'
 				for (var x of kontol) {
@@ -2420,7 +2760,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'revdl':
 				if (args.length == 0) return reply(`Example: ${prefix + command} Bgmi`)
 				query = args.join(' ')
-				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/revdl?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, { method: 'get' })
+				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/revdl?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Searching for Applications through the website and sending a data which is the result of the search! 」\n\n'
 				for (var x of kontol) {
@@ -2433,7 +2773,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'hostapk':
 				if (args.length == 0) return reply(`Example: ${prefix + command} Bgmi`)
 				query = args.join(' ')
-				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/hostapk?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, { method: 'get' })
+				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/hostapk?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the hostapk.com website and provide data from the search results 」\n\n'
 				for (var x of kontol) {
@@ -2449,7 +2789,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'apkshub':
 				if (args.length == 0) return reply(`Example: ${prefix + command} Bgmi`)
 				query = args.join(' ')
-				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkshub?apps=${query}&apikey=cabd55849002ea851ce8`, { method: 'get' })
+				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkshub?apps=${query}&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the apkshub.com platform and provide the result data 」\n\n'
 				for (var x of kontol) {
@@ -2463,7 +2803,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'apkmody':
 				if (args.length == 0) return reply(`Example: ${prefix + command} Bgmi`)
 				query = args.join(' ')
-				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkmody?apps=${query}&apikey=cabd55849002ea851ce8`, { method: 'get' })
+				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkmody?apps=${query}&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the apkmody.io platform and provide the result data 」\n\n'
 				for (var x of kontol) {
@@ -2477,7 +2817,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'apkgoogle':
 				if (args.length == 0) return reply(`Example: ${prefix + command} Bgmi`)
 				query = args.join(' ')
-				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkgoogle?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, { method: 'get' })
+				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkgoogle?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the apkgoogle.org platform and provide the result data 」\n\n'
 				for (var x of kontol) {
@@ -2491,7 +2831,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'apkdone':
 				if (args.length == 0) return reply(`Example: ${prefix + command} Bgmi`)
 				query = args.join(' ')
-				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkdone?apps=${query}&apikey=cabd55849002ea851ce8`, { method: 'get' })
+				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkdone?apps=${query}&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the apkdone.com website and provide data from the search results 」\n\n'
 				for (var x of kontol) {
@@ -2581,7 +2921,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'sound73':
 			case 'sound74':
 				ini_buffer = await getBuffer(`https://github.com/saipulanuar/Api-Github/raw/main/sound/${command}.mp3`)
-				await WAapi.sendMessage(from, ini_buffer, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+				await WAapi.sendMessage(from, ini_buffer, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 				break
 
 			//══════════[ OCR FEATURES ]══════════//
@@ -2604,7 +2944,7 @@ Please Choose Whether Document, Audio or Video Below`
 				teks = q
 				anussweb = await fetchJson(`https://shot.screenshotapi.net/screenshot?&url=${teks}`)
 				buff = await getBuffer(anussweb.screenshot)
-				WAapi.sendMessage(from, buff, image, { quoted: mek, caption: teks })
+				WAapi.sendMessage(from, buff, image, {quoted: mek, caption: teks})
 				break
 
 			//══════════[ CONVERT FEATURES ]══════════//
@@ -2617,7 +2957,7 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(media)
 					if (err) return reply('Error!')
 					hah = fs.readFileSync(ran)
-					WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+					WAapi.sendMessage(from, hah, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2630,7 +2970,7 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(media)
 					if (err) return reply('Error!')
 					hah = fs.readFileSync(ran)
-					WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+					WAapi.sendMessage(from, hah, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2642,7 +2982,7 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(media)
 					if (err) return reply('Error!')
 					hah = fs.readFileSync(ran)
-					WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+					WAapi.sendMessage(from, hah, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2654,11 +2994,12 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(media)
 					if (err) return reply('Error!')
 					riu = fs.readFileSync(ran)
-					WAapi.sendMessage(from, riu, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+					WAapi.sendMessage(from, riu, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 					fs.unlinkSync(ran)
 				})
 				break
-			case 'slowmo': case 'slow': {
+			case 'slowmo':
+			case 'slow': {
 				try {
 					encmedia22 = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
 					media = await WAapi.downloadAndSaveMediaMessage(encmedia22)
@@ -2667,7 +3008,7 @@ Please Choose Whether Document, Audio or Video Below`
 						fs.unlinkSync(media)
 						if (err) return reply('Error!')
 						uhh = fs.readFileSync(ran)
-						WAapi.sendMessage(from, uhh, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+						WAapi.sendMessage(from, uhh, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 						fs.unlinkSync(ran)
 					})
 				} catch (e) {
@@ -2684,7 +3025,7 @@ Please Choose Whether Document, Audio or Video Below`
 						fs.unlinkSync(media)
 						if (err) return reply('Error!')
 						hah = fs.readFileSync(ran)
-						WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+						WAapi.sendMessage(from, hah, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 						fs.unlinkSync(ran)
 					})
 				} catch (e) {
@@ -2692,7 +3033,8 @@ Please Choose Whether Document, Audio or Video Below`
 				}
 			}
 				break
-			case 'vibra': case 'vibrato': {
+			case 'vibra':
+			case 'vibrato': {
 				encmedia33 = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
 				media = await WAapi.downloadAndSaveMediaMessage(encmedia33)
 				ran = getRandom('.mp3')
@@ -2700,7 +3042,7 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(media)
 					if (err) return reply('Error!')
 					hah = fs.readFileSync(ran)
-					WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+					WAapi.sendMessage(from, hah, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 					fs.unlinkSync(ran)
 				})
 			}
@@ -2715,7 +3057,7 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(core)
 					if (err) return reply('Error!')
 					hah = fs.readFileSync(ran)
-					WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', ptt: false, quoted: mek, ptt: true })
+					WAapi.sendMessage(from, hah, audio, {mimetype: 'audio/mp4', ptt: false, quoted: mek, ptt: true})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2724,7 +3066,12 @@ Please Choose Whether Document, Audio or Video Below`
 				mediam = await WAapi.downloadAndSaveMediaMessage(encmediam)
 				cokmatane = Number(args[0])
 				hah = fs.readFileSync(mediam)
-				WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', duration: cokmatane, ptt: true, quoted: mek })
+				WAapi.sendMessage(from, hah, audio, {
+					mimetype: 'audio/mp4',
+					duration: cokmatane,
+					ptt: true,
+					quoted: mek
+				})
 				fs.unlinkSync(mediam)
 				break
 			case 'vidsec':
@@ -2732,7 +3079,7 @@ Please Choose Whether Document, Audio or Video Below`
 				median = await WAapi.downloadAndSaveMediaMessage(encmedian)
 				cokmatane = Number(args[0])
 				hah = fs.readFileSync(median)
-				WAapi.sendMessage(from, hah, video, { mimetype: 'video/mp4', duration: cokmatane, quoted: mek })
+				WAapi.sendMessage(from, hah, video, {mimetype: 'video/mp4', duration: cokmatane, quoted: mek})
 				fs.unlinkSync(median)
 				break
 			case 'robot':
@@ -2743,7 +3090,12 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(medial)
 					if (err) return reply(mess.error.api)
 					hah = fs.readFileSync(ran)
-					WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', duration: 359996400, ptt: true, quoted: mek })
+					WAapi.sendMessage(from, hah, audio, {
+						mimetype: 'audio/mp4',
+						duration: 359996400,
+						ptt: true,
+						quoted: mek
+					})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2755,7 +3107,12 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(mediaz)
 					if (err) return ephe('Error!')
 					hah = fs.readFileSync(ran)
-					WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', ptt: true, duration: 359996400, quoted: mek })
+					WAapi.sendMessage(from, hah, audio, {
+						mimetype: 'audio/mp4',
+						ptt: true,
+						duration: 359996400,
+						quoted: mek
+					})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2767,7 +3124,12 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(mediau)
 					if (err) return reply('Error!')
 					hah = fs.readFileSync(ran)
-					WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', ptt: true, duration: 359996400, quoted: mek })
+					WAapi.sendMessage(from, hah, audio, {
+						mimetype: 'audio/mp4',
+						ptt: true,
+						duration: 359996400,
+						quoted: mek
+					})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2779,7 +3141,12 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(mediao)
 					if (err) return reply('Error!')
 					hah = fs.readFileSync(ran)
-					WAapi.sendMessage(from, hah, audio, { mimetype: 'audio/mp4', ptt: true, duration: 359996400, quoted: mek })
+					WAapi.sendMessage(from, hah, audio, {
+						mimetype: 'audio/mp4',
+						ptt: true,
+						duration: 359996400,
+						quoted: mek
+					})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2794,7 +3161,7 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(mediad)
 					if (err) return reply(mess.error.api)
 					mhee = fs.readFileSync(ran)
-					WAapi.sendMessage(from, mhee, audio, { mimetype: 'audio/mp4', ptt: true, quoted: mek })
+					WAapi.sendMessage(from, mhee, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2808,7 +3175,7 @@ Please Choose Whether Document, Audio or Video Below`
 					fs.unlinkSync(media)
 					if (err) return reply('Failed, when converting sticker to image')
 					buffer = fs.readFileSync(ran)
-					WAapi.sendMessage(from, buffer, image, { quoted: mek, caption: 'Here' })
+					WAapi.sendMessage(from, buffer, image, {quoted: mek, caption: 'Here'})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2816,7 +3183,7 @@ Please Choose Whether Document, Audio or Video Below`
 				try {
 					if (args.length > 1) {
 						const gtts = require('./lib/gtts')(args[0])
-						if (args.length < 2) return WAapi.sendMessage(from, 'Where is the text bro??', text, { quoted: mek })
+						if (args.length < 2) return WAapi.sendMessage(from, 'Where is the text bro??', text, {quoted: mek})
 						ngab = budy.slice(7)
 						ranm = getRandom('.mp3')
 						rano = getRandom('.ogg')
@@ -2827,7 +3194,7 @@ Please Choose Whether Document, Audio or Video Below`
 									fs.unlinkSync(ranm)
 									buff = fs.readFileSync(rano)
 									if (err) return reply('Failed bro:(')
-									WAapi.sendMessage(from, buff, audio, { quoted: mek, ptt: true })
+									WAapi.sendMessage(from, buff, audio, {quoted: mek, ptt: true})
 									fs.unlinkSync(rano)
 								})
 							})
@@ -2841,7 +3208,7 @@ Please Choose Whether Document, Audio or Video Below`
 								fs.unlinkSync(ranm)
 								buff = fs.readFileSync(rano)
 								if (err) return reply(mess.error.api)
-								WAapi.sendMessage(from, buff, audio, { quoted: mek, ptt: true })
+								WAapi.sendMessage(from, buff, audio, {quoted: mek, ptt: true})
 								fs.unlinkSync(rano)
 							})
 						})
@@ -2870,7 +3237,7 @@ Please Choose Whether Document, Audio or Video Below`
 				if (userLevel === undefined && userXp === undefined) return reply(ind.lvlnul())
 				const requiredXp = 5000 * (Math.pow(2, userLevel) - 1)
 				resul = `◪ *ʟᴇᴠᴇʟ*\n  ├─ ► 𝗡𝗮𝗺𝗲 : ${pushname}\n  ├─ ► 𝗥𝗮𝗻𝗸 : ${role}\n  ├─ ► 𝗫𝗣 : ${userXp}/${requiredXp}\n  └─ ► 𝗟𝗲𝘃𝗲𝗹 : ${userLevel}\n`
-				WAapi.sendMessage(from, resul, text, { quoted: mek })
+				WAapi.sendMessage(from, resul, text, {quoted: mek})
 					.catch(async (err) => {
 						console.error(err)
 						await reply(`Error!\n${err}`)
@@ -2888,7 +3255,7 @@ Please Choose Whether Document, Audio or Video Below`
 				}
 				profile = `╭─「 *💖ʏᴏᴜʀ ᴘʀᴏꜰɪʟᴇ💖* 」\n│• 𝗡𝗮𝗺𝗲 : ${pushname}\n│• 𝗡𝘂𝗺𝗯𝗲𝗿 : ${sender.split("@")[0]}\n│• 𝗕𝗶𝗼 : ${bio_user}\n│• 𝗫𝗣 : ${getLevelingXp(sender)}\n│• 𝗟𝗲𝘃𝗲𝗹 : ${getLevelingLevel(sender)}\n│• 𝗥𝗮𝗻𝗸 : ${role}\n│• 𝗣𝗠 : wa.me/${sender.split("@")[0]}\n╰──────────────────`
 				buffer = await getBuffer(ppimg)
-				WAapi.sendMessage(from, buffer, image, { quoted: mek, caption: profile })
+				WAapi.sendMessage(from, buffer, image, {quoted: mek, caption: profile})
 				break
 
 			//══════════[ STICKER FEATURES ]══════════//
@@ -2902,9 +3269,10 @@ Please Choose Whether Document, Audio or Video Below`
 				if (!c) return reply(`Where is the text bro?\nExample :\n${prefix}attp DogeBot`)
 				atetepe12 = await getBuffer(`https://violetics.pw/api/canvas/attp?apikey=${viokey}&text=${encodeURIComponent(c)}`)
 				if (!atetepe12) return reply("There's an error.");
-				WAapi.sendMessage(from, atetepe12, sticker, { quoted: mek })
+				WAapi.sendMessage(from, atetepe12, sticker, {quoted: mek})
 				break
-			case 'memegenerator': case 'memegen': {
+			case 'memegenerator':
+			case 'memegen': {
 				if (args.length < 1) return reply(`Reply to sticker with up and down text for example *${prefix + command}* top text|bottom text`)
 				if (!q.includes('|')) return reply(`Send orders *${prefix + command}* top text|bottom text`)
 				try {
@@ -2916,7 +3284,11 @@ Please Choose Whether Document, Audio or Video Below`
 					var mediiia = await WAapi.downloadMediaMessage(enmediaokekek)
 					var njay = await uploadImages(mediiia)
 					var resu = await getBuffer(`https://api.memegen.link/images/custom/${teks1}/${teks2}.png?background=${njay}`)
-					WAapi.sendMessage(from, resu, image, { caption: '.stikerin bang', thumbnail: Buffer.alloc(0), quoted: mek })
+					WAapi.sendMessage(from, resu, image, {
+						caption: '.stikerin bang',
+						thumbnail: Buffer.alloc(0),
+						quoted: mek
+					})
 					fs.unlinkSync(mediiia)
 				} catch (e) {
 					reply(mess.eror)
@@ -2924,7 +3296,12 @@ Please Choose Whether Document, Audio or Video Below`
 				}
 			}
 				break
-			case 'stickermeme': case 'memesticker': case 'memestick': case 'stickmeme': case 'stcmeme': case 'smeme': {
+			case 'stickermeme':
+			case 'memesticker':
+			case 'memestick':
+			case 'stickmeme':
+			case 'stcmeme':
+			case 'smeme': {
 				if (args.length < 1) return reply(`Send orders *${prefix + command}* DogeBot`)
 				if (q.includes('|')) return reply(`Reply to an image with a caption, For Example *${prefix + command}* Xeon`)
 				try {
@@ -2954,7 +3331,7 @@ Please Choose Whether Document, Audio or Video Below`
 				exif.create(packname, author, `takestick_${sender}`)
 				exec(`webpmux -set exif ./sticker/takestick_${sender}.exif ./sticker/${sender}.webp -o ./sticker/${sender}.webp`, async (error) => {
 					if (error) return reply(mess.error.api)
-					WAapi.sendMessage(from, fs.readFileSync(`./sticker/${sender}.webp`), sticker, { quoted: mek })
+					WAapi.sendMessage(from, fs.readFileSync(`./sticker/${sender}.webp`), sticker, {quoted: mek})
 					fs.unlinkSync(media2)
 					fs.unlinkSync(`./sticker/takestick_${sender}.exif`)
 				})
@@ -2982,7 +3359,7 @@ Please Choose Whether Document, Audio or Video Below`
 							console.log('Finish')
 							exec(`webpmux -set exif ./sticker/stickwm_${sender}.exif ./sticker/${sender}.webp -o ./sticker/${sender}.webp`, async (error) => {
 								if (error) return reply(mess.error.api)
-								WAapi.sendMessage(from, fs.readFileSync(`./sticker/${sender}.webp`), sticker, { quoted: mek })
+								WAapi.sendMessage(from, fs.readFileSync(`./sticker/${sender}.webp`), sticker, {quoted: mek})
 								fs.unlinkSync(media)
 								fs.unlinkSync(`./sticker/${sender}.webp`)
 								fs.unlinkSync(`./sticker/stickwm_${sender}.exif`)
@@ -3015,7 +3392,7 @@ Please Choose Whether Document, Audio or Video Below`
 							console.log('Finish')
 							exec(`webpmux -set exif ./sticker/stickwm_${sender}.exif ./sticker/${sender}.webp -o ./sticker/${sender}.webp`, async (error) => {
 								if (error) return reply(mess.error.api)
-								WAapi.sendMessage(from, fs.readFileSync(`./sticker/${sender}.webp`), sticker, { quoted: ftex })
+								WAapi.sendMessage(from, fs.readFileSync(`./sticker/${sender}.webp`), sticker, {quoted: ftex})
 								fs.unlinkSync(media)
 								fs.unlinkSync(`./sticker/${sender}.webp`)
 								fs.unlinkSync(`./sticker/stickwm_${sender}.exif`)
@@ -3058,7 +3435,7 @@ Please Choose Whether Document, Audio or Video Below`
 						})
 						.on('end', function () {
 							console.log('Finish')
-							WAapi.sendMessage(from, fs.readFileSync(ran), sticker, { quoted: mek })
+							WAapi.sendMessage(from, fs.readFileSync(ran), sticker, {quoted: mek})
 							fs.unlinkSync(media)
 							fs.unlinkSync(ran)
 						})
@@ -3083,7 +3460,7 @@ Please Choose Whether Document, Audio or Video Below`
 						})
 						.on('end', function () {
 							console.log('Finish')
-							WAapi.sendMessage(from, fs.readFileSync(ran), sticker, { quoted: mek })
+							WAapi.sendMessage(from, fs.readFileSync(ran), sticker, {quoted: mek})
 							fs.unlinkSync(media)
 							fs.unlinkSync(ran)
 						})
@@ -3094,7 +3471,8 @@ Please Choose Whether Document, Audio or Video Below`
 					reply(`Send a picture with a caption ${prefix}sticker\nVideo Sticker Duration 1-9 Seconds`)
 				}
 				break
-			case 'stcmemepic': case 'stickermemepic':
+			case 'stcmemepic':
+			case 'stickermemepic':
 
 				if (args.length < 1) return reply(`Send orders *${prefix + command}* top text|bottom text`)
 				if (!q.includes('|')) return reply(`Send orders *${prefix + command}* top text|bottom text`)
@@ -3108,7 +3486,7 @@ Please Choose Whether Document, Audio or Video Below`
 					var media = await WAapi.downloadAndSaveMediaMessage(enmediahe1)
 					var njay = await imgbb('520bd6f6209077d1777c2a4f20c509c2', media)
 					var resu = await getBuffer(`https://api.memegen.link/images/custom/${teks1}/${teks2}.png?background=${njay.display_url}`)
-					WAapi.sendMessage(from, resu, image, { quoted: mek })
+					WAapi.sendMessage(from, resu, image, {quoted: mek})
 					fs.unlinkSync(media)
 				} catch (e) {
 					return reply(`${e}`)
@@ -3122,25 +3500,25 @@ Please Choose Whether Document, Audio or Video Below`
 				rate = body.slice(1)
 				const ra = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '100']
 				const te = ra[Math.floor(Math.random() * ra.length)]
-				WAapi.sendMessage(from, 'Question : *' + rate + '*\n\nAnswer : ' + te + '%', text, { quoted: mek })
+				WAapi.sendMessage(from, 'Question : *' + rate + '*\n\nAnswer : ' + te + '%', text, {quoted: mek})
 				break
 			case 'can':
 				bisakah = body.slice(1)
 				const bisa = ['Can', 'Cant', 'Try again', 'Are you dreaming?', 'Are you sure you can?']
 				const keh = bisa[Math.floor(Math.random() * bisa.length)]
-				WAapi.sendMessage(from, 'Question : *' + bisakah + '*\n\nAnswer : ' + keh, text, { quoted: mek })
+				WAapi.sendMessage(from, 'Question : *' + bisakah + '*\n\nAnswer : ' + keh, text, {quoted: mek})
 				break
 			case 'when':
 				kapankah = body.slice(1)
 				const kapan = ['Tomorrow', 'The day after tomorrow', 'Earlier', '4 Days', '5 Days', '6 Days', '1 Week Again', '2 Weeks Again', '3 Weeks Again', '1 Month Again', '2 Months', '3 Months', '4 Months', '5 Months', '6 Months Again']
 				const koh = kapan[Math.floor(Math.random() * kapan.length)]
-				WAapi.sendMessage(from, 'Question : *' + kapankah + '*\n\nAnswer : ' + koh, text, { quoted: mek })
+				WAapi.sendMessage(from, 'Question : *' + kapankah + '*\n\nAnswer : ' + koh, text, {quoted: mek})
 				break
 			case 'is':
 				apakah = body.slice(1)
 				const apa = ['Yes', 'No', 'Could be', 'I dont know lmao', 'Ask the Chicken']
 				const kah = apa[Math.floor(Math.random() * apa.length)]
-				WAapi.sendMessage(from, 'Question : *' + apakah + '*\n\nAnswer : ' + kah, text, { quoted: mek })
+				WAapi.sendMessage(from, 'Question : *' + apakah + '*\n\nAnswer : ' + kah, text, {quoted: mek})
 				break
 			case 'stupid':
 			case 'foolish':
@@ -3164,7 +3542,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case 'topibaaz':
 			case 'nerd':
 			case 'hot':
-			// case 'sexy':
+				// case 'sexy':
 				if (!isGroup) return reply(mess.only.group)
 				membr = []
 				const pff = groupMembers
@@ -3173,7 +3551,7 @@ Please Choose Whether Document, Audio or Video Below`
 				const oe = go[Math.floor(Math.random() * go.length)]
 				teks = `*The most ${command} here is:* @${goo.jid.split('@')[0]}`
 				membr.push(goo.jid)
-				mentions(teks, membr, true, { quoted: mek })
+				mentions(teks, membr, true, {quoted: mek})
 				break
 			case "couple":
 				jds = []
@@ -3190,19 +3568,19 @@ Please Choose Whether Document, Audio or Video Below`
 				ganteng = body.slice(1)
 				const gan = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '100']
 				const teng = gan[Math.floor(Math.random() * gan.length)]
-				WAapi.sendMessage(from, 'Question : *' + ganteng + '*\n\nAnswer : ' + teng + '%', text, { quoted: mek })
+				WAapi.sendMessage(from, 'Question : *' + ganteng + '*\n\nAnswer : ' + teng + '%', text, {quoted: mek})
 				break
 			case 'beautycheck':
 				cantik = body.slice(1)
 				const can = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '100']
 				const tik = can[Math.floor(Math.random() * can.length)]
-				WAapi.sendMessage(from, 'Question : *' + cantik + '*\n\nAnswer : ' + tik + '%', text, { quoted: mek })
+				WAapi.sendMessage(from, 'Question : *' + cantik + '*\n\nAnswer : ' + tik + '%', text, {quoted: mek})
 				break
 			case 'charactercheck':
 				watak = body.slice(1)
 				const wa = ['Compassionate', 'Generous', 'Grumpy', 'Forgiving', 'Obedient', 'Good', 'Simp', 'Kind-Hearted', 'patient', 'UwU', 'top, anyway', 'Helpful', 'chutiya', 'topibaaz', 'pro-comder', 'dassi', 'panji', 'bhakt']
 				const tak = wa[Math.floor(Math.random() * wa.length)]
-				WAapi.sendMessage(from, 'Question : *' + watak + '*\n\nAnswer : ' + tak, text, { quoted: mek })
+				WAapi.sendMessage(from, 'Question : *' + watak + '*\n\nAnswer : ' + tak, text, {quoted: mek})
 				break
 
 			case "girl":
@@ -3213,7 +3591,7 @@ Please Choose Whether Document, Audio or Video Below`
 				membr = []
 				teks = `*Ask  @${foo.jid.split('@')[0]} if she is ready for you....*`
 				membr.push(foo.jid)
-				mentions(teks, membr, true, { quoted: mek })
+				mentions(teks, membr, true, {quoted: mek})
 				break
 			case "boy":
 				if (!isGroup) return reply(mess.only.group)
@@ -3223,7 +3601,7 @@ Please Choose Whether Document, Audio or Video Below`
 				membr = []
 				teks = `*Ask  @${khoo.jid.split('@')[0]} if he is ready for you....*`
 				membr.push(khoo.jid)
-				mentions(teks, membr, true, { quoted: mek })
+				mentions(teks, membr, true, {quoted: mek})
 				break
 
 			//══════════[ OWNER FEATURES ]══════════//
@@ -3237,7 +3615,10 @@ Please Choose Whether Document, Audio or Video Below`
 					const encmediaboomb = isQuotedImage ? JSON.parse(JSON.stringify(WAapi).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : WAapi
 					bc100 = await WAapi.downloadMediaMessage(encmediaboomb)
 					for (let _ of anu100) {
-						WAapi.sendMessage(_.jid, bc100, image, { quoted: fgi, caption: `*「 Doge Bot Broadcast 」*\n\n${body.slice(4)}` })
+						WAapi.sendMessage(_.jid, bc100, image, {
+							quoted: fgi,
+							caption: `*「 Doge Bot Broadcast 」*\n\n${body.slice(4)}`
+						})
 					}
 					reply('Broadcast success')
 				} else {
@@ -3273,21 +3654,26 @@ Please Choose Whether Document, Audio or Video Below`
 					const encmedia12345 = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					buff = await WAapi.downloadMediaMessage(encmedia12345)
 					for (let _ of anubc2) {
-						WAapi.sendMessage(_.jid, buff, image, { viewOnce: true, caption: `${body.slice(4)}` })
+						WAapi.sendMessage(_.jid, buff, image, {viewOnce: true, caption: `${body.slice(4)}`})
 					}
 					reply(`Broadcast success ${body.slice(4)}`)
 				} else if (isMedia && !mek.message.videoMessage || isQuotedVideo) {
 					const encmediaki = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					buff = await WAapi.downloadMediaMessage(encmediaki)
 					for (let _ of anubc2) {
-						WAapi.sendMessage(_.jid, buff, video, { viewOnce: true, caption: `${body.slice(4)}` })
+						WAapi.sendMessage(_.jid, buff, video, {viewOnce: true, caption: `${body.slice(4)}`})
 					}
 					reply(`Broadcast success ${body.slice(4)}`)
 				} else if (isMedia && !mek.message.videoMessage || isQuotedVideo) {
 					const encmediadirk = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					buff = await WAapi.downloadMediaMessage(encmediadirk)
 					for (let _ of anubc2) {
-						WAapi.sendMessage(_.jid, buff, video, { mimetype: Mimetype.gif, quoted: finv, contextInfo: { forwardingScore: 508, isForwarded: true }, caption: `${body.slice(4)}` })
+						WAapi.sendMessage(_.jid, buff, video, {
+							mimetype: Mimetype.gif,
+							quoted: finv,
+							contextInfo: {forwardingScore: 508, isForwarded: true},
+							caption: `${body.slice(4)}`
+						})
 					}
 					reply(`Broadcast success ${body.slice(4)}`)
 				} else {
@@ -3305,7 +3691,7 @@ Please Choose Whether Document, Audio or Video Below`
 					const encmediabcgc = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					bcgc = await WAapi.downloadMediaMessage(encmediabcgc)
 					for (let _ of groupMembers) {
-						WAapi.sendMessage(_.jid, bcgc, image, { caption: `*「 DOGE BOT BROADCAST 」*\n*Group* : ${groupName}\n\n${body.slice(6)}` })
+						WAapi.sendMessage(_.jid, bcgc, image, {caption: `*「 DOGE BOT BROADCAST 」*\n*Group* : ${groupName}\n\n${body.slice(6)}`})
 					}
 					reply('')
 				} else {
@@ -3430,7 +3816,11 @@ Please Choose Whether Document, Audio or Video Below`
 					if (!Number(args[0])) return reply('Amount must be a number!')
 					if (Number(args[0]) >= 50) return reply('Max 50!')
 					for (let i = 0; i < args[0]; i++) {
-						WAapi.sendMessage(from, anu2spem2, audio, { mimetype: 'audio/mp4', duration: 359996400, ptt: true })
+						WAapi.sendMessage(from, anu2spem2, audio, {
+							mimetype: 'audio/mp4',
+							duration: 359996400,
+							ptt: true
+						})
 					}
 				} else if (isQuotedImage) {
 					boij = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
@@ -3441,7 +3831,7 @@ Please Choose Whether Document, Audio or Video Below`
 					if (Number(oi2) >= 50) return reply('Max 50!')
 					if (!Number(oi2)) return reply('Amount must be a number!')
 					for (let i = 0; i < oi2; i++) {
-						WAapi.sendMessage(from, delb, MessageType.image, { caption: oi1 })
+						WAapi.sendMessage(from, delb, MessageType.image, {caption: oi1})
 					}
 				}
 				break
@@ -3474,7 +3864,7 @@ Please Choose Whether Document, Audio or Video Below`
 				vien.push(`${nm}`)
 				fs.writeFileSync(`./media/vn/${nm}.mp3`, delb)
 				fs.writeFileSync('./database/vien.json', JSON.stringify(vien))
-				WAapi.sendMessage(from, `Success, please check with *${prefix}vnlist*`, MessageType.text, { quoted: mek })
+				WAapi.sendMessage(from, `Success, please check with *${prefix}vnlist*`, MessageType.text, {quoted: mek})
 				break
 			case 'delvn':
 				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
@@ -3496,7 +3886,7 @@ Please Choose Whether Document, Audio or Video Below`
 					teks += `- ${awokwkwk}\n`
 				}
 				teks += `\n*Total : ${vien.length}*\n\n_To retrieve the vn, please reply to this message with the caption of the vn name_`
-				WAapi.sendMessage(from, teks.trim(), extendedText, { quoted: mek, contextInfo: { "mentionedJid": vien } })
+				WAapi.sendMessage(from, teks.trim(), extendedText, {quoted: mek, contextInfo: {"mentionedJid": vien}})
 				break
 			case 'addimage':
 				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
@@ -3508,7 +3898,7 @@ Please Choose Whether Document, Audio or Video Below`
 				imagi.push(`${nm}`)
 				fs.writeFileSync(`./media/image/${nm}.jpg`, delb)
 				fs.writeFileSync('./database/imagi.json', JSON.stringify(imagi))
-				WAapi.sendMessage(from, `Success, please check with *${prefix}imglist*`, MessageType.text, { quoted: mek })
+				WAapi.sendMessage(from, `Success, please check with *${prefix}imglist*`, MessageType.text, {quoted: mek})
 				break
 			case 'delimage':
 				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
@@ -3530,7 +3920,7 @@ Please Choose Whether Document, Audio or Video Below`
 					teks += `- ${awokwkwk}\n`
 				}
 				teks += `\n*Total : ${imagi.length}*\n\n_To take a picture, please reply to this message with the caption of the image name_`
-				WAapi.sendMessage(from, teks.trim(), extendedText, { quoted: mek, contextInfo: { "mentionedJid": imagi } })
+				WAapi.sendMessage(from, teks.trim(), extendedText, {quoted: mek, contextInfo: {"mentionedJid": imagi}})
 				break
 			case 'addsticker':
 				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
@@ -3542,7 +3932,7 @@ Please Choose Whether Document, Audio or Video Below`
 				setik.push(`${nm}`)
 				fs.writeFileSync(`./media/sticker/${nm}.webp`, delb)
 				fs.writeFileSync('./database/setik.json', JSON.stringify(setik))
-				WAapi.sendMessage(from, `Success, please check with *${prefix}liststicker*`, MessageType.text, { quoted: mek })
+				WAapi.sendMessage(from, `Success, please check with *${prefix}liststicker*`, MessageType.text, {quoted: mek})
 				break
 			case 'delsticker':
 				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
@@ -3564,7 +3954,7 @@ Please Choose Whether Document, Audio or Video Below`
 					teks += `- ${awokwkwk}\n`
 				}
 				teks += `\n*Total : ${setik.length}*\n\n_To take a sticker, please reply to this message with the caption of the sticker name_`
-				WAapi.sendMessage(from, teks.trim(), extendedText, { quoted: mek, contextInfo: { "mentionedJid": setik } })
+				WAapi.sendMessage(from, teks.trim(), extendedText, {quoted: mek, contextInfo: {"mentionedJid": setik}})
 				break
 				break
 
@@ -3601,7 +3991,7 @@ Please Choose Whether Document, Audio or Video Below`
 				mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid[0]
 				pictt = await WAapi.getProfilePicture(mentioned)
 				pict = await getBuffer(pictt)
-				WAapi.sendMessage(from, pict, image, { quoted: mek })
+				WAapi.sendMessage(from, pict, image, {quoted: mek})
 				break
 			case 'getname':
 				var ambl = mek.message.extendedTextMessage.contextInfo.participant
@@ -3622,7 +4012,7 @@ Please Choose Whether Document, Audio or Video Below`
 				if (!isGroup) return reply(mess.only.group)
 				anugetdescgc = from
 				metadete = await WAapi.groupMetadata(anugetdescgc)
-				WAapi.sendMessage(from, metadete.desc, text, { quoted: mek })
+				WAapi.sendMessage(from, metadete.desc, text, {quoted: mek})
 				break
 			case 'welcome':
 
@@ -3683,15 +4073,20 @@ Please Choose Whether Document, Audio or Video Below`
 					reply(`_Choose on or off_`)
 				}
 				break
-			case 'gc': case 'group':
-				buttonss = [{ buttonId: `${prefix}opengc`, buttonText: { displayText: 'OPEN ⚙️' }, type: 1 }, { buttonId: `${prefix}closegc`, buttonText: { displayText: 'CLOSE ⚙️' }, type: 1 }]
+			case 'gc':
+			case 'group':
+				buttonss = [{
+					buttonId: `${prefix}opengc`,
+					buttonText: {displayText: 'OPEN ⚙️'},
+					type: 1
+				}, {buttonId: `${prefix}closegc`, buttonText: {displayText: 'CLOSE ⚙️'}, type: 1}]
 				const bMess = {
 					contentText: 'OPEN/CLOSE\n\nGroup',
 					footerText: 'Please choose one',
 					buttons: buttonss,
 					headerType: 1
 				}
-				await WAapi.sendMessage(from, bMess, MessageType.buttonsMessage, { quoted: mek })
+				await WAapi.sendMessage(from, bMess, MessageType.buttonsMessage, {quoted: mek})
 				break
 			case 'opengc':
 				if (!isGroup) return reply(mess.only.group)
@@ -3718,7 +4113,7 @@ Please Choose Whether Document, Audio or Video Below`
 				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 				linkgc = await WAapi.groupInviteCode(from)
 				yeh = `https://chat.whatsapp.com/${linkgc}\n\n*${groupName}* group link`
-				WAapi.sendMessage(from, yeh, text, { quoted: fgi })
+				WAapi.sendMessage(from, yeh, text, {quoted: fgi})
 				break
 			case 'promote':
 
@@ -3768,7 +4163,7 @@ Please Choose Whether Document, Audio or Video Below`
 				for (let mem of groupMembers) {
 					members_id.push(mem.jid)
 				}
-				members_id = members_id.filter(function(value, index, arr){ 
+				members_id = members_id.filter(function (value, index, arr) {
 					return value != myJid2 && value != myJid1;
 				});
 				WAapi.groupDemoteAdmin(from, members_id)
@@ -3841,7 +4236,7 @@ Please Choose Whether Document, Audio or Video Below`
 				if (!isGroupAdmins) return reply(mess.only.admin)
 				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 				WAapi.groupUpdateSubject(from, `${body.slice(9)}`)
-				WAapi.sendMessage(from, `\`\`\`Success ✅, Renamed the group to\`\`\` *${body.slice(9)}*`, text, { quoted: mek })
+				WAapi.sendMessage(from, `\`\`\`Success ✅, Renamed the group to\`\`\` *${body.slice(9)}*`, text, {quoted: mek})
 				break
 			case 'setdesc':
 
@@ -3849,7 +4244,7 @@ Please Choose Whether Document, Audio or Video Below`
 				if (!isGroupAdmins) return reply(mess.only.admin)
 				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 				WAapi.groupUpdateDescription(from, `${body.slice(9)}`)
-				WAapi.sendMessage(from, `\`\`\`Success ✅, Changing group description\`\`\` *${groupMetadata.subject}* Became: *${body.slice(9)}*`, text, { quoted: fgi })
+				WAapi.sendMessage(from, `\`\`\`Success ✅, Changing group description\`\`\` *${groupMetadata.subject}* Became: *${body.slice(9)}*`, text, {quoted: fgi})
 				break
 			case 'setgrouppp':
 			case 'setgruppp':
@@ -3893,7 +4288,11 @@ Please Choose Whether Document, Audio or Video Below`
 					var pic = 'https://i.ibb.co/Tq7d7TZ/age-hananta-495-photo.png'
 				}
 				let ingfo = `*G R O U P I N F O*\n\n*Name :* ${groupName}\n*Group ID :* ${from}\n*Made :* ${moment(`${groupMetadata.creation}` * 1000).tz('Asia/Kolkata').format('DD/MM/YYYY HH:mm:ss')}\n*Group Owner :* @${groupMetadata.owner.split('@')[0]}\n*Number of Admins :* ${groupAdmins.length}\n*Number of participants :* ${groupMembers.length}\n*Welcome :* ${isWelkom ? 'Aktif' : 'Mati'}\n*AntiLink :* ${isAntiLink ? 'Aktif' : 'Mati'}\n*Desc :* \n\n${groupMetadata.desc}`
-				WAapi.sendMessage(from, await getBuffer(pic), image, { quoted: mek, caption: ingfo, contextInfo: { "mentionedJid": [groupMetadata.owner.replace('@c.us', '@s.whatsapp.net')] } })
+				WAapi.sendMessage(from, await getBuffer(pic), image, {
+					quoted: mek,
+					caption: ingfo,
+					contextInfo: {"mentionedJid": [groupMetadata.owner.replace('@c.us', '@s.whatsapp.net')]}
+				})
 				break
 			case 'resetlinkgc':
 			case 'resetlinkgroup':
@@ -3908,7 +4307,7 @@ Please Choose Whether Document, Audio or Video Below`
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
 				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 				json = ['action', 'inviteReset', from]
-				WAapi.query({ json, expect200: true })
+				WAapi.query({json, expect200: true})
 				reply('Successfully Reset Group Link')
 				break
 			case 'online':
@@ -3919,7 +4318,10 @@ Please Choose Whether Document, Audio or Video Below`
 				try {
 					let ido = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : from
 					let online = [...Object.keys(WAapi.chats.get(ido).presences), WAapi.user.jid]
-					WAapi.sendMessage(from, 'List Online:\n' + online.map(v => '- @' + v.replace(/@.+/, '')).join`\n`, text, { quoted: mek, contextInfo: { mentionedJid: online } })
+					WAapi.sendMessage(from, 'List Online:\n' + online.map(v => '- @' + v.replace(/@.+/, '')).join`\n`, text, {
+						quoted: mek,
+						contextInfo: {mentionedJid: online}
+					})
 				} catch (e) {
 					reply(`${e}`)
 				}
@@ -3952,7 +4354,7 @@ Please Choose Whether Document, Audio or Video Below`
 						mem.push(adm.id.replace('c.us', 's.whatsapp.net'))
 					})
 					var options = {
-						contextInfo: { mentionedJid: mem },
+						contextInfo: {mentionedJid: mem},
 						quoted: mek
 					}
 					ini_buffer = fs.readFileSync(file)
@@ -3969,7 +4371,7 @@ Please Choose Whether Document, Audio or Video Below`
 						mem.push(adm.id.replace('c.us', 's.whatsapp.net'))
 					})
 					var options = {
-						contextInfo: { mentionedJid: mem },
+						contextInfo: {mentionedJid: mem},
 						quoted: mek
 					}
 					ini_buffer = fs.readFileSync(file)
@@ -3988,7 +4390,7 @@ Please Choose Whether Document, Audio or Video Below`
 					var options = {
 						mimetype: 'audio/mp4', duration: 359996400,
 						ptt: true,
-						contextInfo: { mentionedJid: mem },
+						contextInfo: {mentionedJid: mem},
 						quoted: mek
 					}
 					ini_buffer = fs.readFileSync(file)
@@ -4006,7 +4408,7 @@ Please Choose Whether Document, Audio or Video Below`
 					})
 					var options = {
 						mimetype: 'video/gif',
-						contextInfo: { mentionedJid: mem },
+						contextInfo: {mentionedJid: mem},
 						quoted: mek
 					}
 					ini_buffer = fs.readFileSync(file)
@@ -4024,7 +4426,7 @@ Please Choose Whether Document, Audio or Video Below`
 					})
 					var options = {
 						mimetype: 'text/plain',
-						contextInfo: { mentionedJid: mem },
+						contextInfo: {mentionedJid: mem},
 						quoted: mek
 					}
 					ini_buffer = fs.readFileSync(file)
@@ -4042,7 +4444,7 @@ Please Choose Whether Document, Audio or Video Below`
 					})
 					var options = {
 						mimetype: 'video/mp4', duration: 359996400,
-						contextInfo: { mentionedJid: mem },
+						contextInfo: {mentionedJid: mem},
 						quoted: mek
 					}
 					ini_buffer = fs.readFileSync(file)
@@ -4070,9 +4472,9 @@ Please Choose Whether Document, Audio or Video Below`
 				if (!isGroup) return reply(mess.only.group)
 				options = {
 					text: `Here is the group owner : https://wa.me/${from.split("-")[0]}`,
-					contextInfo: { mentionedJid: [from] }
+					contextInfo: {mentionedJid: [from]}
 				}
-				WAapi.sendMessage(from, options, text, { quoted: mek })
+				WAapi.sendMessage(from, options, text, {quoted: mek})
 				break
 			case 'contag':
 
@@ -4102,7 +4504,7 @@ Please Choose Whether Document, Audio or Video Below`
 			case "hi":
 				reply("*Hi, how's your day goin!*")
 			case "bot":
-				WAapi.sendMessage(from, "*_I'm the bot. How can I help you._^_^*", text, {quoted : mek})
+				WAapi.sendMessage(from, "*_I'm the bot. How can I help you._^_^*", text, {quoted: mek})
 
 			//━━━━━━━━━━━━━━━[ THE END OF ALL FEATURES ]━━━━━━━━━━━━━━━━━//
 
@@ -4136,7 +4538,19 @@ Please Choose Whether Document, Audio or Video Below`
 		e = String(e)
 		if (!e.includes("this.isZero") && !e.includes("jid")) {
 			console.log('Error : %s', color(e, 'red'))
-			WAapi.sendMessage(`${owner}@s.whatsapp.net`, `─────「 *ALERT-ERROR* 」─────\n\n\`\`\`${e}\`\`\`\n\n────────────────────`, MessageType.text, { contextInfo: { forwardingScore: 508, isForwarded: true, externalAdReply: { title: "Dream Guy Xeon", body: "Dont forget to subscribe Xeon", previewType: "PHOTO", thumbnail: fs.readFileSync('./media/dogepic1.jpg'), sourceUrl: "https://wa.me/916909137213" } } })
+			WAapi.sendMessage(`${owner}@s.whatsapp.net`, `─────「 *ALERT-ERROR* 」─────\n\n\`\`\`${e}\`\`\`\n\n────────────────────`, MessageType.text, {
+				contextInfo: {
+					forwardingScore: 508,
+					isForwarded: true,
+					externalAdReply: {
+						title: "Dream Guy Xeon",
+						body: "Dont forget to subscribe Xeon",
+						previewType: "PHOTO",
+						thumbnail: fs.readFileSync('./media/dogepic1.jpg'),
+						sourceUrl: "https://wa.me/916909137213"
+					}
+				}
+			})
 		}
 		// console.log(e)
 	}
