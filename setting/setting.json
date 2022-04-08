@@ -1,6 +1,6 @@
 {
     "self": false,
-    "autoread": false,
+    "autoread": true,
     "autoketik": false,
     "autovn": false,
     "OwnerNumber": "919734192003",
@@ -8,6 +8,6 @@
     "BotName": "Doge IITKGP Bot",
     "session": "session",
     "icon1": "🦄᭄➤",
-    "icon2": "   ⃟🐶⃟   ",
+    "icon2": "  *⟹*   ",
     "gayawel": "  *o*   "
 }
