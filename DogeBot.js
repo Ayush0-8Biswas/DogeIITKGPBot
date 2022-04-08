@@ -25,8 +25,6 @@ const ggs = require('google-it')
 const googleImage = require('g-i-s')
 const yts = require('yt-search')
 const zee = require('api-alphabot')
-const { removeBackgroundFromImageFile } = require('remove.bg')
-
 //══════════[ Lib ]══════════//
 
 const {fetchJson } = require('./lib/fetcher')
@@ -38,7 +36,7 @@ const { lirikLagu } = require('./lib/lirik.js')
 const { herolist } = require('./lib/herolist.js')
 const { herodetails } = require('./lib/herodetail.js')
 const { pinterest } = require('./lib/pinterest')
-const { uploadimg, upload } = require('./lib/uploadimg')
+const {upload } = require('./lib/uploadimg')
 const { uploadImages } = require('./lib/uploadimage')
 const { mediafireDl } = require('./lib/mediafire.js')
 
@@ -78,7 +76,6 @@ viokey = apikey.violetics
 //const webp = require('webp-converter')
 //const sharp = require('sharp')
 const Exif = require('./lib/exif')
-const {log} = require("async/index");
 const exif = new Exif()
 
 //══════════[ Data Base ]══════════//
@@ -87,7 +84,7 @@ const _antilink = JSON.parse(fs.readFileSync('./database/antilink.json'))
 const _antivirtex = JSON.parse(fs.readFileSync('./database/antivirtex.json'))
 const setik = JSON.parse(fs.readFileSync('./database/setik.json'))
 const vien = JSON.parse(fs.readFileSync('./database/vien.json'))
-const imagi = JSON.parse(fs.readFileSync('./database/imagi.json'))
+// const imagi = JSON.parse(fs.readFileSync('./database/imagi.json'))
 
 // Anime variables //
 let animeName, animeResponse, animeList, animeReply
@@ -117,16 +114,16 @@ if (time2 < "05:00:00") {
 //══════════[ Module Export ]══════════//
 
 module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
-	let myText1;
-	let myText2;
-	let media;
-	let resu;
+	let myText1, myText2, media, resu;
 	let njay;
 	let bio_user;
 	let pporang;
 	let mess;
 	let textReply;
 	let m;
+	let mentioned;
+	let myJid1 = "919734192003@s.whatsapp.net";
+	let myJid2 = "919460908375@s.whatsapp.net";
 	try {
 		if (!mek.hasNewMessage) return
 		mek = mek.messages.all()[0]
@@ -273,11 +270,10 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 				Iv: 'Link invalid !!'
 			},
 			only: {
-				nsfw: 'The nsfw feature has not been activated, please contact the admin to activate',
 				group: 'This feature is only for group!!',
 				owner: 'This feature is only for owner!!',
 				admin: 'This feature is onlu for admin!!',
-				Badmin: 'Please give adminship to the bot first!!'
+				BotAdmin: 'Please give adminship to the bot first!!'
 			}
 		}
 
@@ -309,7 +305,6 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 		}
 
 		const sendButImage = async (id, text1, desc1, gam1, but = [], options = {}) => {
-			kma = gam1
 			mhan = await WhatsappAPI.prepareMessage(from, kma, image)
 			const buttonMessages = {
 				imageMessage: mhan.message.imageMessage,
@@ -321,8 +316,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			WhatsappAPI.sendMessage(id, buttonMessages, MessageType.buttonsMessage, options)
 		}
 		const sendButVideo = async (id, text1, desc1, vid1, but = [], options = {}) => {
-			kma = vid1
-			mhan = await WhatsappAPI.prepareMessage(from, kma, video)
+			mhan = await WhatsappAPI.prepareMessage(from, vid1, video)
 			const buttonMessages = {
 				videoMessage: mhan.message.videoMessage,
 				contentText: text1,
@@ -333,8 +327,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			await WhatsappAPI.sendMessage(id, buttonMessages, MessageType.buttonsMessage, options)
 		}
 		const sendButLocation = async (id, text1, desc1, gam1, but = [], options = {}) => {
-			kma = gam1
-			mhan = await WhatsappAPI.prepareMessage(from, kma, location)
+			mhan = await WhatsappAPI.prepareMessage(from, gam1, location)
 			const buttonMessages = {
 				locationMessage: mhan.message.locationMessage,
 				contentText: text1,
@@ -1325,7 +1318,6 @@ ${icon2} ${prefix}delete _Reply to bot messages_`
 				menu =
 					`*「 OWNER MENU 」*
 
-${icon2} ${prefix}spam _text|amount_
 ${icon2} ${prefix}tospam _reply with amount_
 ${icon2} ${prefix}bc _text_
 ${icon2} ${prefix}bc2 _text_
@@ -1543,37 +1535,37 @@ Can request, if interested please contact the developer`
 							rows: [
 								{
 									"title": "Cecan",
-									"description": `Get Cecan Image`,
+									"description": `Get Cecan Girl Image`,
 									"rowId": `${prefix}cecan`
 								},
 								{
 									"title": "Chinese",
-									"description": `Get Chinese Image`,
+									"description": `Get Chinese Girl Image`,
 									"rowId": `${prefix}chinese`
 								},
 								{
 									"title": "Indonesia",
-									"description": `Get Indonesia Image`,
+									"description": `Get Indonesian Girl Image`,
 									"rowId": `${prefix}indonesia`
 								},
 								{
 									"title": "Japan",
-									"description": `Get Japan Image`,
+									"description": `Get Japanese Girl Image`,
 									"rowId": `${prefix}japan`
 								},
 								{
 									"title": "Malaysia",
-									"description": `Get Malaysia Image`,
+									"description": `Get Malaysian Girl Image`,
 									"rowId": `${prefix}malaysia`
 								},
 								{
 									"title": "Thailand",
-									"description": `Get Thailand Image`,
+									"description": `Get Thailand Girl Image`,
 									"rowId": `${prefix}thailand`
 								},
 								{
 									"title": "Vietnam",
-									"description": `Get Vietnam Image`,
+									"description": `Get Vietnam Girl Image`,
 									"rowId": `${prefix}vietnam`
 								},
 
@@ -3430,17 +3422,6 @@ Can request, if interested please contact the developer`
 					}
 				}
 				break
-			case 'spam':
-				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-				if (!arg) return reply(`Use ${prefix}spam text|amount`)
-				argzi = arg.split("|")
-				if (!argzi) return reply(`Use ${prefix}spam text|amount`)
-				if (Number(argzi[1]) >= 50) return reply('Max 50!')
-				if (isNaN(argzi[1])) return reply(`must be a number`)
-				for (let i = 0; i < argzi[1]; i++) {
-					WhatsappAPI.sendMessage(from, argzi[0], MessageType.text)
-				}
-				break
 			case 'leaveall':
 				if (!isOwner) return reply(mess.only.owner)
 				let totalgroup = WhatsappAPI.chats.array.filter(u => u.jid.endsWith('@g.us')).map(u => u.jid)
@@ -3449,117 +3430,117 @@ Can request, if interested please contact the developer`
 					WhatsappAPI.groupLeave(id)
 				}
 				break
-			case 'addvn':
-				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-				if (!isQuotedAudio) return reply('Reply audio')
-				nm = body.slice(7)
-				if (!nm) return reply('Whats the vn name??')
-				boij = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
-				delb = await WhatsappAPI.downloadMediaMessage(boij)
-				vien.push(`${nm}`)
-				fs.writeFileSync(`./media/vn/${nm}.mp3`, delb)
-				fs.writeFileSync('./database/vien.json', JSON.stringify(vien))
-				WhatsappAPI.sendMessage(from, `Success, please check with *${prefix}vnlist*`, MessageType.text, {quoted: mek})
-				break
-			case 'delvn':
-				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-				try {
-					nmm = body.slice(7)
-					wanudelvn = vien.indexOf(nmm)
-					vien.splice(wanudelvn, 1)
-					fs.unlinkSync(`./media/vn/${nmm}.mp3`)
-					reply(`Successfully deleted vn ${body.slice(7)}`)
-				} catch (err) {
-					console.log(err)
-					reply(mess.error.api)
-				}
-				break
-			case 'vnlist':
-			case 'listvn':
-				teks = '*VN List :*\n\n'
-				for (let awokwkwk of vien) {
-					teks += `- ${awokwkwk}\n`
-				}
-				teks += `\n*Total : ${vien.length}*\n\n_To retrieve the vn, please reply to this message with the caption of the vn name_`
-				WhatsappAPI.sendMessage(from, teks.trim(), extendedText, {
-					quoted: mek,
-					contextInfo: {"mentionedJid": vien}
-				})
-				break
-			case 'addimage':
-				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-				if (!isQuotedImage) return reply('Reply image')
-				nm = body.slice(10)
-				if (!nm) return reply('Whats the name of the image??')
-				boij = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
-				delb = await WhatsappAPI.downloadMediaMessage(boij)
-				imagi.push(`${nm}`)
-				fs.writeFileSync(`./media/image/${nm}.jpg`, delb)
-				fs.writeFileSync('./database/imagi.json', JSON.stringify(imagi))
-				WhatsappAPI.sendMessage(from, `Success, please check with *${prefix}imglist*`, MessageType.text, {quoted: mek})
-				break
-			case 'delimage':
-				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-				try {
-					nmm = body.slice(10)
-					wanudelimg = imagi.indexOf(nmm)
-					imagi.splice(wanudelimg, 1)
-					fs.unlinkSync(`./media/image/${nmm}.jpg`)
-					reply(`Successfully deleted image ${body.slice(10)}`)
-				} catch (err) {
-					console.log(err)
-					reply(mess.error.api)
-				}
-				break
-			case 'imagelist':
-			case 'listimage':
-				teks = '*IMAGE List :*\n\n'
-				for (let awokwkwk of imagi) {
-					teks += `- ${awokwkwk}\n`
-				}
-				teks += `\n*Total : ${imagi.length}*\n\n_To take a picture, please reply to this message with the caption of the image name_`
-				WhatsappAPI.sendMessage(from, teks.trim(), extendedText, {
-					quoted: mek,
-					contextInfo: {"mentionedJid": imagi}
-				})
-				break
-			case 'addsticker':
-				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-				if (!isQuotedSticker) return reply('Reply sticker')
-				nm = body.slice(12)
-				if (!nm) return reply('What is the name of the sticker??')
-				delb = await WhatsappAPI.downloadMediaMessage(JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo)
-				setik.push(`${nm}`)
-				fs.writeFileSync(`./media/sticker/${nm}.webp`, delb)
-				fs.writeFileSync('./database/setik.json', JSON.stringify(setik))
-				WhatsappAPI.sendMessage(from, `Success, please check with *${prefix}liststicker*`, MessageType.text, {quoted: mek})
-				break
-			case 'delsticker':
-				if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-				try {
-					nmm = body.slice(12)
-					wanudelstick = setik.indexOf(nmm)
-					setik.splice(wanudelstick, 1)
-					fs.unlinkSync(`./media/sticker/${nmm}.webp`)
-					reply(`Successfully deleted the sticker ${body.slice(12)}`)
-				} catch (err) {
-					console.log(err)
-					reply(mess.error.api)
-				}
-				break
-			case 'stickerlist':
-			case 'liststicker':
-				teks = '*Sticker List :*\n\n'
-				for (let awokwkwk of setik) {
-					teks += `- ${awokwkwk}\n`
-				}
-				teks += `\n*Total : ${setik.length}*\n\n_To take a sticker, please reply to this message with the caption of the sticker name_`
-				WhatsappAPI.sendMessage(from, teks.trim(), extendedText, {
-					quoted: mek,
-					contextInfo: {"mentionedJid": setik}
-				})
-				break
-				break
+			// case 'addvn':
+			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
+			// 	if (!isQuotedAudio) return reply('Reply audio')
+			// 	nm = body.slice(7)
+			// 	if (!nm) return reply('Whats the vn name??')
+			// 	boij = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
+			// 	delb = await WhatsappAPI.downloadMediaMessage(boij)
+			// 	vien.push(`${nm}`)
+			// 	fs.writeFileSync(`./media/vn/${nm}.mp3`, delb)
+			// 	fs.writeFileSync('./database/vien.json', JSON.stringify(vien))
+			// 	WhatsappAPI.sendMessage(from, `Success, please check with *${prefix}vnlist*`, MessageType.text, {quoted: mek})
+			// 	break
+			// case 'delvn':
+			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
+			// 	try {
+			// 		nmm = body.slice(7)
+			// 		wanudelvn = vien.indexOf(nmm)
+			// 		vien.splice(wanudelvn, 1)
+			// 		fs.unlinkSync(`./media/vn/${nmm}.mp3`)
+			// 		reply(`Successfully deleted vn ${body.slice(7)}`)
+			// 	} catch (err) {
+			// 		console.log(err)
+			// 		reply(mess.error.api)
+			// 	}
+			// 	break
+			// case 'vnlist':
+			// case 'listvn':
+			// 	teks = '*VN List :*\n\n'
+			// 	for (let awokwkwk of vien) {
+			// 		teks += `- ${awokwkwk}\n`
+			// 	}
+			// 	teks += `\n*Total : ${vien.length}*\n\n_To retrieve the vn, please reply to this message with the caption of the vn name_`
+			// 	WhatsappAPI.sendMessage(from, teks.trim(), extendedText, {
+			// 		quoted: mek,
+			// 		contextInfo: {"mentionedJid": vien}
+			// 	})
+			// 	break
+			// case 'addimage':
+			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
+			// 	if (!isQuotedImage) return reply('Reply image')
+			// 	nm = body.slice(10)
+			// 	if (!nm) return reply('Whats the name of the image??')
+			// 	boij = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
+			// 	delb = await WhatsappAPI.downloadMediaMessage(boij)
+			// 	imagi.push(`${nm}`)
+			// 	fs.writeFileSync(`./media/image/${nm}.jpg`, delb)
+			// 	fs.writeFileSync('./database/imagi.json', JSON.stringify(imagi))
+			// 	WhatsappAPI.sendMessage(from, `Success, please check with *${prefix}imglist*`, MessageType.text, {quoted: mek})
+			// 	break
+			// case 'delimage':
+			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
+			// 	try {
+			// 		nmm = body.slice(10)
+			// 		wanudelimg = imagi.indexOf(nmm)
+			// 		imagi.splice(wanudelimg, 1)
+			// 		fs.unlinkSync(`./media/image/${nmm}.jpg`)
+			// 		reply(`Successfully deleted image ${body.slice(10)}`)
+			// 	} catch (err) {
+			// 		console.log(err)
+			// 		reply(mess.error.api)
+			// 	}
+			// 	break
+			// case 'imagelist':
+			// case 'listimage':
+			// 	teks = '*IMAGE List :*\n\n'
+			// 	for (let awokwkwk of imagi) {
+			// 		teks += `- ${awokwkwk}\n`
+			// 	}
+			// 	teks += `\n*Total : ${imagi.length}*\n\n_To take a picture, please reply to this message with the caption of the image name_`
+			// 	WhatsappAPI.sendMessage(from, teks.trim(), extendedText, {
+			// 		quoted: mek,
+			// 		contextInfo: {"mentionedJid": imagi}
+			// 	})
+			// 	break
+			// case 'addsticker':
+			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
+			// 	if (!isQuotedSticker) return reply('Reply sticker')
+			// 	nm = body.slice(12)
+			// 	if (!nm) return reply('What is the name of the sticker??')
+			// 	delb = await WhatsappAPI.downloadMediaMessage(JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo)
+			// 	setik.push(`${nm}`)
+			// 	fs.writeFileSync(`./media/sticker/${nm}.webp`, delb)
+			// 	fs.writeFileSync('./database/setik.json', JSON.stringify(setik))
+			// 	WhatsappAPI.sendMessage(from, `Success, please check with *${prefix}liststicker*`, MessageType.text, {quoted: mek})
+			// 	break
+			// case 'delsticker':
+			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
+			// 	try {
+			// 		nmm = body.slice(12)
+			// 		wanudelstick = setik.indexOf(nmm)
+			// 		setik.splice(wanudelstick, 1)
+			// 		fs.unlinkSync(`./media/sticker/${nmm}.webp`)
+			// 		reply(`Successfully deleted the sticker ${body.slice(12)}`)
+			// 	} catch (err) {
+			// 		console.log(err)
+			// 		reply(mess.error.api)
+			// 	}
+			// 	break
+			// case 'stickerlist':
+			// case 'liststicker':
+			// 	teks = '*Sticker List :*\n\n'
+			// 	for (let awokwkwk of setik) {
+			// 		teks += `- ${awokwkwk}\n`
+			// 	}
+			// 	teks += `\n*Total : ${setik.length}*\n\n_To take a sticker, please reply to this message with the caption of the sticker name_`
+			// 	WhatsappAPI.sendMessage(from, teks.trim(), extendedText, {
+			// 		quoted: mek,
+			// 		contextInfo: {"mentionedJid": setik}
+			// 	})
+			// 	break
+			// 	break
 
 			//══════════[ GROUP FEATURES ]══════════//
 
@@ -3640,7 +3621,7 @@ Can request, if interested please contact the developer`
 
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				if (!q) return reply(`Choose on or off`)
 				if (args[0].toLowerCase() === 'on') {
 					if (isAntiLink) return reply(`Already active`)
@@ -3660,7 +3641,7 @@ Can request, if interested please contact the developer`
 
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				if (!q) return reply(`Choose on or off`)
 				if (args[0].toLowerCase() === 'on') {
 					if (isAntiVirtex) return reply(`Already active`)
@@ -3712,7 +3693,7 @@ Can request, if interested please contact the developer`
 			case 'linkgrup':
 			case 'linkgc':
 				if (!isGroup) return reply(mess.only.group)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				linkgc = await WhatsappAPI.groupInviteCode(from)
 				yeh = `https://chat.whatsapp.com/${linkgc}\n\n*${groupName}* group link`
 				WhatsappAPI.sendMessage(from, yeh, text, {quoted: fgi})
@@ -3721,7 +3702,7 @@ Can request, if interested please contact the developer`
 
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) return reply('Tag the target who wants to be an admin!')
 				mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid
 				if (mentioned.length > 1) {
@@ -3740,9 +3721,10 @@ Can request, if interested please contact the developer`
 
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) return reply('Tag the admin you want to demote!')
 				mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid
+				if (mentioned == myJid1 || mentioned == myJid2) return reply(`*I won't demote myself.*`);
 				if (mentioned.length > 1) {
 					teks = 'Order received, you are not an admin anymore :\n'
 					for (let _ of mentioned) {
@@ -3756,11 +3738,9 @@ Can request, if interested please contact the developer`
 				}
 				break
 			case 'demoteall':
-				let myJid1 = "919734192003@s.whatsapp.net"
-				let myJid2 = "919460908375@s.whatsapp.net"
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				members_id = []
 				for (let mem of groupMembers) {
 					members_id.push(mem.jid)
@@ -3773,7 +3753,7 @@ Can request, if interested please contact the developer`
 			case 'promoteall':
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				members_id = []
 				for (let mem of groupMembers) {
 					members_id.push(mem.jid)
@@ -3784,7 +3764,7 @@ Can request, if interested please contact the developer`
 
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				if (args.length < 1) return reply('Who wants to be added??')
 				if (args[0].startsWith('08')) return reply('Use country code bro')
 				try {
@@ -3797,15 +3777,16 @@ Can request, if interested please contact the developer`
 				break
 			case "kick":
 
-				if (!isGroup) return reply(mess.only.group)
-				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isGroup) return reply(mess.only.group);
+				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin);
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				if (
 					mek.message.extendedTextMessage === undefined ||
 					mek.message.extendedTextMessage === null
 				)
 					return reply("Tag the target you want to kick!");
 				mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid;
+				if (mentioned == myJid1 || mentioned == myJid2) return reply(`*I won't kick myself.*`);
 				if (mentioned.length > 1) {
 					WhatsappAPI.groupRemove(from, mentioned);
 					reply(mess.success);
@@ -3836,7 +3817,7 @@ Can request, if interested please contact the developer`
 
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				WhatsappAPI.groupUpdateSubject(from, `${body.slice(9)}`)
 				WhatsappAPI.sendMessage(from, `\`\`\`Success ✅, Renamed the group to\`\`\` *${body.slice(9)}*`, text, {quoted: mek})
 				break
@@ -3844,7 +3825,7 @@ Can request, if interested please contact the developer`
 
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				WhatsappAPI.groupUpdateDescription(from, `${body.slice(9)}`)
 				WhatsappAPI.sendMessage(from, `\`\`\`Success ✅, Changing group description\`\`\` *${groupMetadata.subject}* Became: *${body.slice(9)}*`, text, {quoted: fgi})
 				break
@@ -3854,7 +3835,7 @@ Can request, if interested please contact the developer`
 
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				if (isQuotedImage) {
 					let encmediasetppgc = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					let media = await WhatsappAPI.downloadMediaMessage(encmediasetppgc)
@@ -3907,7 +3888,7 @@ Can request, if interested please contact the developer`
 
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
-				if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				json = ['action', 'inviteReset', from]
 				WhatsappAPI.query({json, expect200: true})
 				reply('Successfully Reset Group Link')
