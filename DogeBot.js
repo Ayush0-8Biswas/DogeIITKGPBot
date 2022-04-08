@@ -709,148 +709,96 @@ ${icon2} ${prefix}lyrics _song name_`
 				menu =
 					`*「 MAKER MENU 」*
 
-${icon2} ${prefix}freefire _text_
-${icon2} ${prefix}silverplaybutton _text_
-${icon2} ${prefix}goldplaybutton _text_
-${icon2} ${prefix}blackpink _text_
-${icon2} ${prefix}halloween _text_
-${icon2} ${prefix}halloween2 _text_
-${icon2} ${prefix}3dgradient _text_
-${icon2} ${prefix}naturalleaves _text_
-${icon2} ${prefix}dropwater _text_
-${icon2} ${prefix}blood _text_
-${icon2} ${prefix}blood2 _text_
-${icon2} ${prefix}snow _text_
-${icon2} ${prefix}cloud _text_
-${icon2} ${prefix}neondevil _text_
-${icon2} ${prefix}neon _text_
-${icon2} ${prefix}glowingneonlight _text_
-${icon2} ${prefix}neonlight _text_
-${icon2} ${prefix}neonlight2 _text_
-${icon2} ${prefix}neonlight3 _text_
-${icon2} ${prefix}greenneon _text_
-${icon2} ${prefix}toxic _text_
-${icon2} ${prefix}matrix _text_
-${icon2} ${prefix}thunder _text_
-${icon2} ${prefix}thunder2 _text_
-${icon2} ${prefix}bokeh _text_
-${icon2} ${prefix}carbontext _text_
-${icon2} ${prefix}christmas _text_
-${icon2} ${prefix}breakwall _text_
-${icon2} ${prefix}roadwarning _text_
-${icon2} ${prefix}engraved3d _text_
-${icon2} ${prefix}embossed _text_
-${icon2} ${prefix}3dstone _text_
-${icon2} ${prefix}futuristic _text_
-${icon2} ${prefix}sketch _text_
-${icon2} ${prefix}bluecircuit _text_
-${icon2} ${prefix}space _text_
-${icon2} ${prefix}magmahot _text_
-${icon2} ${prefix}artpapercut _text_
-${icon2} ${prefix}3dluxurygold _text_
-${icon2} ${prefix}robotr2d2 _text_
-${icon2} ${prefix}harrypotter _text_
-${icon2} ${prefix}glitch3 _text_
-${icon2} ${prefix}greenhorror _text_
-${icon2} ${prefix}horrorgift _text_
-${icon2} ${prefix}erodedmetal _text_
-${icon2} ${prefix}3dglowingmetal _text_
-${icon2} ${prefix}blackmetal _text_
-${icon2} ${prefix}bluemetal _text_
-${icon2} ${prefix}shynimetal _text_
-${icon2} ${prefix}rustymetal _text_
-${icon2} ${prefix}metalpurple _text_
-${icon2} ${prefix}metalrainbow _text_
-${icon2} ${prefix}metaldarkgold _text_
-${icon2} ${prefix}colorfullluxurymetal _text_
-${icon2} ${prefix}glossybluemetal _text_
-${icon2} ${prefix}3dglossymetal _text_
-${icon2} ${prefix}3ddeepseametal _text_
-${icon2} ${prefix}leddisplayscreen _text_
-${icon2} ${prefix}metallic _text_
-${icon2} ${prefix}glossymetallic _text_
-${icon2} ${prefix}christmastree _text_
-${icon2} ${prefix}sparklesmerrychristmas _text_
-${icon2} ${prefix}countryflag3d _text_
-${icon2} ${prefix}americanflag3d _text_
-${icon2} ${prefix}3dscfi _text_
-${icon2} ${prefix}3drainbow _text_
-${icon2} ${prefix}3dwaterpipe _text_
-${icon2} ${prefix}3dchrome _text_
-${icon2} ${prefix}bluegem _text_
-${icon2} ${prefix}purplegem _text_
-${icon2} ${prefix}pinkcandy _text_
-${icon2} ${prefix}transformer _text_
-${icon2} ${prefix}berry _text_
-${icon2} ${prefix}brokenglass _text_
-${icon2} ${prefix}3drealistic _text_
-${icon2} ${prefix}3dunderwater _text_
-${icon2} ${prefix}writeinsandsummerbeach _text_
-${icon2} ${prefix}sandwriting _text_
-${icon2} ${prefix}foilballoon _text_
-${icon2} ${prefix}3dglue _text_
-${icon2} ${prefix}1917 _text_
-${icon2} ${prefix}minion _text_
-${icon2} ${prefix}doubleexposure _text_
-${icon2} ${prefix}holographic3d _text_
-${icon2} ${prefix}deluxegold _text_
-${icon2} ${prefix}deluxesilver _text_
-${icon2} ${prefix}glossycarbon _text_
-${icon2} ${prefix}fabric _text_
-${icon2} ${prefix}xmascards3d _text_
-${icon2} ${prefix}wicker _text_
-${icon2} ${prefix}fireworksparkle _text_
-${icon2} ${prefix}skeleton _text_
-${icon2} ${prefix}ultragloss _text_
-${icon2} ${prefix}denim _text_
-${icon2} ${prefix}decorategreen _text_
-${icon2} ${prefix}peridot _text_
-${icon2} ${prefix}rock _text_
-${icon2} ${prefix}lava _text_
-${icon2} ${prefix}rainbowequalizer _text_
-${icon2} ${prefix}purpleglass _text_
-${icon2} ${prefix}decorativeglass _text_
-${icon2} ${prefix}chocolatecake _text_
-${icon2} ${prefix}strawberry _text_
-${icon2} ${prefix}koifish _text_
-${icon2} ${prefix}bread _text_
-${icon2} ${prefix}3dbox _text_
-${icon2} ${prefix}freeadvancedglow _text_
-${icon2} ${prefix}honey _text_
-${icon2} ${prefix}marble _text_
-${icon2} ${prefix}marbleslabs _text_
-${icon2} ${prefix}icecold _text_
-${icon2} ${prefix}fruitjuice _text_
-${icon2} ${prefix}abstragold _text_
-${icon2} ${prefix}biscuit _text_
-${icon2} ${prefix}bagel _text_
-${icon2} ${prefix}wood _text_
-${icon2} ${prefix}hexagolden _text_
-${icon2} ${prefix}wonderfulgraffitiart _text_
-${icon2} ${prefix}8bit _Text1&Text2_
-${icon2} ${prefix}pornhub _Text1&Text2_
-${icon2} ${prefix}glitch _Text1&Text2_
-${icon2} ${prefix}glitch2 _Text1&Text2_
-${icon2} ${prefix}layered _Text1&Text2_
-${icon2} ${prefix}3dsteel _Text1&Text2_
-${icon2} ${prefix}realistic _Text1&Text2_
-${icon2} ${prefix}lionlogo _Text1&Text2_
-${icon2} ${prefix}ninjalogo _Text1&Text2_
-${icon2} ${prefix}wolf _Text1&Text2_
-${icon2} ${prefix}wolf2 _Text1&Text2_
-${icon2} ${prefix}halloween3 _Text1&Text2_
-${icon2} ${prefix}marvel _Text1&Text2_
-${icon2} ${prefix}marvel2 _Text1&Text2_
-${icon2} ${prefix}cinematichorror _Text1&Text2_
-${icon2} ${prefix}avengers _Text1&Text2_
-${icon2} ${prefix}graffiti3 _Text1&Text2_
-${icon2} ${prefix}captainamerica _Text1&Text2_
-${icon2} ${prefix}girlneko _Text1&Text2_
-${icon2} ${prefix}sadboy _Text1&Text2_
-${icon2} ${prefix}makerkaneki _Text1&Text2_
-${icon2} ${prefix}rem _Text1&Text2_
-${icon2} ${prefix}lolimaker _Text1&Text2_
-${icon2} ${prefix}gura _Text1&Text2_`
+${icon2} ${prefix} 1917 _text_
+${icon2} ${prefix} 3d-Crack-Text-Effect-Online _text_
+${icon2} ${prefix} halloween2 _text_
+${icon2} ${prefix} 3d-Underwater _text_
+${icon2} ${prefix} 3d-Wood _text_
+${icon2} ${prefix} 3d-Wood2 _text_
+${icon2} ${prefix} 3damerican-Flag _text_
+${icon2} ${prefix} 3dgalaxy-Metal _text_
+${icon2} ${prefix} 3dglue-Realistic _text_
+${icon2} ${prefix} 3dgold _text_
+${icon2} ${prefix} 3dgradient _text_
+${icon2} ${prefix} 3dgradient2 _text_
+${icon2} ${prefix} 3dmetal-Effect _text_
+${icon2} ${prefix} 3dsub-Zombie _text_
+${icon2} ${prefix} 83day-Card _text_
+${icon2} ${prefix} Advanced-Glow _text_
+${icon2} ${prefix} Ahri-League-Of-Legends _text_
+${icon2} ${prefix} Bats-Halloween _text_
+${icon2} ${prefix} Art-Shader _text_
+${icon2} ${prefix} Balloon-Noel _text_
+${icon2} ${prefix} Bear2 _text_
+${icon2} ${prefix} Bee _text_
+${icon2} ${prefix} Birthday-Cake _text_
+${icon2} ${prefix} Birthday-Cake2 _text_
+${icon2} ${prefix} Blackpink _text_
+${icon2} ${prefix} Blackpink-Neon _text_
+${icon2} ${prefix} Blood-Frosted _text_
+${icon2} ${prefix} Blackskin-Snake _text_
+${icon2} ${prefix} Blood-Text _text_
+${icon2} ${prefix} Blood-Text2 _text_
+${icon2} ${prefix} Blood-Wall _text_
+${icon2} ${prefix} Bokeh-Text _text_
+${icon2} ${prefix} Broken-Glass _text_
+${icon2} ${prefix} Color-Fireworks _text_
+${icon2} ${prefix} Colorful-Angelwing _text_
+${icon2} ${prefix} Cool-Metal _text_
+${icon2} ${prefix} Cute-Girl-Gamer _text_
+${icon2} ${prefix} Dinamo-Effect _text_
+${icon2} ${prefix} Fabric-Effect _text_
+${icon2} ${prefix} Galaxy-Effect _text_
+${icon2} ${prefix} Glossy-Carbon _text_
+${icon2} ${prefix} Gold-Effect _text_
+${icon2} ${prefix} Gold-Text _text_
+${icon2} ${prefix} Graffiti-Text _text_
+${icon2} ${prefix} Halloween-Text _text_
+${icon2} ${prefix} Halloween-Fire _text_
+${icon2} ${prefix} Halloween-Frankenstain _text_
+${icon2} ${prefix} Matrix _text_
+${icon2} ${prefix} Signature _text_
+${icon2} ${prefix} Tiger _text_
+${icon2} ${prefix} Yasuo _text_
+${icon2} ${prefix} Bear2 _text_
+${icon2} ${prefix} Dragon-Fire _text_
+${icon2} ${prefix} Joker _text_
+${icon2} ${prefix} Leaves-Text _text_
+${icon2} ${prefix} Rooster _text_
+${icon2} ${prefix} Wet-Glass _text_
+${icon2} ${prefix} Ninja-Mascot _text_
+${icon2} ${prefix} Avengers _text1&_text2_
+${icon2} ${prefix} Balloon-text _text1&_text2_
+${icon2} ${prefix} Bear _text1&_text2_
+${icon2} ${prefix} Buffalo _text1&_text2_
+${icon2} ${prefix} Bull _text1&_text2_
+${icon2} ${prefix} Captain-America _text1&_text2_
+${icon2} ${prefix} Chicken _text1&_text2_
+${icon2} ${prefix} Dragon _text1&_text2_
+${icon2} ${prefix} Griffin _text1&_text2_
+${icon2} ${prefix} Greenglass-Effect _text1&_text2_
+${icon2} ${prefix} Gun _text1&_text2_
+${icon2} ${prefix} Horse _text1&_text2_
+${icon2} ${prefix} Jaguar _text1&_text2_
+${icon2} ${prefix} Juventus _text1&_text2_
+${icon2} ${prefix} Life-Buoys _text1&_text2_
+${icon2} ${prefix} Lion _text1&_text2_
+${icon2} ${prefix} Lion2 _text1&_text2_
+${icon2} ${prefix} Marvel _text1&_text2_
+${icon2} ${prefix} Messi _text1&_text2_
+${icon2} ${prefix} Monkey _text1&_text2_
+${icon2} ${prefix} Shark _text1&_text2_
+${icon2} ${prefix} 3dsilver _text1&_text2_
+${icon2} ${prefix} 3dspace _text1&_text2_
+${icon2} ${prefix} 3dstone _text1&_text2_
+${icon2} ${prefix} Eagle _text1&_text2_
+${icon2} ${prefix} Monkey _text1&_text2_
+${icon2} ${prefix} Sabertooth _text1&_text2_
+${icon2} ${prefix} Wolver _text1&_text2_
+${icon2} ${prefix} Text-Logo _text1&_text2_
+${icon2} ${prefix} Wolf-Logo _text1&_text2_
+${icon2} ${prefix} Yellowglass-Effect _text1&_text2_
+${icon2} ${prefix} Ninja-Black&White _text1&_text2_`
 				WAapi.sendMessage(from, { contentText: `${menu}`, footerText: `*_${myTimezone}_*`, buttons: [{ buttonId: `${prefix}command`, buttonText: { displayText: 'BACK ⬅️' }, type: 1 }, { buttonId: `${prefix}owner`, buttonText: { displayText: 'OWNER 👤' }, type: 1 }], headerType: 'LOCATION', locationMessage: { degreesLatitude: '', degreesLongitude: '', jpegThumbnail: fakeimage, contextInfo: { mentionedJid: [sender] } } }, 'buttonsMessage')
 				break
 			
@@ -1772,475 +1720,122 @@ Please Choose Whether Document, Audio or Video Below`
 			--> Xeon*/
 
 			//----> 1 TEXT <----//
-			case 'goldplaybutton':
-			case 'silverplaybutton':
-			case 'freefire':
-				if (args.length == 0) return reply(`Example: ${prefix + command} Xeon`)
-				ini_txt = args.join(" ")
-				getBuffer(`https://api.lolhuman.xyz/api/ephoto1/${command}?apikey=${lolkey}&text=${ini_txt}`).then((gambar) => {
-					WAapi.sendMessage(from, gambar, image, { thumbnail: Buffer.alloc(0), caption: `Here you go!`, quoted: mek })
-				})
-				break
-			case 'blackpink':
-			case 'halloween':
-			case 'halloween2':
-			case '3dgradient':
-			case 'naturalleaves':
-			case 'dropwater':
-			case 'blood':
-			case 'blood2':
-			case 'snow':
-			case 'cloud':
-			case 'neondevil':
-			case 'neon':
-			case 'glowingneonlight':
-			case 'neonlight':
-			case 'neonlight2':
-			case 'neonlight3':
-			case 'greenneon':
-			case 'toxic':
-			case 'matrix':
-			case 'thunder':
-			case 'thunder2':
-			case 'bokeh':
-			case 'carbontext':
-			case 'christmas':
-			case 'breakwall':
-			case 'roadwarning':
-			case 'engraved3d':
-			case 'embossed':
-			case '3dstone':
-			case 'futuristic':
-			case 'sketch':
-			case 'bluecircuit':
-			case 'space':
-			case 'magmahot':
-			case 'artpapercut':
-			case '3dluxurygold':
-			case 'robotr2d2':
-			case 'harrypotter':
-			case 'glitch3':
-			case 'greenhorror':
-			case 'horrorgift':
-			case 'hotmetal':
-			case 'erodedmetal':
-			case '3dglowingmetal':
-			case 'blackmetal':
-			case 'bluemetal':
-			case 'shynimetal':
-			case 'rustymetal':
-			case 'metalpurple':
-			case 'metalrainbow':
-			case 'metaldarkgold':
-			case 'colorfullluxurymetal':
-			case 'glossybluemetal':
-			case '3dglossymetal':
-			case 'metallic':
-			case 'glossymetallic':
-			case 'christmastree':
-			case 'sparklesmerrychristmas':
-			case 'countryflag3d':
-			case 'americanflag3d':
-			case '3dscfi':
-			case '3drainbow':
-			case '3dwaterpipe':
-			case '3dchrome':
-			case 'bluegem':
-			case 'purplegem':
-			case 'pinkcandy':
-			case 'transformer':
-			case 'berry':
-			case 'brokenglass':
-			case '3drealistic':
-			case '3dunderwater':
-			case 'writeinsandsummerbeach':
-			case 'sandwriting':
-			case 'foilballoon':
-			case '3dglue':
+			
 			case '1917':
-			case 'minion':
-			case 'doubleexposure':
-			case 'holographic3d':
-			case 'deluxegold':
-			case 'deluxesilver':
-			case 'glossycarbon':
-			case 'fabric':
-			case 'xmascards3d':
-			case 'wicker':
-			case 'fireworksparkle':
-			case 'skeleton':
-			case 'ultragloss':
-			case 'denim':
-			case 'decorategreen':
-			case 'peridot':
-			case 'rock':
-			case 'lava':
-			case 'rainbowequalizer':
-			case 'purpleglass':
-			case 'decorativeglass':
-			case 'chocolatecake':
-			case 'strawberry':
-			case 'koifish':
-			case 'bread':
-			case '3dbox':
-			case 'freeadvancedglow':
-			case 'honey':
-			case 'marble':
-			case 'marbleslabs':
-			case 'icecold':
-			case 'fruitjuice':
-			case 'abstragold':
-			case 'biscuit':
-			case 'bagel':
-			case 'wood':
-			case 'hexagolden':
-			case '3ddeepseametal':
-			case 'leddisplayscreen':
-			case 'wonderfulgraffitiart':
+			case '3d-Crack-Text-Effect-Online':
+			case 'halloween2':
+			case '3d-Underwater':
+			case '3d-Wood':
+			case '3d-Wood2':
+			case '3damerican-Flag':
+			case '3dgalaxy-Metal':
+			case '3dglue-Realistic':
+			case '3dgold':
+			case '3dgradient':
+			case '3dgradient2':
+			case '3dmetal-Effect':
+			case '3dsub-Zombie':
+			case '83day-Card':
+			case 'Advanced-Glow':
+			case 'Ahri-League-Of-Legends':
+			case 'Bats-Halloween':
+			case 'Art-Shader':
+			case 'Balloon-Noel':
+			case 'Bear2':
+			case 'Bee':
+			case 'Birthday-Cake':
+			case 'Birthday-Cake2':
+			case 'Blackpink':
+			case 'Blackpink-Neon':
+			case 'Blood-Frosted':
+			case 'Blackskin-Snake':
+			case 'Blood-Text':
+			case 'Blood-Text2':
+			case 'Blood-Wall':
+			case 'Bokeh-Text':
+			case 'Broken-Glass':
+			case 'Color-Fireworks':
+			case 'Colorful-Angelwing':
+			case 'Cool-Metal':
+			case 'Cute-Girl-Gamer':
+			case 'Dinamo-Effect':
+			case 'Fabric-Effect':
+			case 'Galaxy-Effect':
+			case 'Glossy-Carbon':
+			case 'Gold-Effect':
+			case 'Gold-Text':
+			case 'Graffiti-Text':
+			case 'Halloween-Text':
+			case 'Halloween-Fire':
+			case 'Halloween-Frankenstain':
+			case 'Matrix':
+			case 'Signature':
+			case 'Tiger':
+			case 'Yasuo':
+			case 'Bear2':
+			case 'Dragon-Fire':
+			case 'Joker':
+			case 'Leaves-Text':
+			case 'Rooster':
+			case 'Wet-Glass':
+			case 'Ninja-Mascot':
+			
 
 				if (args.length < 1) return reply(`*Where is the text?*\n_Example : ${prefix + command} your name_`)
 				teks = args.join(" ")
 				reply(mess.wait)
-				anuapidhani = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/${command}?apikey=${dhakey}&text=${teks}`)
+				anuapidhani = await fetchJson(`https://violetics.pw/api/ephoto360/${command}?apikey=${viokey}&text=${teks}`)
+								
 				oke = await getBuffer(anuapidhani.result)
 				WAapi.sendMessage(from, oke, image, { quoted: mek, caption: 'Here u go!😛' })
-				break
-			case 'hartatahta':
-
-				if (args.length < 1) return reply(`*Wher is the text?*\n_Example : ${prefix + command} your name_`)
-				teks = args.join(" ")
-				reply(mess.wait)
-				harta = await getBuffer(`https://apidhani.herokuapp.com/api/maker/harta-tahta?apikey=${dhakey}&text=${teks}`)
-				WAapi.sendMessage(from, harta, image, { quoted: mek, caption: 'Here u go!😛' })
 				break
 
 			//----> 2 TEXT <----//
 
-			case '8bit':
-
+			case 'Avengers':
+			case 'Ballon-text':
+			case 'Bear':
+			case 'Buffalo':
+			case 'Bull':
+			case 'Captain-America':
+			case 'Chicken':
+			case 'Dragon':
+			case 'Griffin':
+			case 'Greenglass-Effect':
+			case 'Gun':
+			case 'Horse':
+			case 'Jaguar':
+			case 'Juventus':
+			case 'Life-Buoys':
+			case 'Lion':
+			case 'Lion2':
+			case 'Marvel':
+			case 'Messi':
+			case 'Monkey':
+			case 'Shark':
+			case '3dsilver':
+			case '3dspace':
+			case '3dstone':
+			case 'Eagle':
+			case 'Monkey':
+			case 'Sabertooth':
+			case 'Wolver':
+			case 'Text-Logo':
+			case 'Wolf-Logo':
+			case 'Yellowglass-Effect':
+			case 'Ninja-Black&White':	
+				
+				
 				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
 				var F = body.slice(5)
 				var F1 = F.split("&")[0];
 				var F2 = F.split("&")[1];
 				reply(mess.wait)
-				anubit = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/8bit?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
+				anubit = await fetchJson(`https://violetics.pw/api/ephoto360/${command}?apikey=${viokey}&text=${F1}&text2=${F2}`)
 				pornhub = await getBuffer(anubit.result)
 				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
 				break
-			case 'pornhub':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(8)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuphub = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/pornhub?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuphub.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'glitch':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(7)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuglitch = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/glitch?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuglitch.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'glitch2':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(8)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anug2 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/glitch2?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anug2.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'layered':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(8)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anulayered = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/layered?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anulayered.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case '3dsteel':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(8)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anu3dstl = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/3dsteel?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anu3dstl.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'realistic':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(10)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anurlstc = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/realistic?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anurlstc.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'lionlogo':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(9)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anullo = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/lionlogo?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anullo.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'ninjalogo':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(10)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anunlogo = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/ninjalogo?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anunlogo.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'wolf':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(5)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuwolf = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/logowolf?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuwolf.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'wolf2':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(6)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuw2 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/logowolf2?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuw2.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'halloween3':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(11)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuh3 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/halloween3?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuh3.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'marvel':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(7)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anumvl = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/marvelstudio?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anumvl.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'marvel2':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(8)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anumvl2 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/marvelstudio2?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anumvl2.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'cinematichorror':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(16)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anucmcr = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/cinematichorror?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anucmcr.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'avengers':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(8)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuavgr = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/avengerslogo?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuavgr.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'graffiti3':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(10)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anugrf3 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/coolwallgraffiti?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anugrf3.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'captainamerica':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(15)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				anucaptainca = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/captainamerica?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anucaptainca.result)
-				WAapi.sendMessage(from, pornhub, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'girlneko':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(9)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlneko = await getBuffer(`https://apidhani.herokuapp.com/api/maker/girlneko?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlneko, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'sadboy':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(7)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlneko2 = await getBuffer(`https://apidhani.herokuapp.com/api/maker/sadboy?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlneko2, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'makerkaneki':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(12)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlneko8383 = await getBuffer(`https://apidhani.herokuapp.com/api/maker/kaneki?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlneko8383, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'rem':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(4)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlneko11111 = await getBuffer(`https://apidhani.herokuapp.com/api/maker/rem?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlneko11111, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'lolimaker':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(9)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlnekojkjk = await getBuffer(`https://apidhani.herokuapp.com/api/maker/lolimaker?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlnekojkjk, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'gura':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				var F = body.slice(5)
-				var F1 = F.split("&")[0];
-				var F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlnekoooo = await getBuffer(`https://apidhani.herokuapp.com/api/maker/gura?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WAapi.sendMessage(from, girlnekoooo, image, { caption: `Here u go!😛`, quoted: mek })
-				break
-			case 'wolf3':
-
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
-				F = body.slice(6)
-				reply(mess.wait)
-				anuwolf3 = await getBuffer(`${ApiZeks}/api/wolflogo?apikey=${zeksApikey}&text1=zeeoneofc&text2=${F}`)
-				WAapi.sendMessage(from, anuwolf3, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it?`, quoted: mek })
-				break
-			case 't3d':
-
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
-				F = body.slice(5)
-				reply(mess.wait)
-				anut3d = await getBuffer(`${ApiZeks}/api/text3dbox?apikey=${zeksApikey}&text=${F}`)
-				WAapi.sendMessage(from, anut3d, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
-				break
-			case 'logoa':
-
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon&lol*`)
-				var F = body.slice(7)
-				var F1 = F.split("|")[0];
-				var F2 = F.split("|")[1];
-				reply(mess.wait)
-				anulogoa = await getBuffer(`${ApiZeks}/api/logoaveng?text1=${F1}&text2=${F2}&apikey=${zeksApikey}`)
-				WAapi.sendMessage(from, anulogoa, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
-				break
-			case 'phlogo':
-
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon&lol*`)
-				var F = body.slice(9)
-				var F1 = F.split("|")[0];
-				var F2 = F.split("|")[1];
-				reply(mess.wait)
-				anuphlogo = await getBuffer(`${ApiZeks}/api/phlogo?text1=${F1}&text2=${F2}&apikey=${zeksApikey}`)
-				WAapi.sendMessage(from, anuphlogo, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
-				break
-			case 'marvel3':
-
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon&lol*`)
-				var F = body.slice(8)
-				var F1 = F.split("|")[0];
-				var F2 = F.split("|")[1];
-				reply(mess.wait)
-				anumrvl3 = await getBuffer(`${ApiZeks}/api/marvellogo?text1=${F1}&text2=${F2}&apikey=${zeksApikey}`)
-				WAapi.sendMessage(from, anumrvl3, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
-				break
-			case 'leavest':
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
-				F = body.slice(9)
-				reply(mess.wait)
-				anulvst = await getBuffer(`${ApiZeks}/api/leavest?text=${F}&apikey=${zeksApikey}`)
-				WAapi.sendMessage(from, anulvst, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
-				break
-			case 'notewrite':
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
-				F = body.slice(7)
-				reply(mess.wait)
-				anunw = await getBuffer(`${ApiZeks}/api/nulis?text=${F}&apikey=${zeksApikey}`)
-				WAapi.sendMessage(from, anunw, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
-				break
-			case 'neon2':
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
-				F = body.slice(7)
-				reply(mess.wait)
-				anunion2 = await getBuffer(`${ApiZeks}/api/bneon?apikey=${zeksApikey}&text=${F}`)
-				WAapi.sendMessage(from, anunion2, image, { thumbnail: Buffer.alloc(0), caption: `OK it's done\n\nHow is it? `, quoted: mek })
-				break
+			
 
 			//══════════[ OTHER FEATURES ]══════════//
 			case 'owner':
