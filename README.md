@@ -58,31 +58,31 @@ heroku/nodejs
 * [Libwebp](https://developers.google.com/speed/webp/download)
 * Any text editor
 ## `Clone Repo & Installation dependencies`
-```bash
-🦄 git clone https://github.com/Ayush0-8Biswas/DogeIITKGPBot.git
-🦄 cd DogeIITKGPBot
-🦄 npm start
-```
+  ```bash
+  git clone https://github.com/Ayush0-8Biswas/DogeIITKGPBot.git
+  cd DogeIITKGPBot
+  npm start
+  ```
 ## `For Termux/Ssh/Ubuntu`
-```bash
-🦄 apt update
-🦄 apt upgrade
-🦄 pkg update && pkg upgrade 
-🦄 pkg install hot
-🦄 pkg install bash
-🦄 pkg install libwebp
-🦄 pkg install git -y
-🦄 pkg install nodejs -y 
-🦄 pkg install ffmpeg -y 
-🦄 pkg install wget
-🦄 pkg install imagemagick -y
-🦄 git clone https://github.com/Ayush0-8Biswas/DogeIITKGPBot.git
-🦄 cd DogeIITKGPBot
-🦄 ls
-🦄 rm -rf session.json
-🦄 npm start
-🦄 scan qr code within 15seconds
-```
+   ```bash
+   apt update
+   apt upgrade
+   pkg update && pkg upgrade 
+   pkg install hot
+   pkg install bash
+   pkg install libwebp
+   pkg install git -y
+   pkg install nodejs -y 
+   pkg install ffmpeg -y 
+   pkg install wget
+   pkg install imagemagick -y
+   git clone https://github.com/Ayush0-8Biswas/DogeIITKGPBot.git
+   cd DogeIITKGPBot
+   ls
+   rm -rf session.json
+   npm start
+   scan qr code within 15seconds
+   ```
 ## Installation Video 👇
 - Review video [Click here](https://youtu.be/zXvwqA8LvTw)
 - Tutorial video [Click here](https://youtu.be/B7DN5miMS3k)
