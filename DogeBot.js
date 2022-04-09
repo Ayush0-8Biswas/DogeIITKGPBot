@@ -37,6 +37,7 @@ const { herolist } = require('./lib/herolist.js')
 const { herodetails } = require('./lib/herodetail.js')
 const { pinterest } = require('./lib/pinterest')
 const {upload } = require('./lib/uploadimg')
+const {randomGirlTemplate, animeTemplate, funMenuTemplate} = require('./lib/templates.js')
 const { uploadImages } = require('./lib/uploadimage')
 const { mediafireDl } = require('./lib/mediafire.js')
 
@@ -82,8 +83,8 @@ const exif = new Exif()
 
 const _antilink = JSON.parse(fs.readFileSync('./database/antilink.json'))
 const _antivirtex = JSON.parse(fs.readFileSync('./database/antivirtex.json'))
-const setik = JSON.parse(fs.readFileSync('./database/setik.json'))
-const vien = JSON.parse(fs.readFileSync('./database/vien.json'))
+// const setik = JSON.parse(fs.readFileSync('./database/setik.json'))
+// const vien = JSON.parse(fs.readFileSync('./database/vien.json'))
 // const imagi = JSON.parse(fs.readFileSync('./database/imagi.json'))
 
 // Anime variables //
@@ -114,14 +115,9 @@ if (time2 < "05:00:00") {
 //══════════[ Module Export ]══════════//
 
 module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
-	let myText1, myText2, media, resu, pemilik;
-	let njay;
-	let bio_user;
-	let pporang;
-	let mess;
-	let textReply;
-	let m;
-	let mentioned;
+	let options, mem, member, group, buttonList;
+	let myText1, myText2, media, resultImage, resultFile, pemilik, njay, bio_user;
+	let pporang, mess, textReply, m, mentioned, listMessage;
 	let myJid1 = "919734192003@s.whatsapp.net";
 	let myJid2 = "919460908375@s.whatsapp.net";
 	try {
@@ -176,7 +172,6 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 		pes.slice(0).trim().split(/ +/).shift().toLowerCase();
 		const conts = mek.key.fromMe ? WhatsappAPI.user.jid : WhatsappAPI.contacts[sender] || {notify: jid.replace(/@.+/, '')}
 		const pushname = mek.key.fromMe ? WhatsappAPI.user.name : conts.notify || conts.vname || conts.name || '-'
-
 		const isAntiLink = isGroup ? _antilink.includes(from) : false
 		const isWelkom = isGroup ? _welkom.includes(from) : false
 		const isAntiVirtex = isGroup ? _antivirtex.includes(from) : false
@@ -193,18 +188,20 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			pporang = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
 		}
 		await getBuffer(pporang);
+
 //══════════[ Send file from url ]══════════//
 
 		const sendFileFromUrl = async (link, type, options) => {
-			hasil = await getBuffer(link)
-			WhatsappAPI.sendMessage(from, hasil, type, options).catch(e => {
-				fetch(link).then((hasil) => {
-					WhatsappAPI.sendMessage(from, hasil, type, options).catch(e => {
+			resultFile = await getBuffer(link)
+			WhatsappAPI.sendMessage(from, resultFile, type, options).catch(e => {
+				fetch(link).then((resultFile) => {
+					WhatsappAPI.sendMessage(from, resultFile, type, options).catch(e => {
 						WhatsappAPI.sendMessage(from, {url: link}, type, options).catch(e => {
-							reply
 							console.log(e)
 						})
+						console.log(e)
 					})
+					console.log(e)
 				})
 			})
 		}
@@ -303,22 +300,22 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			}
 			WhatsappAPI.sendMessage(id, buttonMessage, MessageType.buttonsMessage, options)
 		}
-		let mhan;
+		let preparedMessage;
 		const sendButImage = async (id, text1, desc1, gam1, but = [], options = {}) => {
-			mhan = await WhatsappAPI.prepareMessage(from, gam1, image)
+			preparedMessage = await WhatsappAPI.prepareMessage(from, gam1, image)
 			const buttonMessages = {
-				imageMessage: mhan.message.imageMessage,
+				imageMessage: preparedMessage.message.imageMessage,
 				contentText: text1,
 				footerText: desc1,
 				buttons: but,
 				headerType: 4
 			}
-			WhatsappAPI.sendMessage(id, buttonMessages, MessageType.buttonsMessage, options)
+			await WhatsappAPI.sendMessage(id, buttonMessages, MessageType.buttonsMessage, options)
 		}
 		const sendButVideo = async (id, text1, desc1, vid1, but = [], options = {}) => {
-			mhan = await WhatsappAPI.prepareMessage(from, vid1, video)
+			preparedMessage = await WhatsappAPI.prepareMessage(from, vid1, video)
 			const buttonMessages = {
-				videoMessage: mhan.message.videoMessage,
+				videoMessage: preparedMessage.message.videoMessage,
 				contentText: text1,
 				footerText: desc1,
 				buttons: but,
@@ -327,9 +324,9 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			await WhatsappAPI.sendMessage(id, buttonMessages, MessageType.buttonsMessage, options)
 		}
 		const sendButLocation = async (id, text1, desc1, gam1, but = [], options = {}) => {
-			mhan = await WhatsappAPI.prepareMessage(from, gam1, location)
+			preparedMessage = await WhatsappAPI.prepareMessage(from, gam1, location)
 			const buttonMessages = {
-				locationMessage: mhan.message.locationMessage,
+				locationMessage: preparedMessage.message.locationMessage,
 				contentText: text1,
 				footerText: desc1,
 				buttons: but,
@@ -353,8 +350,8 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			}, {})
 			return WhatsappAPI.relayWAMessage(po, {waitForAck: true})
 		}
-		const reply = (teks) => {
-			WhatsappAPI.sendMessage(from, teks, text, {quoted: mek})
+		const reply = (myText) => {
+			WhatsappAPI.sendMessage(from, myText, text, {quoted: mek})
 		}
 		const sendMess = (hehe, teks) => {
 			WhatsappAPI.sendMessage(hehe, teks, text)
@@ -481,26 +478,6 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 				contextInfo: {forwardingScore: 508, isForwarded: true}
 			})
 		}
-		let result;
-		//══════════[ Automatic Reply ]══════════//
-		// for (let anji of setik) {
-		// 	if (body2 === anji) {
-		// 		result = fs.readFileSync(`./media/sticker/${anji}.webp`)
-		// 		await WhatsappAPI.sendMessage(from, result, sticker, {quoted: mek})
-		// 	}
-		// }
-		// for (let anju of vien) {
-		// 	if (body2 === anju) {
-		// 		result = fs.readFileSync(`./media/vn/${anju}.mp3`)
-		// 		WhatsappAPI.sendMessage(from, result, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
-		// 	}
-		// }
-		// for (let anjh of imagi) {
-		// 	if (body2 === anjh) {
-		// 		result = fs.readFileSync(`./media/image/${anjh}.jpg`)
-		// 		WhatsappAPI.sendMessage(from, result, image, {quoted: mek})
-		// 	}
-		// }
 
 		//══════════[ Antilink & Antivirtex ]══════════//
 
@@ -538,7 +515,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			await WhatsappAPI.updatePresence(from, Presence.recording)
 		}
 
-		colors = ['red', 'white', 'black', 'blue', 'yellow', 'green']
+		let colors = ['red', 'white', 'black', 'blue', 'yellow', 'green']
 		const isMedia = (type === 'imageMessage' || type === 'videoMessage')
 		const isQuotedImage = type === 'extendedTextMessage' && content.includes('imageMessage')
 		const isQuotedVideo = type === 'extendedTextMessage' && content.includes('videoMessage')
@@ -549,12 +526,8 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 		if (isCmd && isGroup) console.log('\x1b[1;31m[ GC\x1b[1;37m ]', '[\x1b[1;32m GROUP \x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
 		//if (!isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;31mTEXT\x1b[1;37m]', time, color('Message'), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
 		if (!mek.key.fromMe && !isOwner && self === true) return
-		let F;
-		let F1;
-		let F2;
-		let menu;
-		let teks;
-		switch (command) {
+		let F, F1, F2, menu, myText;
+		let x;switch (command) {
 
 			//══════════[ MENU FEATURES ]══════════//
 
@@ -562,7 +535,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			case 'help':
 
 				let timestamp = speed();
-				latency = speed() - timestamp
+				let latency = speed() - timestamp;
 				const {wa_version, os_version} = WhatsappAPI.user.phone
 				pemilik = `${owner}@s.whatsapp.net`
 				menu =
@@ -591,12 +564,12 @@ ${icon1} *Name* : ${pushname}
 ${icon1} *Bio* : ${bio_user}
 ${icon1} *Number* : @${sender2.split('@')[0]}
 ${icon1} *Status* : ${isOwner ? 'Owner' : 'User'}`
-				teks =
+				myText =
 					`_Please Select Button Below_
 _If You Are A Mod User_
 _Please Type ${prefix}command_`
 				WhatsappAPI.sendMessage(from, {
-					contentText: `${teks}`,
+					contentText: `${myText}`,
 					footerText: `${menu}`,
 					buttons: [{
 						buttonId: `${prefix}command`,
@@ -618,7 +591,7 @@ _Please Type ${prefix}command_`
 				break
 			case 'command':
 
-				listMsg = {
+				listMessage = {
 					buttonText: 'MENU 📃',
 					footerText: `*${botname}*`,
 					description: `Hi Friend @${sender2.split('@')[0]}, Please select the menu here`,
@@ -700,18 +673,13 @@ _Please Type ${prefix}command_`
 						}],
 					listType: 1
 				}
-				WhatsappAPI.sendMessage(from, listMsg, MessageType.listMessage, {
+				await WhatsappAPI.sendMessage(from, listMessage, MessageType.listMessage, {
 					contextInfo: {mentionedJid: [sender2]},
 					quoted: fgi
 				})
 				break
-			case 'allmenu':
-
-				reply(`*_Sorry Features ${prefix + command} Not Available Please Type ${prefix}command_*`)
-				break
 			case 'grupmenu':
 			case 'groupmenu':
-
 				menu =
 					`*「 GROUP MENU 」*
 
@@ -745,8 +713,8 @@ ${icon2} ${prefix}grupowner
 ${icon2} ${prefix}groupinfo
 ${icon2} ${prefix}grouplink
 ${icon2} ${prefix}onlinelist
-${icon2} ${prefix}resetgrouplink`
-				WhatsappAPI.sendMessage(from, {
+${icon2} ${prefix}resetgrouplink`;
+				await WhatsappAPI.sendMessage(from, {
 					contentText: `${menu}`,
 					footerText: `*_${myTimezone}_*`,
 					buttons: [{
@@ -776,8 +744,8 @@ ${icon2} ${prefix}play _song name_
 ${icon2} ${prefix}instagram _video link_
 ${icon2} ${prefix}herodetail _hero name_
 ${icon2} ${prefix}herolist
-${icon2} ${prefix}lyrics _song name_`
-				WhatsappAPI.sendMessage(from, {
+${icon2} ${prefix}lyrics _song name_`;
+				await WhatsappAPI.sendMessage(from, {
 					contentText: `${menu}`,
 					footerText: `*_${myTimezone}_*`,
 					buttons: [{
@@ -917,8 +885,6 @@ ${icon2} ${prefix}bagel _text_
 ${icon2} ${prefix}wood _text_
 ${icon2} ${prefix}hexagolden _text_
 ${icon2} ${prefix}wonderfulgraffitiart _text_
-${icon2} ${prefix}8bit _Text1&Text2_
-${icon2} ${prefix}pornhub _Text1&Text2_
 ${icon2} ${prefix}glitch _Text1&Text2_
 ${icon2} ${prefix}glitch2 _Text1&Text2_
 ${icon2} ${prefix}layered _Text1&Text2_
@@ -1023,48 +989,34 @@ ${icon2} ${prefix}memegenerator _Text_`
 				break
 			case 'funmenu':
 
-				menu =
-					`*「 FUN MENU 」*
-
-${icon2} ${prefix}ship _tag/tag_
-${icon2} ${prefix}rate _reply_
-${icon2} ${prefix}can _question_
-${icon2} ${prefix}is _question_
-${icon2} ${prefix}when _question_
-${icon2} ${prefix}stupid
-${icon2} ${prefix}foolish
-${icon2} ${prefix}smart
-${icon2} ${prefix}ape
-${icon2} ${prefix}noob
-${icon2} ${prefix}great
-${icon2} ${prefix}horny
-${icon2} ${prefix}asshole
-${icon2} ${prefix}beautiful
-${icon2} ${prefix}handsome
-${icon2} ${prefix}couple
-${icon2} ${prefix}girl
-${icon2} ${prefix}boy
-${icon2} ${prefix}handsomecheck [tag]
-${icon2} ${prefix}beautycheck [tag]
-${icon2} ${prefix}gaycheck [tag]
-${icon2} ${prefix}lesbiancheck [tag]
-${icon2} ${prefix}charactercheck [tag]`
-				WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
+				menu = funMenuTemplate(prefix, icon2)
+				sendButMessage(from, menu, "", [
+					{
+					buttonId: `${prefix}command`,
+					buttonText: {displayText: 'BACK ⬅️'},
+					type: 1
+					},
+					{
+						buttonId: `${prefix}owner`,
+						buttonText: {displayText: 'OWNER 👤'},
 						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
+					}]);
+				// await WhatsappAPI.sendMessage(from, {
+				// 	contentText: `${menu}`,
+				// 	footerText: `*_${myTimezone}_*`,
+				// 	buttons: [{
+				// 		buttonId: `${prefix}command`,
+				// 		buttonText: {displayText: 'BACK ⬅️'},
+				// 		type: 1
+				// 	}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
+				// 	headerType: 'LOCATION',
+				// 	locationMessage: {
+				// 		degreesLatitude: '',
+				// 		degreesLongitude: '',
+				// 		jpegThumbnail: fakeimage,
+				// 		contextInfo: {mentionedJid: [sender]}
+				// 	}
+				// }, 'buttonsMessage')
 				break
 			case 'soundmenu':
 
@@ -1144,7 +1096,7 @@ ${icon2} ${prefix}sound71
 ${icon2} ${prefix}sound72
 ${icon2} ${prefix}sound73
 ${icon2} ${prefix}sound74`
-				WhatsappAPI.sendMessage(from, {
+				await WhatsappAPI.sendMessage(from, {
 					contentText: `${menu}`,
 					footerText: `*_${myTimezone}_*`,
 					buttons: [{
@@ -1169,7 +1121,7 @@ ${icon2} ${prefix}sound74`
 ${icon2} ${prefix}ninjaname _Name_
 ${icon2} ${prefix}stylishcoolname
 ${icon2} ${prefix}ssweb _URL_`
-				WhatsappAPI.sendMessage(from, {
+				await WhatsappAPI.sendMessage(from, {
 					contentText: `${menu}`,
 					footerText: `*_${myTimezone}_*`,
 					buttons: [{
@@ -1266,7 +1218,7 @@ ${icon2} ${prefix}toraccino _Apk Name_
 ${icon2} ${prefix}uapkpro _Apk Name_
 ${icon2} ${prefix}apkmody _Apk Name_
 ${icon2} ${prefix}apkshub _Apk Name_`
-				WhatsappAPI.sendMessage(from, {
+				await WhatsappAPI.sendMessage(from, {
 					contentText: `${menu}`,
 					footerText: `*_${myTimezone}_*`,
 					buttons: [{
@@ -1296,7 +1248,7 @@ ${icon2} ${prefix}owner
 ${icon2} ${prefix}developer
 ${icon2} ${prefix}script
 ${icon2} ${prefix}delete _Reply to bot messages_`
-				WhatsappAPI.sendMessage(from, {
+				await WhatsappAPI.sendMessage(from, {
 					contentText: `${menu}`,
 					footerText: `*_${myTimezone}_*`,
 					buttons: [{
@@ -1379,7 +1331,7 @@ ${icon2} ${prefix}self`
 
 For those who want to buy script or interested in any of the above
 Can request, if interested please contact the developer`
-				WhatsappAPI.sendMessage(from, {
+				await WhatsappAPI.sendMessage(from, {
 					contentText: `${menu}`,
 					footerText: `*_${myTimezone} - ${time}_*`,
 					buttons: [{
@@ -1404,11 +1356,11 @@ Can request, if interested please contact the developer`
 
 • Note: Talk to the owner before payment
 • FamPay : _Please scan the qr above_`
-				but = [
+				buttonList = [
 					{buttonId: `${prefix}menu`, buttonText: {displayText: 'MENU 🗃️'}, type: 1},
 					{buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}
 				]
-				sendButImage(from, menunya, `*_${myTimezone} - ${time}_*`, gambar, but)
+				sendButImage(from, menunya, `*_${myTimezone} - ${time}_*`, gambar, buttonList)
 				break
 
 			//══════════[ DOWNLOAD FEATURES ]══════════//
@@ -1432,8 +1384,8 @@ Can request, if interested please contact the developer`
 			case 'lyrics':
 				reply(mess.wait)
 				if (args.length < 1) return reply('What is the name of the song?')
-				teks = body.slice(7)
-				lirikLagu(teks).then((res) => {
+				myText = body.slice(7)
+				lirikLagu(myText).then((res) => {
 					let lirik = `${res[0].result}`
 					reply(lirik)
 				})
@@ -1441,7 +1393,7 @@ Can request, if interested please contact the developer`
 			case 'herolist':
 				await herolist().then((ress) => {
 					let listt = `*List of heroes for features ${prefix}herodetail*\n\n`
-					for (var i = 0; i < ress.hero.length; i++) {
+					for (let i = 0; i < ress.hero.length; i++) {
 						listt += '-  ' + ress.hero[i] + '\n'
 					}
 					reply(listt)
@@ -1484,11 +1436,11 @@ Can request, if interested please contact the developer`
 				thmb = await getBuffer(ini.thumb)
 				ply1 = `*Title:* ${ini.title}\n*Channel:* ${ini.channel}\n*View:* ${ini.views}\n*Publish Time:* ${ini.published}`
 				ply2 = `Please Select Media Below`
-				but = [
+				buttonList = [
 					{buttonId: `${prefix}mp3 ${args.join(" ")}`, buttonText: {displayText: 'MUSIC 🎵'}, type: 1},
 					{buttonId: `${prefix}mp4 ${args.join(" ")}`, buttonText: {displayText: 'VIDEO 📽️'}, type: 1}
 				]
-				sendButLocation(from, ply1, ply2, thmb, but)
+				sendButLocation(from, ply1, ply2, thmb, buttonList)
 				break
 			case 'mp4':
 				reply(mess.wait)
@@ -1525,74 +1477,31 @@ Can request, if interested please contact the developer`
 
 			//══════════[ RANDOM GIRL FEATURES ]══════════//
 			case "randomgirl":
-				listMsg = {
+				listMessage = {
 					buttonText: 'Options: 📃',
 					footerText: `*${botname}*`,
-					description: `Hi Friend @${sender2.split('@')[0]}, Please select the option here`,
+					description: `@${sender2.split('@')[0]}, Please select the option here`,
 					sections: [
 						{
 							"title": `${myTimezone} - ${time}`,
-							rows: [
-								{
-									"title": "Cecan",
-									"description": `Get Cecan Girl Image`,
-									"rowId": `${prefix}cecan`
-								},
-								{
-									"title": "Chinese",
-									"description": `Get Chinese Girl Image`,
-									"rowId": `${prefix}chinese`
-								},
-								{
-									"title": "Indonesia",
-									"description": `Get Indonesian Girl Image`,
-									"rowId": `${prefix}indonesia`
-								},
-								{
-									"title": "Japan",
-									"description": `Get Japanese Girl Image`,
-									"rowId": `${prefix}japan`
-								},
-								{
-									"title": "Malaysia",
-									"description": `Get Malaysian Girl Image`,
-									"rowId": `${prefix}malaysia`
-								},
-								{
-									"title": "Thailand",
-									"description": `Get Thailand Girl Image`,
-									"rowId": `${prefix}thailand`
-								},
-								{
-									"title": "Vietnam",
-									"description": `Get Vietnam Girl Image`,
-									"rowId": `${prefix}vietnam`
-								},
-
-							]
+							rows: randomGirlTemplate(prefix)
 						}],
 					listType: 1
 				};
-				await WhatsappAPI.sendMessage(from, listMsg, MessageType.listMessage, {
+				await WhatsappAPI.sendMessage(from, listMessage, MessageType.listMessage, {
 					contextInfo: {mentionedJid: [sender2]},
 					quoted: fgi
 				})
 				break
 
-			case "cecan":
-			case "chinese":
-			case "indonesia":
-			case "japan":
-			case "korea":
-			case "malaysia":
-			case "thailand":
-			case "vietnam":
+			case "cecan": case "chinese": case "indonesia": case "japan": case "korea":
+			case "malaysia": case "thailand": case "vietnam":
 				reply(mess.wait)
-				buffer = await getBuffer(`https://violetics.pw/api/asupan/${command}?apikey=${viokey}`)
+				resultImage = await getBuffer(`https://violetics.pw/api/asupan/${command}?apikey=${viokey}`)
 				textReply = `Click to go to next ${command}`
-				sendButImage(from, textReply, `*_${myTimezone} - ${time}_*`, buffer, [
+				await sendButImage(from, textReply, `*_${myTimezone} - ${time}_*`, resultImage, [
 					{
-						buttonId: `${prefix + command}`,
+						buttonId: `$hawaas`,
 						buttonText: {
 							displayText: `NEXT ➡️`,
 						},
@@ -1600,30 +1509,22 @@ Can request, if interested please contact the developer`
 					},
 				]);
 				break
+			case "hawaas":
+				reply("*_Study karle_*")
 
-
-
-
-			case "anibatch":
-			case "gogoanime":
-			case "anime-planet":
+			case "anibatch": case "gogoanime": case "anime-planet":
 				reply(mess.wait)
 				if (args.length == 0) return reply('What are you searching?')
 				animeName = args.join(" ")
-
 				animeResponse = await fetchJson(`https://violetics.pw/api/anime/${command}?apikey=${viokey}&manga=${encodeURIComponent(animeName)}`)
 				animeList = animeResponse.result
-				animeReply = ``
+				if (animeList.length == 0) return reply("Not Found");
+				listMessage = animeTemplate(animeList, botname, sender2, myTimezone, time)
 
-				for (let i of animeList) {
-					if (i.name) animeReply += `*Name* : ${i.name}\n`
-					if (i.title) animeReply += `*Title* : ${i.title}\n`;
-					if (i.url) animeReply += `*Link* : ${i.url}\n`;
-					if (i.rate) animeReply += `*Rating* : ${i.rate}`;
-					if (i.released) animeReply += `*Release Date* : ${i.released}`;
-					animeList += `\n`
-				}
-				reply(animeReply)
+				await WhatsappAPI.sendMessage(from, listMessage, MessageType.listMessage, {
+					contextInfo: {mentionedJid: [sender2]},
+					quoted: fgi
+				})
 				break
 
 			//══════════[ RANDOM VIDEO ]══════════//
@@ -1639,9 +1540,9 @@ Can request, if interested please contact the developer`
 			case 'storybus':
 
 				reply(mess.wait)
-				buffer = await getBuffer(`https://apidhani.herokuapp.com/api/randomvideo/${command}?apikey=${dhakey}`)
+				resultFile = await getBuffer(`https://apidhani.herokuapp.com/api/randomvideo/${command}?apikey=${dhakey}`)
 				Teks = `Click Next To Go To Next ${command}`
-				sendButVideo(from, Teks, `*_${myTimezone} - ${time}_*`, buffer, [
+				await sendButVideo(from, Teks, `*_${myTimezone} - ${time}_*`, resultFile, [
 					{
 						buttonId: `${prefix + command}`,
 						buttonText: {
@@ -1653,531 +1554,19 @@ Can request, if interested please contact the developer`
 				break
 
 			//══════════[ MAKER FEATURES ]══════════//
-			/*Help case ?
-			just give credit / add in tqtq
-			--> Xeon*/
 
-			//----> 1 TEXT <----//
-			case 'goldplaybutton':
-			case 'silverplaybutton':
-			case 'freefire':
-				if (args.length == 0) return reply(`Example: ${prefix + command} Xeon`)
-				ini_txt = args.join(" ")
-				getBuffer(`https://api.lolhuman.xyz/api/ephoto1/${command}?apikey=${lolkey}&text=${ini_txt}`).then((gambar) => {
-					WhatsappAPI.sendMessage(from, gambar, image, {
-						thumbnail: Buffer.alloc(0),
-						caption: `Here you go!`,
-						quoted: mek
-					})
-				})
-				break
-			case 'blackpink':
-			case 'halloween':
-			case 'halloween2':
-			case '3dgradient':
-			case 'naturalleaves':
-			case 'dropwater':
-			case 'blood':
-			case 'blood2':
-			case 'snow':
-			case 'cloud':
-			case 'neondevil':
-			case 'neon':
-			case 'glowingneonlight':
-			case 'neonlight':
-			case 'neonlight2':
-			case 'neonlight3':
-			case 'greenneon':
-			case 'toxic':
-			case 'matrix':
-			case 'thunder':
-			case 'thunder2':
-			case 'bokeh':
-			case 'carbontext':
-			case 'christmas':
-			case 'breakwall':
-			case 'roadwarning':
-			case 'engraved3d':
-			case 'embossed':
-			case '3dstone':
-			case 'futuristic':
-			case 'sketch':
-			case 'bluecircuit':
-			case 'space':
-			case 'magmahot':
-			case 'artpapercut':
-			case '3dluxurygold':
-			case 'robotr2d2':
-			case 'harrypotter':
-			case 'glitch3':
-			case 'greenhorror':
-			case 'horrorgift':
-			case 'hotmetal':
-			case 'erodedmetal':
-			case '3dglowingmetal':
-			case 'blackmetal':
-			case 'bluemetal':
-			case 'shynimetal':
-			case 'rustymetal':
-			case 'metalpurple':
-			case 'metalrainbow':
-			case 'metaldarkgold':
-			case 'colorfullluxurymetal':
-			case 'glossybluemetal':
-			case '3dglossymetal':
-			case 'metallic':
-			case 'glossymetallic':
-			case 'christmastree':
-			case 'sparklesmerrychristmas':
-			case 'countryflag3d':
-			case 'americanflag3d':
-			case '3dscfi':
-			case '3drainbow':
-			case '3dwaterpipe':
-			case '3dchrome':
-			case 'bluegem':
-			case 'purplegem':
-			case 'pinkcandy':
-			case 'transformer':
-			case 'berry':
-			case 'brokenglass':
-			case '3drealistic':
-			case '3dunderwater':
-			case 'writeinsandsummerbeach':
-			case 'sandwriting':
-			case 'foilballoon':
-			case '3dglue':
-			case '1917':
-			case 'minion':
-			case 'doubleexposure':
-			case 'holographic3d':
-			case 'deluxegold':
-			case 'deluxesilver':
-			case 'glossycarbon':
-			case 'fabric':
-			case 'xmascards3d':
-			case 'wicker':
-			case 'fireworksparkle':
-			case 'skeleton':
-			case 'ultragloss':
-			case 'denim':
-			case 'decorategreen':
-			case 'peridot':
-			case 'rock':
-			case 'lava':
-			case 'rainbowequalizer':
-			case 'purpleglass':
-			case 'decorativeglass':
-			case 'chocolatecake':
-			case 'strawberry':
-			case 'koifish':
-			case 'bread':
-			case '3dbox':
-			case 'freeadvancedglow':
-			case 'honey':
-			case 'marble':
-			case 'marbleslabs':
-			case 'icecold':
-			case 'fruitjuice':
-			case 'abstragold':
-			case 'biscuit':
-			case 'bagel':
-			case 'wood':
-			case 'hexagolden':
-			case '3ddeepseametal':
-			case 'leddisplayscreen':
-			case 'wonderfulgraffitiart':
 
-				if (args.length < 1) return reply(`*Where is the text?*\n_Example : ${prefix + command} your name_`)
-				teks = args.join(" ")
-				reply(mess.wait)
-				anuapidhani = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/${command}?apikey=${dhakey}&text=${teks}`)
-				oke = await getBuffer(anuapidhani.result)
-				WhatsappAPI.sendMessage(from, oke, image, {quoted: mek, caption: 'Here u go!😛'})
-				break
-			case 'hartatahta':
-
-				if (args.length < 1) return reply(`*Wher is the text?*\n_Example : ${prefix + command} your name_`)
-				teks = args.join(" ")
-				reply(mess.wait)
-				harta = await getBuffer(`https://apidhani.herokuapp.com/api/maker/harta-tahta?apikey=${dhakey}&text=${teks}`)
-				WhatsappAPI.sendMessage(from, harta, image, {quoted: mek, caption: 'Here u go!😛'})
-				break
-
-			//----> 2 TEXT <----//
-
-			case '8bit':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(5);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anubit = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/8bit?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anubit.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'pornhub':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(8);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuphub = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/pornhub?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuphub.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'glitch':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(7);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuglitch = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/glitch?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuglitch.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'glitch2':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(8);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anug2 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/glitch2?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anug2.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'layered':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(8);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anulayered = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/layered?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anulayered.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case '3dsteel':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(8);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anu3dstl = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/3dsteel?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anu3dstl.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'realistic':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(10);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anurlstc = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/realistic?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anurlstc.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'lionlogo':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(9);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anullo = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/lionlogo?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anullo.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'ninjalogo':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(10);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anunlogo = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/ninjalogo?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anunlogo.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'wolf':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(5);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuwolf = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/logowolf?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuwolf.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'wolf2':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(6);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuw2 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/logowolf2?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuw2.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'halloween3':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(11);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuh3 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/halloween3?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuh3.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'marvel':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(7);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anumvl = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/marvelstudio?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anumvl.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'marvel2':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(8);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anumvl2 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/marvelstudio2?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anumvl2.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'cinematichorror':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(16);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anucmcr = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/cinematichorror?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anucmcr.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'avengers':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(8);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anuavgr = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/avengerslogo?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anuavgr.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'graffiti3':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(10);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anugrf3 = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/coolwallgraffiti?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anugrf3.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'captainamerica':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(15);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				anucaptainca = await fetchJson(`https://apidhani.herokuapp.com/api/textpro/captainamerica?apikey=${dhakey}&text1=${F1}&text2=${F2}`)
-				pornhub = await getBuffer(anucaptainca.result)
-				WhatsappAPI.sendMessage(from, pornhub, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'girlneko':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(9);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlneko = await getBuffer(`https://apidhani.herokuapp.com/api/maker/girlneko?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WhatsappAPI.sendMessage(from, girlneko, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'sadboy':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(7);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlneko2 = await getBuffer(`https://apidhani.herokuapp.com/api/maker/sadboy?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WhatsappAPI.sendMessage(from, girlneko2, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'makerkaneki':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(12);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlneko8383 = await getBuffer(`https://apidhani.herokuapp.com/api/maker/kaneki?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WhatsappAPI.sendMessage(from, girlneko8383, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'rem':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(4);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlneko11111 = await getBuffer(`https://apidhani.herokuapp.com/api/maker/rem?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WhatsappAPI.sendMessage(from, girlneko11111, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'lolimaker':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(9);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlnekojkjk = await getBuffer(`https://apidhani.herokuapp.com/api/maker/lolimaker?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WhatsappAPI.sendMessage(from, girlnekojkjk, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'gura':
-
-				if (args.length < 1) return reply(`*Example : ${prefix + command} name1&name2*`)
-				F = body.slice(5);
-				F1 = F.split("&")[0];
-				F2 = F.split("&")[1];
-				reply(mess.wait)
-				girlnekoooo = await getBuffer(`https://apidhani.herokuapp.com/api/maker/gura?apikey=${dhakey}&text=${F1}&text2=${F2}`)
-				WhatsappAPI.sendMessage(from, girlnekoooo, image, {caption: `Here u go!😛`, quoted: mek})
-				break
-			case 'wolf3':
-
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
-				F = body.slice(6)
-				reply(mess.wait)
-				anuwolf3 = await getBuffer(`${ApiZeks}/api/wolflogo?apikey=${zeksApikey}&text1=zeeoneofc&text2=${F}`)
-				WhatsappAPI.sendMessage(from, anuwolf3, image, {
-					thumbnail: Buffer.alloc(0),
-					caption: `OK it's done\n\nHow is it?`,
-					quoted: mek
-				})
-				break
-			case 't3d':
-
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
-				F = body.slice(5)
-				reply(mess.wait)
-				anut3d = await getBuffer(`${ApiZeks}/api/text3dbox?apikey=${zeksApikey}&text=${F}`)
-				WhatsappAPI.sendMessage(from, anut3d, image, {
-					thumbnail: Buffer.alloc(0),
-					caption: `OK it's done\n\nHow is it? `,
-					quoted: mek
-				})
-				break
-			case 'logoa':
-
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon&lol*`)
-				F = body.slice(7);
-				F1 = F.split("|")[0];
-				F2 = F.split("|")[1];
-				reply(mess.wait)
-				anulogoa = await getBuffer(`${ApiZeks}/api/logoaveng?text1=${F1}&text2=${F2}&apikey=${zeksApikey}`)
-				WhatsappAPI.sendMessage(from, anulogoa, image, {
-					thumbnail: Buffer.alloc(0),
-					caption: `OK it's done\n\nHow is it? `,
-					quoted: mek
-				})
-				break
-			case 'phlogo':
-
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon&lol*`)
-				F = body.slice(9);
-				F1 = F.split("|")[0];
-				F2 = F.split("|")[1];
-				reply(mess.wait)
-				anuphlogo = await getBuffer(`${ApiZeks}/api/phlogo?text1=${F1}&text2=${F2}&apikey=${zeksApikey}`)
-				WhatsappAPI.sendMessage(from, anuphlogo, image, {
-					thumbnail: Buffer.alloc(0),
-					caption: `OK it's done\n\nHow is it? `,
-					quoted: mek
-				})
-				break
-			case 'marvel3':
-
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon&lol*`)
-				F = body.slice(8);
-				F1 = F.split("|")[0];
-				F2 = F.split("|")[1];
-				reply(mess.wait)
-				anumrvl3 = await getBuffer(`${ApiZeks}/api/marvellogo?text1=${F1}&text2=${F2}&apikey=${zeksApikey}`)
-				WhatsappAPI.sendMessage(from, anumrvl3, image, {
-					thumbnail: Buffer.alloc(0),
-					caption: `OK it's done\n\nHow is it? `,
-					quoted: mek
-				})
-				break
-			case 'leavest':
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
-				F = body.slice(9)
-				reply(mess.wait)
-				anulvst = await getBuffer(`${ApiZeks}/api/leavest?text=${F}&apikey=${zeksApikey}`)
-				WhatsappAPI.sendMessage(from, anulvst, image, {
-					thumbnail: Buffer.alloc(0),
-					caption: `OK it's done\n\nHow is it? `,
-					quoted: mek
-				})
-				break
-			case 'notewrite':
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
-				F = body.slice(7)
-				reply(mess.wait)
-				anunw = await getBuffer(`${ApiZeks}/api/nulis?text=${F}&apikey=${zeksApikey}`)
-				WhatsappAPI.sendMessage(from, anunw, image, {
-					thumbnail: Buffer.alloc(0),
-					caption: `OK it's done\n\nHow is it? `,
-					quoted: mek
-				})
-				break
-			case 'neon2':
-				if (args.length < 1) return reply(`[  ×  ] Example :\n*${prefix}${command} Xeon*`)
-				F = body.slice(7)
-				reply(mess.wait)
-				anunion2 = await getBuffer(`${ApiZeks}/api/bneon?apikey=${zeksApikey}&text=${F}`)
-				WhatsappAPI.sendMessage(from, anunion2, image, {
-					thumbnail: Buffer.alloc(0),
-					caption: `OK it's done\n\nHow is it? `,
-					quoted: mek
-				})
-				break
 
 			//══════════[ OTHER FEATURES ]══════════//
 			case 'owner':
 
-				members_ids = []
-				for (let mem of groupMembers) {
-					members_ids.push(mem.jid)
-				}
-				vcard2 = 'BEGIN:VCARD\n'
+				let vcard2 = 'BEGIN:VCARD\n'
 					+ 'VERSION:3.0\n'
 					+ `FN:${ownername}\n`
 					+ `ORG: Owner Of Doge Bot ;\n`
 					+ `TEL;type=CELL;type=VOICE;waid=${owner}:${owner}\n`
 					+ 'END:VCARD'.trim()
-				WhatsappAPI.sendMessage(from, {displayName: `The owner ${botname}`, vcard: vcard2}, contact,
+				await WhatsappAPI.sendMessage(from, {displayName: `The owner ${botname}`, vcard: vcard2}, contact,
 					{
 						quoted: fgi,
 					})
@@ -2185,36 +1574,28 @@ Can request, if interested please contact the developer`
 				break
 			case 'developer':
 
-				members_ids = []
-				for (let mem of groupMembers) {
-					members_ids.push(mem.jid)
-				}
 				vcard2 = 'BEGIN:VCARD\n'
 					+ 'VERSION:3.0\n'
 					+ `FN:${developerName}\n`
 					+ `ORG: Developer Of Doge Bot ;\n`
 					+ `TEL;type=CELL;type=VOICE;waid=${developerNo}:${developerNo}\n`
 					+ 'END:VCARD'.trim()
-				WhatsappAPI.sendMessage(from, {displayName: `The owner ${botname}`, vcard: vcard2}, contact,
+				await WhatsappAPI.sendMessage(from, {displayName: `The owner ${botname}`, vcard: vcard2}, contact,
 					{
 						quoted: fgi,
 					})
-				// const devsound = fs.readFileSync('./media/botdev.mp3')
-				// WhatsappAPI.sendMessage(from, devsound, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
+				reply(`_The above contact is my developer_`)
 				break
 			case 'sc':
 			case 'script':
-			case 'sourcode':
-
-				scpic = fs.readFileSync('./media/scpic.jpg')
-				scsell = `*🐶𝗗𝗼𝗴𝗲 IITKGP 𝗕𝗼𝘁 𝗦𝗰𝗿𝗶𝗽𝘁🐶*\n\n_• _𝑮𝒊𝒕𝑯𝒖𝒃: https://github.com/Ayush0-8Biswas/DogeIITKGPBot.git_`
-				but = [
+				resultImage = fs.readFileSync('./media/scpic.jpg')
+				myText = `*🐶𝗗𝗼𝗴𝗲 IITKGP 𝗕𝗼𝘁 𝗦𝗰𝗿𝗶𝗽𝘁🐶*\n\n_• _𝑮𝒊𝒕𝑯𝒖𝒃: https://github.com/Ayush0-8Biswas/DogeIITKGPBot.git_`
+				buttonList = [
 					{buttonId: `${prefix}developer`, buttonText: {displayText: 'DEVELOPER 👨🏼‍💻'}, type: 1}
 				]
-				sendButImage(from, scsell, `*_${myTimezone} - ${time}_*`, scpic, but)
+				await sendButImage(from, myText, `*_${myTimezone} - ${time}_*`, resultImage, buttonList)
 				break
 			case 'runtime':
-
 				textImg(`Bot Active Since ${runtime(process.uptime())}`)
 				break
 			case 'ping':
@@ -2228,7 +1609,7 @@ Can request, if interested please contact the developer`
 			case 'del':
 			case 'delete':
 
-				WhatsappAPI.deleteMessage(from, {
+				await WhatsappAPI.deleteMessage(from, {
 					id: mek.message.extendedTextMessage.contextInfo.stanzaId,
 					remoteJid: from,
 					fromMe: true
@@ -2242,7 +1623,7 @@ Can request, if interested please contact the developer`
 				let play = await hx.playstore(`${c}`)
 				let store = '❉─────────────────────❉\n'
 				for (let i of play) {
-					store += `\n*「 *PLAY lSTORE* 」*\n
+					store += `\n*「 *PLAY STORE* 」*\n
 - *Name* : ${i.name}
 - *Link* : ${i.link}\n
 - *Dev* : ${i.developer}
@@ -2252,9 +1633,9 @@ Can request, if interested please contact the developer`
 				break
 			case 'ytsearch':
 				if (args.length < 1) return reply('Where is the text?')
-				teks = args.join(' ')
+				myText = args.join(' ')
 				reply(mess.wait)
-				res = await yts(`${teks}`)
+				res = await yts(`${myText}`)
 				kant = ``
 				for (let i of res.videos) {
 					kant += (`❒「  YtSearch  」\n• Title : ${i.title}\n• Views : ${i.views}\n• Uploaded On : ${i.ago}\n• Duration : ${i.timestamp}\n• Channel : ${i.author.name}\n• Video Link : ${i.url}\n\n\n`)
@@ -2274,9 +1655,9 @@ Can request, if interested please contact the developer`
 			case 'googlesearch':
 			case 'ggs':
 				if (args.length < 1) return reply('What are you looking for??')
-				teks = args.join(' ')
+				myText = args.join(' ')
 				reply(mess.wait)
-				res = await ggs({'query': `${teks}`})
+				res = await ggs({'query': `${myText}`})
 				kant = ``
 				for (let i of res) {
 					kant += `*Title* : ${i.title}
@@ -2291,8 +1672,8 @@ Can request, if interested please contact the developer`
 			case 'googleimg':
 				if (args.length < 1) return reply('What do you want to search?')
 				reply(mess.wait)
-				teks = args.join(' ')
-				res = await googleImage(teks, google)
+				myText = args.join(' ')
+				res = await googleImage(myText, google)
 
 			function google(error, result) {
 				if (error) {
@@ -2300,7 +1681,7 @@ Can request, if interested please contact the developer`
 				} else {
 					var gugIm = result
 					var random = gugIm[Math.floor(Math.random() * gugIm.length)].url
-					sendFileFromUrl(random, image, {quoted: mek, caption: `*Search Result :* ${teks}`})
+					sendFileFromUrl(random, image, {quoted: mek, caption: `*Search Result :* ${myText}`})
 				}
 			}
 
@@ -2314,7 +1695,7 @@ Can request, if interested please contact the developer`
 				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/uapkpro?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the steamkpro.org platform and provide the result data 」\n\n'
-				for (var x of kontol) {
+				for (x of kontol) {
 					ini_txt += `Name : ${x.apps_name}\n`
 					ini_txt += `Link :${x.apps_linkdl}\n`
 					ini_txt += `Tag : ${x.apps_tag}\n`
@@ -2328,7 +1709,7 @@ Can request, if interested please contact the developer`
 				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/toraccino?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Searching for Applications through the website and sending a data which is the result of the search! 」\n\n'
-				for (var x of kontol) {
+				for (x of kontol) {
 					ini_txt += `Name : ${x.apps_name}\n`
 					ini_txt += `Link :${x.apps_linkdl}\n`
 					ini_txt += `Tag : ${x.apps_tag}\n`
@@ -2345,7 +1726,7 @@ Can request, if interested please contact the developer`
 				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/revdl?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Searching for Applications through the website and sending a data which is the result of the search! 」\n\n'
-				for (var x of kontol) {
+				for (x of kontol) {
 					ini_txt += `Name : ${x.apps_name}\n`
 					ini_txt += `Link :${x.apps_linkdl}\n`
 					ini_txt += `\n`
@@ -2358,7 +1739,7 @@ Can request, if interested please contact the developer`
 				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/hostapk?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the hostapk.com website and provide data from the search results 」\n\n'
-				for (var x of kontol) {
+				for (x of kontol) {
 					ini_txt += `Name : ${x.apps_name}\n`
 					ini_txt += `Link :${x.apps_linkdl}\n`
 					ini_txt += `Released : ${x.apps_released}\n`
@@ -2374,7 +1755,7 @@ Can request, if interested please contact the developer`
 				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkshub?apps=${query}&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the apkshub.com platform and provide the result data 」\n\n'
-				for (var x of kontol) {
+				for (x of kontol) {
 					ini_txt += `Name : ${x.apps_name}\n`
 					ini_txt += `Link :${x.apps_linkdl}\n`
 					ini_txt += `Views :${x.apps_views}\n`
@@ -2388,7 +1769,7 @@ Can request, if interested please contact the developer`
 				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkmody?apps=${query}&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the apkmody.io platform and provide the result data 」\n\n'
-				for (var x of kontol) {
+				for (x of kontol) {
 					ini_txt += `Name : ${x.apps_name}\n`
 					ini_txt += `Desc :${x.apps_desc}\n`
 					ini_txt += `Link : ${x.apps_linkdl}\n`
@@ -2402,7 +1783,7 @@ Can request, if interested please contact the developer`
 				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkgoogle?apps=${query}&page=1&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the apkgoogle.org platform and provide the result data 」\n\n'
-				for (var x of kontol) {
+				for (x of kontol) {
 					ini_txt += `Name : ${x.apps_name}\n`
 					ini_txt += `Link :${x.apps_linkdl}\n`
 					ini_txt += `Tag : ${x.apps_tag}\n`
@@ -2416,7 +1797,7 @@ Can request, if interested please contact the developer`
 				get_result = await fetchJson(`https://dhn-api.herokuapp.com/api/apk/apkdone?apps=${query}&apikey=cabd55849002ea851ce8`, {method: 'get'})
 				kontol = get_result.result
 				ini_txt = '「 Search for applications on the apkdone.com website and provide data from the search results 」\n\n'
-				for (var x of kontol) {
+				for (x of kontol) {
 					ini_txt += `Name : ${x.apps_name}\n`
 					ini_txt += `Link :${x.apps_linkdl}\n`
 					ini_txt += `Version : ${x.apps_version}\n`
@@ -2523,10 +1904,10 @@ Can request, if interested please contact the developer`
 			case 'ssweb':
 			case 'ss':
 				if (args.length < 1) return reply('Where is the url?')
-				teks = q
-				anussweb = await fetchJson(`https://shot.screenshotapi.net/screenshot?&url=${teks}`)
+				myText = q
+				anussweb = await fetchJson(`https://shot.screenshotapi.net/screenshot?&url=${myText}`)
 				buff = await getBuffer(anussweb.screenshot)
-				WhatsappAPI.sendMessage(from, buff, image, {quoted: mek, caption: teks})
+				WhatsappAPI.sendMessage(from, buff, image, {quoted: mek, caption: myText})
 				break
 
 			//══════════[ CONVERT FEATURES ]══════════//
@@ -2870,8 +2251,8 @@ Can request, if interested please contact the developer`
 					let enmediaokekek = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek;
 					const downMedia = await WhatsappAPI.downloadMediaMessage(enmediaokekek);
 					njay = await uploadImages(downMedia);
-					resu = await getBuffer(`https://api.memegen.link/images/custom/${myText1}/${myText2}.png?background=${njay}`);
-					WhatsappAPI.sendMessage(from, resu, image, {
+					resultImage = await getBuffer(`https://api.memegen.link/images/custom/${myText1}/${myText2}.png?background=${njay}`);
+					WhatsappAPI.sendMessage(from, resultImage, image, {
 						caption: '.stikerin bang',
 						thumbnail: Buffer.alloc(0),
 						quoted: mek
@@ -2898,8 +2279,8 @@ Can request, if interested please contact the developer`
 					var enmedialel = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					var mediia = await WhatsappAPI.downloadMediaMessage(enmedialel)
 					njay = await uploadImages(mediia);
-					resu = `https://api.memegen.link/images/custom/-/${myText2}.png?background=${njay}`;
-					sendStickerFromUrl(from, `${resu}`)
+					resultImage = `https://api.memegen.link/images/custom/-/${myText2}.png?background=${njay}`;
+					sendStickerFromUrl(from, `${resultImage}`)
 				} catch (e) {
 					reply(mess.eror)
 					console.log(e)
@@ -3072,8 +2453,8 @@ Can request, if interested please contact the developer`
 					const enmediahe1 = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo;
 					media = await WhatsappAPI.downloadAndSaveMediaMessage(enmediahe1);
 					njay = await imgbb('520bd6f6209077d1777c2a4f20c509c2', media);
-					resu = await getBuffer(`https://api.memegen.link/images/custom/${myText1}/${myText2}.png?background=${njay.display_url}`);
-					WhatsappAPI.sendMessage(from, resu, image, {quoted: mek})
+					resultImage = await getBuffer(`https://api.memegen.link/images/custom/${myText1}/${myText2}.png?background=${njay.display_url}`);
+					WhatsappAPI.sendMessage(from, resultImage, image, {quoted: mek})
 					fs.unlinkSync(media)
 				} catch (e) {
 					return reply(`${e}`)
@@ -3136,9 +2517,9 @@ Can request, if interested please contact the developer`
 				const go = groupMembers
 				const goo = pff[Math.floor(Math.random() * pff.length)]
 				const oe = go[Math.floor(Math.random() * go.length)]
-				teks = `*The most ${command} here is:* @${goo.jid.split('@')[0]}`
+				myText = `*The most ${command} here is:* @${goo.jid.split('@')[0]}`
 				membr.push(goo.jid)
-				mentions(teks, membr, true, {quoted: mek})
+				mentions(myText, membr, true, {quoted: mek})
 				break
 			case "couple":
 				jds = []
@@ -3146,10 +2527,10 @@ Can request, if interested please contact the developer`
 				const koss = groupMembers
 				const akuu = jdii[Math.floor(Math.random() * jdii.length)]
 				const diaa = koss[Math.floor(Math.random() * koss.length)]
-				teks = `Ciee.. whats happening here @${akuu.jid.split('@')[0]} ♥️👀 @${diaa.jid.split('@')[0]} `
+				myText = `Ciee.. whats happening here @${akuu.jid.split('@')[0]} ♥️👀 @${diaa.jid.split('@')[0]} `
 				jds.push(akuu.jid)
 				jds.push(diaa.jid)
-				mentions(teks, jds, true)
+				mentions(myText, jds, true)
 				break
 			case 'handsomecheck':
 				ganteng = body.slice(1)
@@ -3176,9 +2557,9 @@ Can request, if interested please contact the developer`
 				// const go = groupMembers
 				const foo = proff[Math.floor(Math.random() * proff.length)]
 				membr = []
-				teks = `*Ask  @${foo.jid.split('@')[0]} if she is ready for you....*`
+				myText = `*Ask  @${foo.jid.split('@')[0]} if she is ready for you....*`
 				membr.push(foo.jid)
-				mentions(teks, membr, true, {quoted: mek})
+				mentions(myText, membr, true, {quoted: mek})
 				break
 			case "boy":
 				if (!isGroup) return reply(mess.only.group)
@@ -3186,9 +2567,9 @@ Can request, if interested please contact the developer`
 				// const go = groupMembers
 				const khoo = joff[Math.floor(Math.random() * joff.length)]
 				membr = []
-				teks = `*Ask  @${khoo.jid.split('@')[0]} if he is ready for you....*`
+				myText = `*Ask  @${khoo.jid.split('@')[0]} if he is ready for you....*`
 				membr.push(khoo.jid)
-				mentions(teks, membr, true, {quoted: mek})
+				mentions(myText, membr, true, {quoted: mek})
 				break
 
 			//══════════[ OWNER FEATURES ]══════════//
@@ -3372,20 +2753,20 @@ Can request, if interested please contact the developer`
 				if (!isOwner && !mek.key.fromMe) return reply('Only Owner Can Use This Feature.')
 				if (!arg) return reply(`Reply to sticker, contact, doc, or media with ${prefix}tospam amount in number`)
 				if (!isQuotedSticker && !isQuotedAudio && !isQuotedImage && body2.length > 10) {
-					teks = body.slice(8)
-					oi1 = teks.split('|')[0]
-					oi2 = teks.split('|')[1]
+					myText = body.slice(8)
+					oi1 = myText.split('|')[0]
+					oi2 = myText.split('|')[1]
 					if (Number(oi2) >= 50) return reply('Max 50!')
 					if (!Number(oi2)) return reply('The number must be a number!')
 					for (let i = 0; i < oi2; i++) {
 						WhatsappAPI.sendMessage(from, `${oi1}`, MessageType.text)
 					}
 				} else if (!isQuotedSticker && !isQuotedAudio && !isQuotedImage && body2.length < 10) {
-					teks = mek.message.extendedTextMessage.contextInfo.quotedMessage.conversation
+					myText = mek.message.extendedTextMessage.contextInfo.quotedMessage.conversation
 					if (!Number(args[0])) return reply('Amount must be a number!')
 					if (Number(args[0]) >= 50) return reply('Max 50!')
 					for (let i = 0; i < args[0]; i++) {
-						WhatsappAPI.sendMessage(from, teks, MessageType.text)
+						WhatsappAPI.sendMessage(from, myText, MessageType.text)
 					}
 				} else if (isQuotedSticker) {
 					encmedian = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
@@ -3412,9 +2793,9 @@ Can request, if interested please contact the developer`
 				} else if (isQuotedImage) {
 					boij = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					delb = await WhatsappAPI.downloadMediaMessage(boij)
-					teks = body.slice(6)
-					oi1 = teks.split('|')[0]
-					oi2 = teks.split('|')[1]
+					myText = body.slice(6)
+					oi1 = myText.split('|')[0]
+					oi2 = myText.split('|')[1]
 					if (Number(oi2) >= 50) return reply('Max 50!')
 					if (!Number(oi2)) return reply('Amount must be a number!')
 					for (let i = 0; i < oi2; i++) {
@@ -3430,118 +2811,6 @@ Can request, if interested please contact the developer`
 					WhatsappAPI.groupLeave(id)
 				}
 				break
-			// case 'addvn':
-			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-			// 	if (!isQuotedAudio) return reply('Reply audio')
-			// 	nm = body.slice(7)
-			// 	if (!nm) return reply('Whats the vn name??')
-			// 	boij = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
-			// 	delb = await WhatsappAPI.downloadMediaMessage(boij)
-			// 	vien.push(`${nm}`)
-			// 	fs.writeFileSync(`./media/vn/${nm}.mp3`, delb)
-			// 	fs.writeFileSync('./database/vien.json', JSON.stringify(vien))
-			// 	WhatsappAPI.sendMessage(from, `Success, please check with *${prefix}vnlist*`, MessageType.text, {quoted: mek})
-			// 	break
-			// case 'delvn':
-			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-			// 	try {
-			// 		nmm = body.slice(7)
-			// 		wanudelvn = vien.indexOf(nmm)
-			// 		vien.splice(wanudelvn, 1)
-			// 		fs.unlinkSync(`./media/vn/${nmm}.mp3`)
-			// 		reply(`Successfully deleted vn ${body.slice(7)}`)
-			// 	} catch (err) {
-			// 		console.log(err)
-			// 		reply(mess.error.api)
-			// 	}
-			// 	break
-			// case 'vnlist':
-			// case 'listvn':
-			// 	teks = '*VN List :*\n\n'
-			// 	for (let awokwkwk of vien) {
-			// 		teks += `- ${awokwkwk}\n`
-			// 	}
-			// 	teks += `\n*Total : ${vien.length}*\n\n_To retrieve the vn, please reply to this message with the caption of the vn name_`
-			// 	WhatsappAPI.sendMessage(from, teks.trim(), extendedText, {
-			// 		quoted: mek,
-			// 		contextInfo: {"mentionedJid": vien}
-			// 	})
-			// 	break
-			// case 'addimage':
-			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-			// 	if (!isQuotedImage) return reply('Reply image')
-			// 	nm = body.slice(10)
-			// 	if (!nm) return reply('Whats the name of the image??')
-			// 	boij = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
-			// 	delb = await WhatsappAPI.downloadMediaMessage(boij)
-			// 	imagi.push(`${nm}`)
-			// 	fs.writeFileSync(`./media/image/${nm}.jpg`, delb)
-			// 	fs.writeFileSync('./database/imagi.json', JSON.stringify(imagi))
-			// 	WhatsappAPI.sendMessage(from, `Success, please check with *${prefix}imglist*`, MessageType.text, {quoted: mek})
-			// 	break
-			// case 'delimage':
-			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-			// 	try {
-			// 		nmm = body.slice(10)
-			// 		wanudelimg = imagi.indexOf(nmm)
-			// 		imagi.splice(wanudelimg, 1)
-			// 		fs.unlinkSync(`./media/image/${nmm}.jpg`)
-			// 		reply(`Successfully deleted image ${body.slice(10)}`)
-			// 	} catch (err) {
-			// 		console.log(err)
-			// 		reply(mess.error.api)
-			// 	}
-			// 	break
-			// case 'imagelist':
-			// case 'listimage':
-			// 	teks = '*IMAGE List :*\n\n'
-			// 	for (let awokwkwk of imagi) {
-			// 		teks += `- ${awokwkwk}\n`
-			// 	}
-			// 	teks += `\n*Total : ${imagi.length}*\n\n_To take a picture, please reply to this message with the caption of the image name_`
-			// 	WhatsappAPI.sendMessage(from, teks.trim(), extendedText, {
-			// 		quoted: mek,
-			// 		contextInfo: {"mentionedJid": imagi}
-			// 	})
-			// 	break
-			// case 'addsticker':
-			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-			// 	if (!isQuotedSticker) return reply('Reply sticker')
-			// 	nm = body.slice(12)
-			// 	if (!nm) return reply('What is the name of the sticker??')
-			// 	delb = await WhatsappAPI.downloadMediaMessage(JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo)
-			// 	setik.push(`${nm}`)
-			// 	fs.writeFileSync(`./media/sticker/${nm}.webp`, delb)
-			// 	fs.writeFileSync('./database/setik.json', JSON.stringify(setik))
-			// 	WhatsappAPI.sendMessage(from, `Success, please check with *${prefix}liststicker*`, MessageType.text, {quoted: mek})
-			// 	break
-			// case 'delsticker':
-			// 	if (!isOwner && !mek.key.fromMe) return reply(mess.owner)
-			// 	try {
-			// 		nmm = body.slice(12)
-			// 		wanudelstick = setik.indexOf(nmm)
-			// 		setik.splice(wanudelstick, 1)
-			// 		fs.unlinkSync(`./media/sticker/${nmm}.webp`)
-			// 		reply(`Successfully deleted the sticker ${body.slice(12)}`)
-			// 	} catch (err) {
-			// 		console.log(err)
-			// 		reply(mess.error.api)
-			// 	}
-			// 	break
-			// case 'stickerlist':
-			// case 'liststicker':
-			// 	teks = '*Sticker List :*\n\n'
-			// 	for (let awokwkwk of setik) {
-			// 		teks += `- ${awokwkwk}\n`
-			// 	}
-			// 	teks += `\n*Total : ${setik.length}*\n\n_To take a sticker, please reply to this message with the caption of the sticker name_`
-			// 	WhatsappAPI.sendMessage(from, teks.trim(), extendedText, {
-			// 		quoted: mek,
-			// 		contextInfo: {"mentionedJid": setik}
-			// 	})
-			// 	break
-			// 	break
-
 			//══════════[ GROUP FEATURES ]══════════//
 
 			case 'creategroup':
@@ -3706,11 +2975,11 @@ Can request, if interested please contact the developer`
 				if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) return reply('Tag the target who wants to be an admin!')
 				mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid
 				if (mentioned.length > 1) {
-					teks = 'Order received, you became an admin :\n'
+					myText = 'Order received, you became an admin :\n'
 					for (let _ of mentioned) {
-						teks += `@${_.split('@')[0]}\n`
+						myText += `@${_.split('@')[0]}\n`
 					}
-					mentions(teks, mentioned, true)
+					mentions(myText, mentioned, true)
 					WhatsappAPI.groupMakeAdmin(from, mentioned)
 				} else {
 					mentions(`Order received, Promoted : @${mentioned[0].split('@')[0]} to an admin in *${groupMetadata.subject}*`, mentioned, true)
@@ -3726,11 +2995,11 @@ Can request, if interested please contact the developer`
 				mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid
 				if (mentioned == myJid1 || mentioned == myJid2) return reply(`*I won't demote myself.*`);
 				if (mentioned.length > 1) {
-					teks = 'Order received, you are not an admin anymore :\n'
+					myText = 'Order received, you are not an admin anymore :\n'
 					for (let _ of mentioned) {
-						teks += `@${_.split('@')[0]}\n`
+						myText += `@${_.split('@')[0]}\n`
 					}
-					mentions(teks, mentioned, true)
+					mentions(myText, mentioned, true)
 					WhatsappAPI.groupDemoteAdmin(from, mentioned)
 				} else {
 					mentions(`Order received, Demoted : @${mentioned[0].split('@')[0]} to a member`, mentioned, true)
@@ -3805,13 +3074,13 @@ Can request, if interested please contact the developer`
 				if (!isGroupAdmins) return reply(mess.only.admin)
 				if (!isGroupAdmins) return reply(mess.only.admin)
 				members_id = []
-				teks = (args.length > 1) ? args.join(' ').trim() : ''
-				teks += '\n\n'
+				myText = (args.length > 1) ? args.join(' ').trim() : ''
+				myText += '\n\n'
 				for (let mem of groupMembers) {
-					teks += `• @${mem.jid.split('@')[0]}\n`
+					myText += `• @${mem.jid.split('@')[0]}\n`
 					members_id.push(mem.jid)
 				}
-				mentions(teks, members_id, true)
+				mentions(myText, members_id, true)
 				break
 			case 'setname':
 
@@ -3914,13 +3183,13 @@ Can request, if interested please contact the developer`
 				if (!isGroup) return reply(mess.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply('only admin and bot owner can use this feature')
 				members_id = []
-				teks = (args.length > 1) ? body.slice(8).trim() : ''
-				teks += '\n\n'
+				myText = (args.length > 1) ? body.slice(8).trim() : ''
+				myText += '\n\n'
 				for (let mem of groupMembers) {
-					teks += `🐶 @${mem.jid.split('@')[0]}\n`
+					myText += `🐶 @${mem.jid.split('@')[0]}\n`
 					members_id.push(mem.jid)
 				}
-				mentions(teks, members_id, true)
+				mentions(myText, members_id, true)
 				break
 			case 'totag':
 			case 'sticktag':
@@ -3930,16 +3199,16 @@ Can request, if interested please contact the developer`
 					encmediau = isQuotedSticker ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					file = await WhatsappAPI.downloadAndSaveMediaMessage(encmediau, filename = getRandom())
 					value = args.join(" ")
-					var group = await WhatsappAPI.groupMetadata(from)
-					var member = group['participants']
-					var mem = []
+					group = await WhatsappAPI.groupMetadata(from);
+					member = group['participants'];
+					mem = [];
 					member.map(async adm => {
 						mem.push(adm.id.replace('c.us', 's.whatsapp.net'))
 					})
-					var options = {
+					options = {
 						contextInfo: {mentionedJid: mem},
 						quoted: mek
-					}
+					};
 					ini_buffer = fs.readFileSync(file)
 					WhatsappAPI.sendMessage(from, ini_buffer, sticker, options)
 					fs.unlinkSync(file)
@@ -3947,16 +3216,16 @@ Can request, if interested please contact the developer`
 					encmediau = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					file = await WhatsappAPI.downloadAndSaveMediaMessage(encmediau, filename = getRandom())
 					value = args.join(" ")
-					var group = await WhatsappAPI.groupMetadata(from)
-					var member = group['participants']
-					var mem = []
+					group = await WhatsappAPI.groupMetadata(from);
+					member = group['participants'];
+					mem = [];
 					member.map(async adm => {
 						mem.push(adm.id.replace('c.us', 's.whatsapp.net'))
 					})
-					var options = {
+					options = {
 						contextInfo: {mentionedJid: mem},
 						quoted: mek
-					}
+					};
 					ini_buffer = fs.readFileSync(file)
 					WhatsappAPI.sendMessage(from, ini_buffer, image, options)
 					fs.unlinkSync(file)
@@ -3964,18 +3233,18 @@ Can request, if interested please contact the developer`
 					encmediau = isQuotedAudio ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					file = await WhatsappAPI.downloadAndSaveMediaMessage(encmediau, filename = getRandom())
 					value = args.join(" ")
-					var group = await WhatsappAPI.groupMetadata(from)
-					var member = group['participants']
-					var mem = []
+					group = await WhatsappAPI.groupMetadata(from);
+					member = group['participants'];
+					mem = [];
 					member.map(async adm => {
 						mem.push(adm.id.replace('c.us', 's.whatsapp.net'))
 					})
-					var options = {
+					options = {
 						mimetype: 'audio/mp4', duration: 359996400,
 						ptt: true,
 						contextInfo: {mentionedJid: mem},
 						quoted: mek
-					}
+					};
 					ini_buffer = fs.readFileSync(file)
 					WhatsappAPI.sendMessage(from, ini_buffer, audio, options)
 					fs.unlinkSync(file)
@@ -3983,17 +3252,17 @@ Can request, if interested please contact the developer`
 					encmediau = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					file = await WhatsappAPI.downloadAndSaveMediaMessage(encmediau, filename = getRandom())
 					value = args.join(" ")
-					var group = await WhatsappAPI.groupMetadata(from)
-					var member = group['participants']
-					var mem = []
+					group = await WhatsappAPI.groupMetadata(from);
+					member = group['participants'];
+					mem = [];
 					member.map(async adm => {
 						mem.push(adm.id.replace('c.us', 's.whatsapp.net'))
 					})
-					var options = {
+					options = {
 						mimetype: 'video/gif',
 						contextInfo: {mentionedJid: mem},
 						quoted: mek
-					}
+					};
 					ini_buffer = fs.readFileSync(file)
 					WhatsappAPI.sendMessage(from, ini_buffer, video, options)
 					fs.unlinkSync(file)
@@ -4001,17 +3270,17 @@ Can request, if interested please contact the developer`
 					encmediau = isQuotedDocument ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					file = await WhatsappAPI.downloadAndSaveMediaMessage(encmediau, filename = getRandom())
 					value = args.join(" ")
-					var group = await WhatsappAPI.groupMetadata(from)
-					var member = group['participants']
-					var mem = []
+					group = await WhatsappAPI.groupMetadata(from);
+					member = group['participants'];
+					mem = [];
 					member.map(async adm => {
 						mem.push(adm.id.replace('c.us', 's.whatsapp.net'))
 					})
-					var options = {
+					options = {
 						mimetype: 'text/plain',
 						contextInfo: {mentionedJid: mem},
 						quoted: mek
-					}
+					};
 					ini_buffer = fs.readFileSync(file)
 					WhatsappAPI.sendMessage(from, ini_buffer, document, options)
 					fs.unlinkSync(file)
@@ -4019,17 +3288,17 @@ Can request, if interested please contact the developer`
 					encmediau = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					file = await WhatsappAPI.downloadAndSaveMediaMessage(encmediau, filename = getRandom())
 					value = args.join(" ")
-					var group = await WhatsappAPI.groupMetadata(from)
-					var member = group['participants']
-					var mem = []
+					group = await WhatsappAPI.groupMetadata(from);
+					member = group['participants'];
+					mem = [];
 					member.map(async adm => {
 						mem.push(adm.id.replace('c.us', 's.whatsapp.net'))
 					})
-					var options = {
+					options = {
 						mimetype: 'video/mp4', duration: 359996400,
 						contextInfo: {mentionedJid: mem},
 						quoted: mek
-					}
+					};
 					ini_buffer = fs.readFileSync(file)
 					WhatsappAPI.sendMessage(from, ini_buffer, video, options)
 					fs.unlinkSync(file)
@@ -4041,13 +3310,13 @@ Can request, if interested please contact the developer`
 			case 'adminlist':
 
 				if (!isGroup) return reply(mess.only.group)
-				teks = `Admin list of group *${groupMetadata.subject}*\nTotal : ${groupAdmins.length}\n\n`
+				myText = `Admin list of group *${groupMetadata.subject}*\nTotal : ${groupAdmins.length}\n\n`
 				no = 0
 				for (let admon of groupAdmins) {
 					no += 1
-					teks += `${no.toString()}. @${admon.split('@')[0]}\n`
+					myText += `${no.toString()}. @${admon.split('@')[0]}\n`
 				}
-				mentions(teks, groupAdmins, true)
+				mentions(myText, groupAdmins, true)
 				break
 			case 'ownergrup':
 			case 'ownergroup':
@@ -4087,11 +3356,11 @@ Can request, if interested please contact the developer`
 			case "hi":
 				reply("*Hi, how's your day goin!*")
 			case "bot":
-				teks =
+				myText =
 					`_Please Select Button Below_
 _Or Type ${prefix}command_`
 				WhatsappAPI.sendMessage(from, {
-					contentText: `${teks}`,
+					contentText: `${myText}`,
 					footerText: `${menu}`,
 					buttons: [{
 						buttonId: `${prefix}command`,

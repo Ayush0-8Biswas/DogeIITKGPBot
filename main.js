@@ -1,20 +1,16 @@
 const {
     WAConnection,
-    MessageType,
-    Presence,
-    Mimetype,
-    GroupSettingChange
+    MessageType
 } = require('@adiwajshing/baileys')
 const fs = require('fs')
 const figlet = require('figlet')
 const moment = require('moment-timezone')
-const { wait, banner, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, start, info, success, close } = require('./lib/functions.js')
+const {getBuffer, getGroupAdmins, start, success} = require('./lib/functions.js')
 const { color } = require('./lib/color.js')
 const _welkom = JSON.parse(fs.readFileSync('./database/welcome.json'))
 const setting = JSON.parse(fs.readFileSync('./setting/setting.json'))
 
 session = setting.session
-
 
 require('./DogeBot.js')
 nocache('./DogeBot.js', module => console.log(`${module} There are changes!`))
