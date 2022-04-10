@@ -624,6 +624,7 @@ _Or Type ${prefix}command_`
 			case 'groupmenu':
 			case 'animemenu':
 			case 'makermenu':
+			case 'photomenu':
 			case 'downloadmenu':
 			case 'stickermenu':
 			case 'funmenu':
@@ -641,6 +642,7 @@ _Or Type ${prefix}command_`
 				if (command === 'convertmenu') menu = templates.converterMenuTemplate(prefix, icon2)
 				if (command === 'searchmenu') menu = templates.searchMenuTemplates(prefix, icon2)
 				if (command === 'othermenu') menu = templates.otherMenuTemplates(prefix, icon2);
+				if (command === 'photomenu') menu = templates.photoTemplate(prefix, icon2);
 				await sendButMessage(from, menu, `${myTimezone}`, [
 					{
 						buttonId: `${prefix}command`,
@@ -759,12 +761,13 @@ _Or Type ${prefix}command_`
 				break
 
 			//══════════[ MAKER MENU FEATURES ]══════════//
+
 			case "maker":
-				if (args.length == 0) return reply(`_Where is the text?_`)
+				if (args.length === 0) return reply(`_Where is the text?_`)
 				let vioOptions = JSON.parse(fs.readFileSync('./lib/vioAPI.json'))
 				let optionList;
 				for (let option of vioOptions) {
-					if (option.name == "ephoto360") {
+					if (option.name === "ephoto360") {
 						// console.log(option["stacks"])
 						optionList = option["stacks"]
 					}
@@ -783,6 +786,7 @@ _Or Type ${prefix}command_`
 				break;
 
 			case "viomake":
+				reply(mess.wait)
 				let vioOption = args.shift()
 				let Texts = args.join(" ").split("|")
 				if (Texts.length === 1) {
@@ -795,6 +799,53 @@ _Or Type ${prefix}command_`
 					// await sendFileFromUrl(`https://violetics.pw/api/ephoto360/${vioOption}?apikey=${apikey}&text=${Texts[0]}&text2=${Texts[1]}`, MessageType.image, {quoted:mek, caption:'Here'} )
 				}
 				await WhatsappAPI.sendMessage(from, imageBuffer, MessageType.image, {quoted:mek, caption:'Here'})
+				break;
+
+
+			//══════════[ PHOTO FILTER MENU FEATURES ]══════════//
+
+			case "pfilter":
+
+				try {
+					if (!isQuotedImage) return reply(`Reply To An Image!`)
+					reply(mess.wait)
+
+					let mediaMessage = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek;
+					const downMedia = await WhatsappAPI.downloadMediaMessage(mediaMessage);
+					imageBuffer = await uploadImages(downMedia);
+
+					let vioOptions = JSON.parse(fs.readFileSync('./lib/vioAPI.json'))
+					let optionList;
+					for (let option of vioOptions) {
+						if (option.name === "photofilter") {
+							// console.log(option["stacks"])
+							optionList = option["stacks"]
+						}
+					}
+					listMessage = templates.photoFilterTemplate(optionList, prefix, imageBuffer, sender2, botname, myTimezone, time)
+					await WhatsappAPI.sendMessage(from, listMessage, MessageType.listMessage, {
+						contextInfo: {mentionedJid: [sender2]},
+						quoted: fgi
+					})
+					console.log(imageBuffer)
+				} catch (e) {
+					reply(mess.eror)
+					console.log(e)
+				}
+				break;
+
+			case "viofilter":
+				try {
+					reply(mess.wait)
+					let filterOption = args[0], imageLink = args[1];
+					console.log(filterOption)
+					console.log(imageLink)
+					resultImage = await getBuffer(`https://violetics.pw/api/photofilter/${filterOption}?apikey=${viokey}&image=${imageLink}`)
+					await WhatsappAPI.sendMessage(from, resultImage, MessageType.image, {quoted:mek, caption:'Here'})
+				} catch(e) {
+					reply(mess.error)
+					console.log(e)
+				}
 				break;
 
 			//══════════[ OTHER FEATURES ]══════════//
