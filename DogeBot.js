@@ -33,13 +33,13 @@ const {getBuffer, getGroupAdmins, getRandom} = require('./lib/functions')
 const setting = JSON.parse(fs.readFileSync('./setting/setting.json'))
 const apikey = JSON.parse(fs.readFileSync('./setting/apikey.json'))
 const { lirikLagu } = require('./lib/lirik.js')
-const { herolist } = require('./lib/herolist.js')
-const { herodetails } = require('./lib/herodetail.js')
+const { heroList } = require('./lib/herolist.js')
 const { pinterest } = require('./lib/pinterest')
 const {upload } = require('./lib/uploadimg')
-const {randomGirlTemplate, animeTemplate, funMenuTemplate} = require('./lib/templates.js')
+const templates = require('./lib/templates.js')
 const { uploadImages } = require('./lib/uploadimage')
-const { mediafireDl } = require('./lib/mediafire.js')
+// const { mediafireDl } = require('./lib/mediafire.js')
+// const { herodetails } = require('./lib/herodetail.js')
 
 //══════════[ Setting ]══════════//
 
@@ -52,7 +52,7 @@ botname = setting.BotName
 ownername = setting.OwnerName
 icon1 = setting.icon1
 icon2 = setting.icon2
-const fakeimage = fs.readFileSync('./media/dogepic1.jpg')
+const fakeImage = fs.readFileSync('./media/dogepic1.jpg')
 const thumb = fs.readFileSync('./media/dogetb.jpg')
 
 //══════════[ Developer Number ]══════════//
@@ -114,10 +114,11 @@ if (time2 < "05:00:00") {
 
 //══════════[ Module Export ]══════════//
 
-module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
-	let options, mem, member, group, buttonList;
-	let myText1, myText2, media, resultImage, resultFile, pemilik, njay, bio_user;
+module.exports = DogeBotOP = async (WhatsappAPI, mek, _welkom) => {
+	let options, mem, member, group, buttonList, vcard2, members_id;
+	let myText1, myText2, media, resultImage, resultFile, ownerJid, imageBuffer, bio_user;
 	let pporang, mess, textReply, m, mentioned, listMessage;
+	let audioBuffer;
 	let myJid1 = "919734192003@s.whatsapp.net";
 	let myJid2 = "919460908375@s.whatsapp.net";
 	try {
@@ -129,17 +130,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 		mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
 		const content = JSON.stringify(mek.message)
 		const from = mek.key.remoteJid
-		const {
-			text,
-			extendedText,
-			contact,
-			location,
-			image,
-			video,
-			sticker,
-			document,
-			audio
-		} = MessageType
+		const { text, extendedText, contact, location, image, video, sticker, document, audio} = MessageType
 		const myTimezone = moment.tz('Asia/Kolkata').format('dddd') + ', ' + moment.tz('Asia/Kolkata').format('LL')
 		const time = moment().tz('Asia/Kolkata').format("HH:mm:ss")
 		const timeMak = moment().tz('Asia/Kolkata').format("HH:mm:ss");
@@ -189,7 +180,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 		}
 		await getBuffer(pporang);
 
-//══════════[ Send file from url ]══════════//
+		//══════════[ Send file from url ]══════════//
 
 		const sendFileFromUrl = async (link, type, options) => {
 			resultFile = await getBuffer(link)
@@ -291,54 +282,60 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 		};
 
 		//══════════[ BUTTON ]══════════//
+		let preparedMessage;
+		const sendButton = async (from, context, fortext, but, mek) => {
+			await WhatsappAPI.sendMessage(from, {
+				contentText: context,
+				footerText: fortext,
+				buttons: but,
+				headerType: 1
+			}, MessageType.buttonsMessage, {
+				quoted: mek
+			})
+		}
 		const sendButMessage = (id, text1, desc1, but = [], options = {}) => {
-			const buttonMessage = {
+			WhatsappAPI.sendMessage(id, {
 				contentText: text1,
 				footerText: desc1,
 				buttons: but,
 				headerType: 1
-			}
-			WhatsappAPI.sendMessage(id, buttonMessage, MessageType.buttonsMessage, options)
+			}, MessageType.buttonsMessage, options)
 		}
-		let preparedMessage;
-		const sendButImage = async (id, text1, desc1, gam1, but = [], options = {}) => {
-			preparedMessage = await WhatsappAPI.prepareMessage(from, gam1, image)
-			const buttonMessages = {
+		const sendButImage = async (id, text1, desc1, myImage, but = [], options = {}) => {
+			preparedMessage = await WhatsappAPI.prepareMessage(from, myImage, MessageType.image)
+			await WhatsappAPI.sendMessage(id, {
 				imageMessage: preparedMessage.message.imageMessage,
 				contentText: text1,
 				footerText: desc1,
 				buttons: but,
 				headerType: 4
-			}
-			await WhatsappAPI.sendMessage(id, buttonMessages, MessageType.buttonsMessage, options)
+			}, MessageType.buttonsMessage, options)
 		}
 		const sendButVideo = async (id, text1, desc1, vid1, but = [], options = {}) => {
 			preparedMessage = await WhatsappAPI.prepareMessage(from, vid1, video)
-			const buttonMessages = {
+			await WhatsappAPI.sendMessage(id, {
 				videoMessage: preparedMessage.message.videoMessage,
 				contentText: text1,
 				footerText: desc1,
 				buttons: but,
 				headerType: 5
-			}
-			await WhatsappAPI.sendMessage(id, buttonMessages, MessageType.buttonsMessage, options)
+			}, MessageType.buttonsMessage, options)
 		}
 		const sendButLocation = async (id, text1, desc1, gam1, but = [], options = {}) => {
 			preparedMessage = await WhatsappAPI.prepareMessage(from, gam1, location)
-			const buttonMessages = {
+			await WhatsappAPI.sendMessage(id, {
 				locationMessage: preparedMessage.message.locationMessage,
 				contentText: text1,
 				footerText: desc1,
 				buttons: but,
 				headerType: 6
-			}
-			await WhatsappAPI.sendMessage(id, buttonMessages, MessageType.buttonsMessage, options)
+			}, MessageType.buttonsMessage, options)
 		}
 
 		//══════════[ Fake ]══════════//
 
 		const listmsg = (from, title, desc, list) => {
-			let po = WhatsappAPI.prepareMessageFromContent(from, {
+			let preparedMessage = WhatsappAPI.prepareMessageFromContent(from, {
 				"listMessage": {
 					"title": title,
 					"description": desc,
@@ -348,7 +345,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 					"sections": list
 				}
 			}, {})
-			return WhatsappAPI.relayWAMessage(po, {waitForAck: true})
+			return WhatsappAPI.relayWAMessage(preparedMessage, {waitForAck: true})
 		}
 		const reply = (myText) => {
 			WhatsappAPI.sendMessage(from, myText, text, {quoted: mek})
@@ -375,10 +372,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 				}
 			})
 		}
-		// const ftrol = { key: { participant: '0@s.whatsapp.net' }, message: { orderMessage: { itemCount: 5555, status: 1, surface: 1, message: `${ucapanWaktu} ${pushname}`, orderTitle: `${ucapanWaktu} ${pushname}`, thumbnail: thumb, sellerJid: '0@s.whatsapp.net' } } }
-		// const floc = { key: { participant: '0@s.whatsapp.net' }, message: { liveLocationMessage: { caption: `${ucapanWaktu} ${pushname}`, jpegThumbnail: thumb } } }
-		// const fvid = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "6289643739077-1613049930@g.us" } : {}) }, message: { "videoMessage": { "title": `${ucapanWaktu} ${pushname}`, "h": `${ucapanWaktu} ${pushname}`, 'duration': '99999', 'caption': `${ucapanWaktu} ${pushname}`, 'jpegThumbnail': thumb } } }
-		// const fvoc = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "6289643739077-1613049930@g.us" } : {}) }, message: { "audioMessage": { "mimetype": "audio/ogg; codecs=opus", "seconds": "99999", "ptt": "true" } } }
+
 		const fgi = {
 			key: {
 				fromMe: false,
@@ -412,7 +406,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			const fn = Date.now() / 10000;
 			const filename = fn.toString()
 			let mime = ""
-			var download = function (uri, filename, callback) {
+			let download = function (uri, filename, callback) {
 				request.head(uri, function (err, res, body) {
 					mime = res.headers['content-type']
 					request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
@@ -429,7 +423,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 				if (mime.split("/")[0] === "audio") {
 					mime = Mimetype.mp4Audio
 				}
-				WhatsappAPI.sendMessage(to, media, type, {
+				await WhatsappAPI.sendMessage(to, media, type, {
 					quoted: fgi,
 					mimetype: mime,
 					caption: text,
@@ -453,7 +447,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			for (let i of members) {
 				ane.push(i.jid)
 			}
-			WhatsappAPI.sendMessage(from, {
+			await WhatsappAPI.sendMessage(from, {
 				text: text,
 				jpegThumbnail: fs.readFileSync('media/dogepic1.jpg')
 			}, 'extendedTextMessage', {contextInfo: {"mentionedJid": ane}})
@@ -466,7 +460,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 			for (let i of members) {
 				ane.push(i.jid)
 			}
-			WhatsappAPI.sendMessage(from, {
+			await WhatsappAPI.sendMessage(from, {
 				displayname: nama,
 				vcard: vcard
 			}, MessageType.contact, {contextInfo: {"mentionedJid": ane}})
@@ -514,8 +508,6 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 		} else if (autovn) {
 			await WhatsappAPI.updatePresence(from, Presence.recording)
 		}
-
-		let colors = ['red', 'white', 'black', 'blue', 'yellow', 'green']
 		const isMedia = (type === 'imageMessage' || type === 'videoMessage')
 		const isQuotedImage = type === 'extendedTextMessage' && content.includes('imageMessage')
 		const isQuotedVideo = type === 'extendedTextMessage' && content.includes('videoMessage')
@@ -537,7 +529,7 @@ module.exports = DogeXeonOP = async (WhatsappAPI, mek, _welkom) => {
 				let timestamp = speed();
 				let latency = speed() - timestamp;
 				const {wa_version, os_version} = WhatsappAPI.user.phone
-				pemilik = `${owner}@s.whatsapp.net`
+				ownerJid = `${owner}@s.whatsapp.net`
 				menu =
 					`*_${timeString} @${sender2.split('@')[0]}_*
 
@@ -550,7 +542,7 @@ ${icon1} *Speed* : ${latency.toFixed(4)} Second
 ${icon1} *Runtime* : ${runtime(process.uptime())}
 ${icon1} *Bot Name* : ${botname}
 ${icon1} *Owner Name* : ${ownername}
-${icon1} *Owner Number* : @${pemilik.split('@')[0]}
+${icon1} *Owner Number* : @${ownerJid.split('@')[0]}
 ${icon1} *Host Name :* ${os.hostname()}
 ${icon1} *Platform :* ${os.platform()}
 ${icon1} *Wa Version :* ${WhatsappAPI.user.phone.wa_version}
@@ -568,7 +560,7 @@ ${icon1} *Status* : ${isOwner ? 'Owner' : 'User'}`
 					`_Please Select Button Below_
 _If You Are A Mod User_
 _Please Type ${prefix}command_`
-				WhatsappAPI.sendMessage(from, {
+				await WhatsappAPI.sendMessage(from, {
 					contentText: `${myText}`,
 					footerText: `${menu}`,
 					buttons: [{
@@ -584,10 +576,32 @@ _Please Type ${prefix}command_`
 					locationMessage: {
 						degreesLatitude: '',
 						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender2, pemilik]}
+						jpegThumbnail: fakeImage,
+						contextInfo: {mentionedJid: [sender2, ownerJid]}
 					}
 				}, 'buttonsMessage')
+				break
+			case "bot":
+				buttonList = [{
+					buttonId: `${prefix}command`,
+					buttonText: {displayText: 'MENU 🗃️'},
+					type: 1
+				}, {
+					buttonId: `${prefix}sc`,
+					buttonText: {displayText: 'SCRIPT 📝'},
+					type: 1
+				}, {
+					buttonId: `${prefix}developer`,
+					buttonText: {displayText: 'DEVELOPER 👨🏼‍💻'},
+					type: 1
+				}];
+				myText =
+`Hi, @${sender2.split('@')[0]}, _Please Select Button Below_
+_Or Type ${prefix}command_`
+				sendButMessage(from, myText, `DogeIITKGPBot`, buttonList, {
+					contextInfo: {mentionedJid:[sender2]},
+					quoted: fgi,
+				})
 				break
 			case 'command':
 
@@ -598,78 +612,7 @@ _Please Type ${prefix}command_`
 					sections: [
 						{
 							"title": `${myTimezone} - ${time}`,
-							rows: [
-								{
-									"title": "GROUP MENU",
-									"description": `Display A List Of Group Features`,
-									"rowId": `${prefix}grupmenu`
-								},
-								{
-									"title": "DOWNLOAD MENU",
-									"description": `Display A List Of Features To Download`,
-									"rowId": `${prefix}downloadmenu`
-								},
-								{
-									"title": "MAKER MENU",
-									"description": `Display A List Of Features To Create Logo`,
-									"rowId": `${prefix}makermenu`
-								},
-								{
-									"title": "ANIME MENU",
-									"description": `Display A List Of Anime Features`,
-									"rowId": `${prefix}animemenu`
-								},
-								{
-									"title": "STICKER MENU",
-									"description": `Display A List Of Sticker Features`,
-									"rowId": `${prefix}stickermenu`
-								},
-								{
-									"title": "FUN MENU",
-									"description": `Display A List Of Fun Features`,
-									"rowId": `${prefix}funmenu`
-								},
-								{
-									"title": "RANDOM GIRL MENU",
-									"description": `Display image of random person`,
-									"rowId": `${prefix}randomgirl`
-								},
-								{
-									"title": "SOUND MENU",
-									"description": `Display A List Of Sounds`,
-									"rowId": `${prefix}soundmenu`
-								},
-								{
-									"title": "OCR MENU",
-									"description": `Display A List Of Ocr Features`,
-									"rowId": `${prefix}ocrmenu`
-								},
-								{
-									"title": "CONVERTER MENU",
-									"description": `Display A List Of Convert Features`,
-									"rowId": `${prefix}convertmenu`
-								},
-								{
-									"title": "SEARCH MENU",
-									"description": `Display A List Of Searching Features`,
-									"rowId": `${prefix}searchmenu`
-								},
-								{
-									"title": "APK MENU",
-									"description": `Display A List Of Apk Features`,
-									"rowId": `${prefix}apkmenu`
-								},
-								{
-									"title": "OTHER MENU",
-									"description": `Display A List Of Other Features`,
-									"rowId": `${prefix}othermenu`
-								},
-								{
-									"title": "OWNER MENU",
-									"description": `Display A List Of Owner Features`,
-									"rowId": `${prefix}ownermenu`
-								}
-							]
+							rows: templates.menuTemplate(prefix)
 						}],
 					listType: 1
 				}
@@ -678,696 +621,56 @@ _Please Type ${prefix}command_`
 					quoted: fgi
 				})
 				break
-			case 'grupmenu':
 			case 'groupmenu':
-				menu =
-					`*「 GROUP MENU 」*
-
-${icon2} ${prefix}antilink _on / off_
-${icon2} ${prefix}antivirtex _on / off_
-${icon2} ${prefix}welcome _on / off_
-${icon2} ${prefix}group _open / closed_
-${icon2} ${prefix}promote _@tag / reply_
-${icon2} ${prefix}demote _@tag / reply_
-${icon2} ${prefix}add _916xx_
-${icon2} ${prefix}kick _@tag / reply_
-${icon2} ${prefix}getdesc
-${icon2} ${prefix}setpp _reply_
-${icon2} ${prefix}setdesc _text_
-${icon2} ${prefix}setname _text_
-${icon2} ${prefix}getbio _reply target_
-${icon2} ${prefix}getdp _tag_
-${icon2} ${prefix}getname _reply target_
-${icon2} ${prefix}tagall
-${icon2} ${prefix}hidetag _text_
-${icon2} ${prefix}contact _916x|Name_
-${icon2} ${prefix}contag _@tag|Name_
-${icon2} ${prefix}sticktag _Reply Sticker_
-${icon2} ${prefix}totag _Reply Image_
-${icon2} ${prefix}creategroup _Name|tag_
-${icon2} ${prefix}promoteall
-${icon2} ${prefix}demoteall
-${icon2} ${prefix}listadmin
-${icon2} ${prefix}leave
-${icon2} ${prefix}grupowner
-${icon2} ${prefix}groupinfo
-${icon2} ${prefix}grouplink
-${icon2} ${prefix}onlinelist
-${icon2} ${prefix}resetgrouplink`;
-				await WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-			case 'downloadmenu':
-
-				menu =
-					`*「 DOWNLOAD MENU 」*
-
-${icon2} ${prefix}soundcloud _Link_
-${icon2} ${prefix}telegramsticker _Link_
-${icon2} ${prefix}ytmp3 _Link_
-${icon2} ${prefix}ytmp4 _Link_
-${icon2} ${prefix}play _song name_
-${icon2} ${prefix}instagram _video link_
-${icon2} ${prefix}herodetail _hero name_
-${icon2} ${prefix}herolist
-${icon2} ${prefix}lyrics _song name_`;
-				await WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-			case 'makermenu':
-
-				menu =
-					`*「 MAKER MENU 」*
-
-${icon2} ${prefix}freefire _text_
-${icon2} ${prefix}silverplaybutton _text_
-${icon2} ${prefix}goldplaybutton _text_
-${icon2} ${prefix}blackpink _text_
-${icon2} ${prefix}halloween _text_
-${icon2} ${prefix}halloween2 _text_
-${icon2} ${prefix}3dgradient _text_
-${icon2} ${prefix}naturalleaves _text_
-${icon2} ${prefix}dropwater _text_
-${icon2} ${prefix}blood _text_
-${icon2} ${prefix}blood2 _text_
-${icon2} ${prefix}snow _text_
-${icon2} ${prefix}cloud _text_
-${icon2} ${prefix}neondevil _text_
-${icon2} ${prefix}neon _text_
-${icon2} ${prefix}glowingneonlight _text_
-${icon2} ${prefix}neonlight _text_
-${icon2} ${prefix}neonlight2 _text_
-${icon2} ${prefix}neonlight3 _text_
-${icon2} ${prefix}greenneon _text_
-${icon2} ${prefix}toxic _text_
-${icon2} ${prefix}matrix _text_
-${icon2} ${prefix}thunder _text_
-${icon2} ${prefix}thunder2 _text_
-${icon2} ${prefix}bokeh _text_
-${icon2} ${prefix}carbontext _text_
-${icon2} ${prefix}christmas _text_
-${icon2} ${prefix}breakwall _text_
-${icon2} ${prefix}roadwarning _text_
-${icon2} ${prefix}engraved3d _text_
-${icon2} ${prefix}embossed _text_
-${icon2} ${prefix}3dstone _text_
-${icon2} ${prefix}futuristic _text_
-${icon2} ${prefix}sketch _text_
-${icon2} ${prefix}bluecircuit _text_
-${icon2} ${prefix}space _text_
-${icon2} ${prefix}magmahot _text_
-${icon2} ${prefix}artpapercut _text_
-${icon2} ${prefix}3dluxurygold _text_
-${icon2} ${prefix}robotr2d2 _text_
-${icon2} ${prefix}harrypotter _text_
-${icon2} ${prefix}glitch3 _text_
-${icon2} ${prefix}greenhorror _text_
-${icon2} ${prefix}horrorgift _text_
-${icon2} ${prefix}erodedmetal _text_
-${icon2} ${prefix}3dglowingmetal _text_
-${icon2} ${prefix}blackmetal _text_
-${icon2} ${prefix}bluemetal _text_
-${icon2} ${prefix}shynimetal _text_
-${icon2} ${prefix}rustymetal _text_
-${icon2} ${prefix}metalpurple _text_
-${icon2} ${prefix}metalrainbow _text_
-${icon2} ${prefix}metaldarkgold _text_
-${icon2} ${prefix}colorfullluxurymetal _text_
-${icon2} ${prefix}glossybluemetal _text_
-${icon2} ${prefix}3dglossymetal _text_
-${icon2} ${prefix}3ddeepseametal _text_
-${icon2} ${prefix}leddisplayscreen _text_
-${icon2} ${prefix}metallic _text_
-${icon2} ${prefix}glossymetallic _text_
-${icon2} ${prefix}christmastree _text_
-${icon2} ${prefix}sparklesmerrychristmas _text_
-${icon2} ${prefix}countryflag3d _text_
-${icon2} ${prefix}americanflag3d _text_
-${icon2} ${prefix}3dscfi _text_
-${icon2} ${prefix}3drainbow _text_
-${icon2} ${prefix}3dwaterpipe _text_
-${icon2} ${prefix}3dchrome _text_
-${icon2} ${prefix}bluegem _text_
-${icon2} ${prefix}purplegem _text_
-${icon2} ${prefix}pinkcandy _text_
-${icon2} ${prefix}transformer _text_
-${icon2} ${prefix}berry _text_
-${icon2} ${prefix}brokenglass _text_
-${icon2} ${prefix}3drealistic _text_
-${icon2} ${prefix}3dunderwater _text_
-${icon2} ${prefix}writeinsandsummerbeach _text_
-${icon2} ${prefix}sandwriting _text_
-${icon2} ${prefix}foilballoon _text_
-${icon2} ${prefix}3dglue _text_
-${icon2} ${prefix}1917 _text_
-${icon2} ${prefix}minion _text_
-${icon2} ${prefix}doubleexposure _text_
-${icon2} ${prefix}holographic3d _text_
-${icon2} ${prefix}deluxegold _text_
-${icon2} ${prefix}deluxesilver _text_
-${icon2} ${prefix}glossycarbon _text_
-${icon2} ${prefix}fabric _text_
-${icon2} ${prefix}xmascards3d _text_
-${icon2} ${prefix}wicker _text_
-${icon2} ${prefix}fireworksparkle _text_
-${icon2} ${prefix}skeleton _text_
-${icon2} ${prefix}ultragloss _text_
-${icon2} ${prefix}denim _text_
-${icon2} ${prefix}decorategreen _text_
-${icon2} ${prefix}peridot _text_
-${icon2} ${prefix}rock _text_
-${icon2} ${prefix}lava _text_
-${icon2} ${prefix}rainbowequalizer _text_
-${icon2} ${prefix}purpleglass _text_
-${icon2} ${prefix}decorativeglass _text_
-${icon2} ${prefix}chocolatecake _text_
-${icon2} ${prefix}strawberry _text_
-${icon2} ${prefix}koifish _text_
-${icon2} ${prefix}bread _text_
-${icon2} ${prefix}3dbox _text_
-${icon2} ${prefix}freeadvancedglow _text_
-${icon2} ${prefix}honey _text_
-${icon2} ${prefix}marble _text_
-${icon2} ${prefix}marbleslabs _text_
-${icon2} ${prefix}icecold _text_
-${icon2} ${prefix}fruitjuice _text_
-${icon2} ${prefix}abstragold _text_
-${icon2} ${prefix}biscuit _text_
-${icon2} ${prefix}bagel _text_
-${icon2} ${prefix}wood _text_
-${icon2} ${prefix}hexagolden _text_
-${icon2} ${prefix}wonderfulgraffitiart _text_
-${icon2} ${prefix}glitch _Text1&Text2_
-${icon2} ${prefix}glitch2 _Text1&Text2_
-${icon2} ${prefix}layered _Text1&Text2_
-${icon2} ${prefix}3dsteel _Text1&Text2_
-${icon2} ${prefix}realistic _Text1&Text2_
-${icon2} ${prefix}lionlogo _Text1&Text2_
-${icon2} ${prefix}ninjalogo _Text1&Text2_
-${icon2} ${prefix}wolf _Text1&Text2_
-${icon2} ${prefix}wolf2 _Text1&Text2_
-${icon2} ${prefix}halloween3 _Text1&Text2_
-${icon2} ${prefix}marvel _Text1&Text2_
-${icon2} ${prefix}marvel2 _Text1&Text2_
-${icon2} ${prefix}cinematichorror _Text1&Text2_
-${icon2} ${prefix}avengers _Text1&Text2_
-${icon2} ${prefix}graffiti3 _Text1&Text2_
-${icon2} ${prefix}captainamerica _Text1&Text2_
-${icon2} ${prefix}girlneko _Text1&Text2_
-${icon2} ${prefix}sadboy _Text1&Text2_
-${icon2} ${prefix}makerkaneki _Text1&Text2_
-${icon2} ${prefix}rem _Text1&Text2_
-${icon2} ${prefix}lolimaker _Text1&Text2_
-${icon2} ${prefix}gura _Text1&Text2_`
-				WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-
-
 			case 'animemenu':
-
-				menu =
-					`*「 ANIME 」*
-
-${icon2} ${prefix}anibatch _Text_
-${icon2} ${prefix}gogoanime _Text_
-${icon2} ${prefix}anime-planet _Text_
-
-`
-				WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
+			case 'makermenu':
+			case 'downloadmenu':
 			case 'stickermenu':
-
-				menu =
-					`*「 STICKER MENU 」*
-
-${icon2} ${prefix}stickerwm _Author|Package_
-${icon2} ${prefix}take _Author|Package_
-${icon2} ${prefix}sticker _Reply_
-${icon2} ${prefix}attp _Text_
-${icon2} ${prefix}ttp _Text_
-${icon2} ${prefix}ttp2 _Text_
-${icon2} ${prefix}ttp3 _Text_
-${icon2} ${prefix}tt4 _Text_
-${icon2} ${prefix}semoji _Emoji_
-${icon2} ${prefix}stcmemepic _Up Txt|Down Txt_
-${icon2} ${prefix}stcmeme _Up Txt|Down Txt_
-${icon2} ${prefix}memegenerator _Text_`
-				WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
+			case 'funmenu':
+			case 'ownermenu':
+			case 'convertmenu':
+			case 'searchmenu':
+			case 'othermenu':
+				if (command === 'groupmenu') menu = templates.groupMenuTemplate(prefix, icon2);
+				if (command === 'downloadmenu') menu = templates.downloadMenuTemplate(prefix, icon2);
+				if (command === 'makermenu') menu = templates.makerMenuTemplate(prefix, icon2);
+				if (command === 'animemenu') menu = templates.animeMenuTemplate(prefix, icon2);
+				if (command === 'stickermenu') menu = templates.stickerMenuTemplate(prefix, icon2);
+				if (command === 'funmenu') menu = templates.funMenuTemplate(prefix, icon2);
+				if (command === 'ownermenu') menu = templates.ownerMenuTemplate(prefix, icon2);
+				if (command === 'convertmenu') menu = templates.converterMenuTemplate(prefix, icon2)
+				if (command === 'searchmenu') menu = templates.searchMenuTemplates(prefix, icon2)
+				if (command === 'othermenu') menu = templates.otherMenuTemplates(prefix, icon2);
+				await sendButMessage(from, menu, `${myTimezone}`, [
+					{
 						buttonId: `${prefix}command`,
 						buttonText: {displayText: 'BACK ⬅️'},
 						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-			case 'funmenu':
-
-				menu = funMenuTemplate(prefix, icon2)
-				sendButMessage(from, menu, "", [
-					{
-					buttonId: `${prefix}command`,
-					buttonText: {displayText: 'BACK ⬅️'},
-					type: 1
 					},
-					{
-						buttonId: `${prefix}owner`,
-						buttonText: {displayText: 'OWNER 👤'},
-						type: 1
-					}]);
-				// await WhatsappAPI.sendMessage(from, {
-				// 	contentText: `${menu}`,
-				// 	footerText: `*_${myTimezone}_*`,
-				// 	buttons: [{
-				// 		buttonId: `${prefix}command`,
-				// 		buttonText: {displayText: 'BACK ⬅️'},
-				// 		type: 1
-				// 	}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-				// 	headerType: 'LOCATION',
-				// 	locationMessage: {
-				// 		degreesLatitude: '',
-				// 		degreesLongitude: '',
-				// 		jpegThumbnail: fakeimage,
-				// 		contextInfo: {mentionedJid: [sender]}
-				// 	}
-				// }, 'buttonsMessage')
+				], {
+					contextInfo: {mentionedJid: [sender]}
+				});
 				break
 			case 'soundmenu':
-
-				menu =
-					`*「 SOUND MENU 」*
-${icon2} ${prefix}sound1
-${icon2} ${prefix}sound2
-${icon2} ${prefix}sound3
-${icon2} ${prefix}sound4
-${icon2} ${prefix}sound5
-${icon2} ${prefix}sound6
-${icon2} ${prefix}sound7
-${icon2} ${prefix}sound8
-${icon2} ${prefix}sound9
-${icon2} ${prefix}sound10
-${icon2} ${prefix}sound11
-${icon2} ${prefix}sound12
-${icon2} ${prefix}sound13
-${icon2} ${prefix}sound14
-${icon2} ${prefix}sound15
-${icon2} ${prefix}sound16
-${icon2} ${prefix}sound17
-${icon2} ${prefix}sound18
-${icon2} ${prefix}sound19
-${icon2} ${prefix}sound20
-${icon2} ${prefix}sound21
-${icon2} ${prefix}sound22
-${icon2} ${prefix}sound23
-${icon2} ${prefix}sound24
-${icon2} ${prefix}sound25
-${icon2} ${prefix}sound26
-${icon2} ${prefix}sound27
-${icon2} ${prefix}sound28
-${icon2} ${prefix}sound29
-${icon2} ${prefix}sound30
-${icon2} ${prefix}sound31
-${icon2} ${prefix}sound32
-${icon2} ${prefix}sound33
-${icon2} ${prefix}sound34
-${icon2} ${prefix}sound35
-${icon2} ${prefix}sound36
-${icon2} ${prefix}sound37
-${icon2} ${prefix}sound38
-${icon2} ${prefix}sound39
-${icon2} ${prefix}sound40
-${icon2} ${prefix}sound41
-${icon2} ${prefix}sound42
-${icon2} ${prefix}sound43
-${icon2} ${prefix}sound44
-${icon2} ${prefix}sound45
-${icon2} ${prefix}sound46
-${icon2} ${prefix}sound47
-${icon2} ${prefix}sound48
-${icon2} ${prefix}sound49
-${icon2} ${prefix}sound50
-${icon2} ${prefix}sound51
-${icon2} ${prefix}sound52
-${icon2} ${prefix}sound53
-${icon2} ${prefix}sound54
-${icon2} ${prefix}sound55
-${icon2} ${prefix}sound56
-${icon2} ${prefix}sound57
-${icon2} ${prefix}sound58
-${icon2} ${prefix}sound59
-${icon2} ${prefix}sound60
-${icon2} ${prefix}sound61
-${icon2} ${prefix}sound62
-${icon2} ${prefix}sound63
-${icon2} ${prefix}sound64
-${icon2} ${prefix}sound65
-${icon2} ${prefix}sound66
-${icon2} ${prefix}sound67
-${icon2} ${prefix}sound68
-${icon2} ${prefix}sound69
-${icon2} ${prefix}sound70
-${icon2} ${prefix}sound71
-${icon2} ${prefix}sound72
-${icon2} ${prefix}sound73
-${icon2} ${prefix}sound74`
-				await WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-			case 'ocrmenu':
-
-				menu =
-					`*「 OCR MENU 」*
-
-${icon2} ${prefix}ninjaname _Name_
-${icon2} ${prefix}stylishcoolname
-${icon2} ${prefix}ssweb _URL_`
-				await WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-			case 'convertmenu':
-
-				menu =
-					`*「 CONVERT MENU 」*
-
-${icon2} ${prefix}cutesound _reply audio/vn_
-${icon2} ${prefix}blub _reply audio/vn_
-${icon2} ${prefix}ghost _reply audio/vn_
-${icon2} ${prefix}squirrel _reply audio/vn_
-${icon2} ${prefix}slow _reply audio/vn_
-${icon2} ${prefix}fast _reply audio/vn_
-${icon2} ${prefix}vibra _reply audio/vn_
-${icon2} ${prefix}nightcore _reply audio/vn_
-${icon2} ${prefix}bass _reply audio/vn_
-${icon2} ${prefix}robot _reply audio/vn_
-${icon2} ${prefix}reverse _reply audio/vn_
-${icon2} ${prefix}fat _reply audio/vn_
-${icon2} ${prefix}vnsec _reply audio with number_
-${icon2} ${prefix}vidsec _reply video with number_
-${icon2} ${prefix}tomp3 _reply video_
-${icon2} ${prefix}toimg _reply sticker_
-${icon2} ${prefix}tourl _reply image/vid_
-${icon2} ${prefix}tts _code text_`
-				WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-			case 'searchmenu':
-
-				menu =
-					`*「 SEARCH MENU 」*
-
-${icon2} ${prefix}playstore _Query_
-${icon2} ${prefix}ytsearch _Query_
-${icon2} ${prefix}pinterest _Query_
-${icon2} ${prefix}googleimg _Query_
-${icon2} ${prefix}google _Query_`
-				WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-			case 'apkmenu':
-
-				menu =
-					`*「 APK MENU 」*
-
-${icon2} ${prefix}apkdone _Apk Name_
-${icon2} ${prefix}apkgoogle _Apk Name_
-${icon2} ${prefix}hostapk _Apk Name_
-${icon2} ${prefix}revdl _Apk Name_
-${icon2} ${prefix}toraccino _Apk Name_
-${icon2} ${prefix}uapkpro _Apk Name_
-${icon2} ${prefix}apkmody _Apk Name_
-${icon2} ${prefix}apkshub _Apk Name_`
-				await WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-			case 'othermenu':
-
-				menu =
-					`*「 OTHER MENU 」*
-
-${icon2} ${prefix}runtime
-${icon2} ${prefix}speed
-${icon2} ${prefix}rentbot
-${icon2} ${prefix}payment
-${icon2} ${prefix}owner
-${icon2} ${prefix}developer
-${icon2} ${prefix}script
-${icon2} ${prefix}delete _Reply to bot messages_`
-				await WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-			case 'ownermenu':
-
-				menu =
-					`*「 OWNER MENU 」*
-
-${icon2} ${prefix}tospam _reply with amount_
-${icon2} ${prefix}bc _text_
-${icon2} ${prefix}bc2 _text_
-${icon2} ${prefix}bcgc _text_
-${icon2} ${prefix}setbotname _text_
-${icon2} ${prefix}setbotbio _text_
-${icon2} ${prefix}setbotpp _Reply Image_
-${icon2} ${prefix}autoread _On / Off_
-${icon2} ${prefix}autotype _On / Off_
-${icon2} ${prefix}autorecord _On / Off_
-${icon2} ${prefix}addvn _Reply audio with caption_
-${icon2} ${prefix}delvn _vn name_
-${icon2} ${prefix}listvn
-${icon2} ${prefix}addsticker _Reply sticker with caption_
-${icon2} ${prefix}delsticker _sticker name_
-${icon2} ${prefix}liststicker
-${icon2} ${prefix}addimage _Reply image with caption_
-${icon2} ${prefix}delimage_image name_
-${icon2} ${prefix}listimage
-${icon2} ${prefix}clearall
-${icon2} ${prefix}leaveall
-${icon2} ${prefix}public
-${icon2} ${prefix}self`
-				WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone}_*`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'BACK ⬅️'},
-						type: 1
-					}, {buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender]}
-					}
-				}, 'buttonsMessage')
-				break
-
-			//══════════[ RENT DLL ]══════════//
-
-			case 'rentbot':
-				menu =
-					`*${timeString} @${sender2.split('@')[0]}*
-
-\`\`\`OPEN FOR RENT :\`\`\`
-➪ *1 Week :* _100INR_
-➪ *1 Month :* _200INR_
-➪ *Permanent :* _550INR_
-
-\`\`\`OPEN FOR STUDENTS :\`\`\`
-➪ *Ordinary student :* _500INR_
-➪ *Premium student :* _1000INR_
-
-\`\`\`OPEN FOR SC :\`\`\`
-➪ *Wanna buy this script? :* _Price: ₹250 (India)_
-
-For those who want to buy script or interested in any of the above
-Can request, if interested please contact the developer`
-				await WhatsappAPI.sendMessage(from, {
-					contentText: `${menu}`,
-					footerText: `*_${myTimezone} - ${time}_*`,
-					buttons: [{
-						buttonId: `${prefix}payment`,
-						buttonText: {displayText: 'PAYMENT 💸'},
-						type: 1
-					}, {buttonId: `${prefix}developer`, buttonText: {displayText: 'DEVELOPER 👨🏼‍💻'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender2]}
-					}
-				}, 'buttonsMessage')
-				break
-			case 'bayar':
-			case 'payment':
-
-				gambar = fs.readFileSync('./media/doged.jpg')
-				menunya = `*「 PAYMENT 」*
-
-• Note: Talk to the owner before payment
-• FamPay : _Please scan the qr above_`
-				buttonList = [
-					{buttonId: `${prefix}menu`, buttonText: {displayText: 'MENU 🗃️'}, type: 1},
-					{buttonId: `${prefix}owner`, buttonText: {displayText: 'OWNER 👤'}, type: 1}
-				]
-				sendButImage(from, menunya, `*_${myTimezone} - ${time}_*`, gambar, buttonList)
+				listMessage = {
+					buttonText: 'Sound Options 📃',
+					footerText: `*${botname}*`,
+					description: `Hi Friend @${sender2.split('@')[0]}, Please select the option here`,
+					sections: [
+						{
+							"title": `${myTimezone} - ${time}`,
+							rows: templates.soundMenuTemplate(prefix)
+						}],
+					listType: 1
+				}
+				await WhatsappAPI.sendMessage(from, listMessage, MessageType.listMessage, {
+					contextInfo: {mentionedJid: [sender2]},
+					quoted: fgi
+				})
 				break
 
 			//══════════[ DOWNLOAD FEATURES ]══════════//
-
-			case 'telesticker':
-			case 'telegramsticker':
-			case 'tstiker': {
+			case 'telesticker': case 'telegramsticker': case 'tstiker':
 				if (!q) return reply(`Example: ${prefix + command} *https://t.me/addstickers/geestickerpack*`)
 				if (!q.includes('t.me')) return reply('This is not a telegram sticker link')
 				let telestc = await zee.Telesticker(`${q}`);
@@ -1378,9 +681,7 @@ Can request, if interested please contact the developer`
 						quoted: mek
 					})
 				}
-			}
 				break
-
 			case 'lyrics':
 				reply(mess.wait)
 				if (args.length < 1) return reply('What is the name of the song?')
@@ -1390,44 +691,9 @@ Can request, if interested please contact the developer`
 					reply(lirik)
 				})
 				break
-			case 'herolist':
-				await herolist().then((ress) => {
-					let listt = `*List of heroes for features ${prefix}herodetail*\n\n`
-					for (let i = 0; i < ress.hero.length; i++) {
-						listt += '-  ' + ress.hero[i] + '\n'
-					}
-					reply(listt)
-				})
-				break
-			case 'herodetail':
-				res = await herodetails(body.slice(12))
-				her = `*Hero Details ${body.slice(12)}*
 
-*Name* : ${res.hero_name}
-*Role* : ${res.role}
-*Quotes* : ${res.entrance_quotes}
-*Hero Features* : ${res.hero_feature}
-*Special* : ${res.speciality}
-*Recommended Lane* : ${res.laning_recommendation}
-*Price* : ${res.price.battle_point} [Battle point] | ${res.price.diamond} [DM] | ${res.price.hero_fragment} [Fragment]
-*Release* : ${res.release_date}
 
-*Durability* : ${res.skill.durability}
-*Offence* : ${res.skill.offense}
-*Skill Effect* : ${res.skill_effects}
-*Difficulty* : ${res.skill.difficulty}
- 
-*Movement Speed* : ${res.attributes.movement_speed}
-*Physical Attack* : ${res.attributes.physical_attack}
-*Magic Defense* : ${res.attributes.magic_defense}
-*Ability Crit Rate* : ${res.attributes.ability_crit_rate}
-*HP* : ${res.attributes.hp}
-*Mana* : ${res.attributes.mana}
-*Mana Regen* : ${res.attributes.mana_regen}
-
-*Story* : ${res.background_story}`
-				reply(her)
-				break
+			//══════════[ DOWNLOAD MENU ]══════════//
 			case 'play':
 				if (args.length == 0) return reply('Whats the title of the song?')
 				bo = args.join(" ")
@@ -1475,43 +741,8 @@ Can request, if interested please contact the developer`
 				WhatsappAPI.sendMessage(from, ytmp4, video, {caption: `Done✓`, thumbnail: Buffer.alloc(0), quoted: mek})
 				break
 
-			//══════════[ RANDOM GIRL FEATURES ]══════════//
-			case "randomgirl":
-				listMessage = {
-					buttonText: 'Options: 📃',
-					footerText: `*${botname}*`,
-					description: `@${sender2.split('@')[0]}, Please select the option here`,
-					sections: [
-						{
-							"title": `${myTimezone} - ${time}`,
-							rows: randomGirlTemplate(prefix)
-						}],
-					listType: 1
-				};
-				await WhatsappAPI.sendMessage(from, listMessage, MessageType.listMessage, {
-					contextInfo: {mentionedJid: [sender2]},
-					quoted: fgi
-				})
-				break
 
-			case "cecan": case "chinese": case "indonesia": case "japan": case "korea":
-			case "malaysia": case "thailand": case "vietnam":
-				reply(mess.wait)
-				resultImage = await getBuffer(`https://violetics.pw/api/asupan/${command}?apikey=${viokey}`)
-				textReply = `Click to go to next ${command}`
-				await sendButImage(from, textReply, `*_${myTimezone} - ${time}_*`, resultImage, [
-					{
-						buttonId: `$hawaas`,
-						buttonText: {
-							displayText: `NEXT ➡️`,
-						},
-						type: 1,
-					},
-				]);
-				break
-			case "hawaas":
-				reply("*_Study karle_*")
-
+			//══════════[ ANIME SEARCH ]══════════//
 			case "anibatch": case "gogoanime": case "anime-planet":
 				reply(mess.wait)
 				if (args.length == 0) return reply('What are you searching?')
@@ -1519,7 +750,7 @@ Can request, if interested please contact the developer`
 				animeResponse = await fetchJson(`https://violetics.pw/api/anime/${command}?apikey=${viokey}&manga=${encodeURIComponent(animeName)}`)
 				animeList = animeResponse.result
 				if (animeList.length == 0) return reply("Not Found");
-				listMessage = animeTemplate(animeList, botname, sender2, myTimezone, time)
+				listMessage = templates.animeTemplate(animeList, botname, sender2, myTimezone, time)
 
 				await WhatsappAPI.sendMessage(from, listMessage, MessageType.listMessage, {
 					contextInfo: {mentionedJid: [sender2]},
@@ -1527,40 +758,49 @@ Can request, if interested please contact the developer`
 				})
 				break
 
-			//══════════[ RANDOM VIDEO ]══════════//
+			//══════════[ MAKER MENU FEATURES ]══════════//
+			case "maker":
+				if (args.length == 0) return reply(`_Where is the text?_`)
+				let vioOptions = JSON.parse(fs.readFileSync('./lib/vioAPI.json'))
+				let optionList;
+				for (let option of vioOptions) {
+					if (option.name == "ephoto360") {
+						// console.log(option["stacks"])
+						optionList = option["stacks"]
+					}
+				}
 
-			case 'beatvn':
-			case 'jedagjedugff':
-			case 'jedagjedugml':
-			case 'jedagjedugpubg':
-			case 'storyanime':
-			case 'storywa':
-			case 'storygalau':
-			case 'storytruk':
-			case 'storybus':
+				let Text = args.join(" ").split("|")
+				if (Text.length === 1) {
+					listMessage = templates.makerOptionsTemplate(optionList, prefix, Text[0], "undefined", sender2, botname, myTimezone, time);
+				} else {
+					listMessage = templates.makerOptionsTemplate(optionList, prefix, Text[0], Text[1], sender2, botname, myTimezone, time);
+				}
+				await WhatsappAPI.sendMessage(from, listMessage, MessageType.listMessage, {
+					contextInfo: {mentionedJid: [sender2]},
+					quoted: fgi
+				})
+				break;
 
-				reply(mess.wait)
-				resultFile = await getBuffer(`https://apidhani.herokuapp.com/api/randomvideo/${command}?apikey=${dhakey}`)
-				Teks = `Click Next To Go To Next ${command}`
-				await sendButVideo(from, Teks, `*_${myTimezone} - ${time}_*`, resultFile, [
-					{
-						buttonId: `${prefix + command}`,
-						buttonText: {
-							displayText: `NEXT ➡️`,
-						},
-						type: 1,
-					},
-				]);
-				break
-
-			//══════════[ MAKER FEATURES ]══════════//
-
-
+			case "viomake":
+				let vioOption = args.shift()
+				let Texts = args.join(" ").split("|")
+				if (Texts.length === 1) {
+					imageBuffer = await getBuffer(`https://violetics.pw/api/ephoto360/${vioOption}?apikey=${viokey}&text=${encodeURIComponent(Texts[0])}`)
+					console.log(`https://violetics.pw/api/ephoto360/${vioOption}?apikey=${viokey}&text=${encodeURIComponent(Texts[0])}`)
+					// await sendFileFromUrl(`https://violetics.pw/api/ephoto360/${vioOption}?apikey=${apikey}&text=${Texts[0]}`, MessageType.image, {quoted:mek, caption:'Here'} )
+				} else {
+					imageBuffer = await getBuffer(`https://violetics.pw/api/ephoto360/${vioOption}?apikey=${viokey}&text=${encodeURIComponent(Texts[0])}&text2=${encodeURIComponent(Texts[1])}`)
+					console.log(`https://violetics.pw/api/ephoto360/${vioOption}?apikey=${viokey}&text=${encodeURIComponent(Texts[0])}&text2=${encodeURIComponent(Texts[1])}`)
+					// await sendFileFromUrl(`https://violetics.pw/api/ephoto360/${vioOption}?apikey=${apikey}&text=${Texts[0]}&text2=${Texts[1]}`, MessageType.image, {quoted:mek, caption:'Here'} )
+				}
+				await WhatsappAPI.sendMessage(from, imageBuffer, MessageType.image, {quoted:mek, caption:'Here'})
+				break;
 
 			//══════════[ OTHER FEATURES ]══════════//
 			case 'owner':
 
-				let vcard2 = 'BEGIN:VCARD\n'
+				vcard2 = 'BEGIN:VCARD\n'
 					+ 'VERSION:3.0\n'
 					+ `FN:${ownername}\n`
 					+ `ORG: Owner Of Doge Bot ;\n`
@@ -1617,7 +857,6 @@ Can request, if interested please contact the developer`
 				break
 
 			//══════════[ SEARCH FEATURES ]══════════//
-
 			case 'playstore':
 				if (!c) return reply('what are you looking for?')
 				let play = await hx.playstore(`${c}`)
@@ -1688,7 +927,6 @@ Can request, if interested please contact the developer`
 				break
 
 			//══════════[ APK FEATURES ]══════════//
-
 			case 'uapkpro':
 				if (args.length == 0) return reply(`Example: ${prefix + command} Bgmi`)
 				query = args.join(' ')
@@ -1809,86 +1047,12 @@ Can request, if interested please contact the developer`
 				break
 
 			//══════════[ SOUND FEATURES ]══════════//
-			case 'sound1':
-			case 'sound2':
-			case 'sound3':
-			case 'sound4':
-			case 'sound5':
-			case 'sound6':
-			case 'sound7':
-			case 'sound8':
-			case 'sound9':
-			case 'sound10':
-			case 'sound11':
-			case 'sound12':
-			case 'sound13':
-			case 'sound14':
-			case 'sound15':
-			case 'sound16':
-			case 'sound17':
-			case 'sound18':
-			case 'sound19':
-			case 'sound20':
-			case 'sound21':
-			case 'sound22':
-			case 'sound23':
-			case 'sound24':
-			case 'sound25':
-			case 'sound26':
-			case 'sound27':
-			case 'sound28':
-			case 'sound29':
-			case 'sound30':
-			case 'sound31':
-			case 'sound32':
-			case 'sound33':
-			case 'sound34':
-			case 'sound35':
-			case 'sound36':
-			case 'sound37':
-			case 'sound38':
-			case 'sound39':
-			case 'sound40':
-			case 'sound41':
-			case 'sound42':
-			case 'sound43':
-			case 'sound44':
-			case 'sound45':
-			case 'sound46':
-			case 'sound47':
-			case 'sound48':
-			case 'sound49':
-			case 'sound50':
-			case 'sound51':
-			case 'sound52':
-			case 'sound53':
-			case 'sound54':
-			case 'sound55':
-			case 'sound56':
-			case 'sound57':
-			case 'sound58':
-			case 'sound59':
-			case 'sound60':
-			case 'sound61':
-			case 'sound62':
-			case 'sound63':
-			case 'sound64':
-			case 'sound65':
-			case 'sound66':
-			case 'sound67':
-			case 'sound68':
-			case 'sound69':
-			case 'sound70':
-			case 'sound71':
-			case 'sound72':
-			case 'sound73':
-			case 'sound74':
-				ini_buffer = await getBuffer(`https://github.com/saipulanuar/Api-Github/raw/main/sound/${command}.mp3`)
-				await WhatsappAPI.sendMessage(from, ini_buffer, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
+			case 'sound':
+				audioBuffer = await getBuffer(`https://github.com/saipulanuar/Api-Github/raw/main/sound/${command+args[0]}.mp3`)
+				await WhatsappAPI.sendMessage(from, audioBuffer, audio, {mimetype: 'audio/mp4', ptt: true, quoted: mek})
 				break
 
 			//══════════[ OCR FEATURES ]══════════//
-
 			case 'ninjaname':
 				if (args.length < 1) return reply(`[❗] Example :\n*${prefix}${command} Naruto*`)
 				F = body.slice(11)
@@ -1901,8 +1065,7 @@ Can request, if interested please contact the developer`
 				anuscn = await fetchJson(`https://leyscoders-api.herokuapp.com/api/nick-epep?apikey=${Leyscoders}`)
 				reply(`*🐶HERE IS YOUR RANDOM STYLISH NAME🐶*\n\n${anuscn.result}`)
 				break
-			case 'ssweb':
-			case 'ss':
+			case 'ssweb': case 'ss':
 				if (args.length < 1) return reply('Where is the url?')
 				myText = q
 				anussweb = await fetchJson(`https://shot.screenshotapi.net/screenshot?&url=${myText}`)
@@ -1911,7 +1074,6 @@ Can request, if interested please contact the developer`
 				break
 
 			//══════════[ CONVERT FEATURES ]══════════//
-
 			case 'squirrel':
 				encmedia012 = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
 				media = await WhatsappAPI.downloadAndSaveMediaMessage(encmedia012)
@@ -2034,7 +1196,7 @@ Can request, if interested please contact the developer`
 				mediam = await WhatsappAPI.downloadAndSaveMediaMessage(encmediam)
 				cokmatane = Number(args[0])
 				hah = fs.readFileSync(mediam)
-				WhatsappAPI.sendMessage(from, hah, audio, {
+				await WhatsappAPI.sendMessage(from, hah, audio, {
 					mimetype: 'audio/mp4',
 					duration: cokmatane,
 					ptt: true,
@@ -2047,7 +1209,7 @@ Can request, if interested please contact the developer`
 				median = await WhatsappAPI.downloadAndSaveMediaMessage(encmedian)
 				cokmatane = Number(args[0])
 				hah = fs.readFileSync(median)
-				WhatsappAPI.sendMessage(from, hah, video, {mimetype: 'video/mp4', duration: cokmatane, quoted: mek})
+				await WhatsappAPI.sendMessage(from, hah, video, {mimetype: 'video/mp4', duration: cokmatane, quoted: mek})
 				fs.unlinkSync(median)
 				break
 			case 'robot':
@@ -2119,7 +1281,7 @@ Can request, if interested please contact the developer`
 				})
 				break
 			case 'tomp3':
-				WhatsappAPI.updatePresence(from, Presence.composing)
+				await WhatsappAPI.updatePresence(from, Presence.composing)
 				if (!isQuotedVideo) return reply('Reply to the video')
 				reply(mess.wait)
 				encmediad = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
@@ -2142,8 +1304,8 @@ Can request, if interested please contact the developer`
 				exec(`ffmpeg -i ${media} ${ran}`, (err) => {
 					fs.unlinkSync(media)
 					if (err) return reply('Failed, when converting sticker to image')
-					buffer = fs.readFileSync(ran)
-					WhatsappAPI.sendMessage(from, buffer, image, {quoted: mek, caption: 'Here'})
+					imageBuffer = fs.readFileSync(ran)
+					WhatsappAPI.sendMessage(from, imageBuffer, image, {quoted: mek, caption: 'Here'})
 					fs.unlinkSync(ran)
 				})
 				break
@@ -2196,46 +1358,17 @@ Can request, if interested please contact the developer`
 				}
 				break
 
-			//══════════[ LEVELING FEATURES ]══════════//
 
-			case 'level':
-				if (!isGroup) return reply(mess.group)
-				const userLevel = getLevelingLevel(sender)
-				const userXp = getLevelingXp(sender)
-				if (userLevel === undefined && userXp === undefined) return reply(ind.lvlnul())
-				const requiredXp = 5000 * (Math.pow(2, userLevel) - 1)
-				resul = `◪ *ʟᴇᴠᴇʟ*\n  ├─ ► 𝗡𝗮𝗺𝗲 : ${pushname}\n  ├─ ► 𝗥𝗮𝗻𝗸 : ${role}\n  ├─ ► 𝗫𝗣 : ${userXp}/${requiredXp}\n  └─ ► 𝗟𝗲𝘃𝗲𝗹 : ${userLevel}\n`
-				WhatsappAPI.sendMessage(from, resul, text, {quoted: mek})
-					.catch(async (err) => {
-						console.error(err)
-						await reply(`Error!\n${err}`)
-					})
-				break
-			case 'profile':
-				if (!isGroup) return reply(mess.group)
-				let anuprofileoke = await WhatsappAPI.groupMetadata(from)
-				const thu = await WhatsappAPI.getStatus(anuprofileoke.participants[0], MessageType.text)
-				WhatsappAPI.updatePresence(from, Presence.composing)
-				try {
-					ppimg = await WhatsappAPI.getProfilePicture(`${sender.split('@')[0]}@s.whatsapp.net`)
-				} catch {
-					ppimg = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
-				}
-				profile = `╭─「 *💖ʏᴏᴜʀ ᴘʀᴏꜰɪʟᴇ💖* 」\n│• 𝗡𝗮𝗺𝗲 : ${pushname}\n│• 𝗡𝘂𝗺𝗯𝗲𝗿 : ${sender.split("@")[0]}\n│• 𝗕𝗶𝗼 : ${bio_user}\n│• 𝗫𝗣 : ${getLevelingXp(sender)}\n│• 𝗟𝗲𝘃𝗲𝗹 : ${getLevelingLevel(sender)}\n│• 𝗥𝗮𝗻𝗸 : ${role}\n│• 𝗣𝗠 : wa.me/${sender.split("@")[0]}\n╰──────────────────`
-				buffer = await getBuffer(ppimg)
-				WhatsappAPI.sendMessage(from, buffer, image, {quoted: mek, caption: profile})
-				break
 
 			//══════════[ STICKER FEATURES ]══════════//
-
-			case 'ttp4':
-			case 'ttp2':
-			case 'ttp3':
-			case 'ttp':
 			case 'attp':
-
+			case 'attp2':
+			case 'ttp':
+			case 'ttp-gradient':
+			case 'attp-gradient':
+			case 'attp-gradient2':
 				if (!c) return reply(`Where is the text bro?\nExample :\n${prefix}attp DogeBot`)
-				atetepe12 = await getBuffer(`https://violetics.pw/api/canvas/attp?apikey=${viokey}&text=${encodeURIComponent(c)}`)
+				atetepe12 = await getBuffer(`https://violetics.pw/api/canvas/${command}?apikey=${viokey}&text=${encodeURIComponent(c)}`)
 				if (!atetepe12) return reply("There's an error.");
 				WhatsappAPI.sendMessage(from, atetepe12, sticker, {quoted: mek})
 				break
@@ -2250,9 +1383,9 @@ Can request, if interested please contact the developer`
 					myText2 = q.split('|')[1] ? q.split('|')[1] : '';
 					let enmediaokekek = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek;
 					const downMedia = await WhatsappAPI.downloadMediaMessage(enmediaokekek);
-					njay = await uploadImages(downMedia);
-					resultImage = await getBuffer(`https://api.memegen.link/images/custom/${myText1}/${myText2}.png?background=${njay}`);
-					WhatsappAPI.sendMessage(from, resultImage, image, {
+					imageBuffer = await uploadImages(downMedia);
+					resultImage = await getBuffer(`https://api.memegen.link/images/custom/${myText1}/${myText2}.png?background=${imageBuffer}`);
+					await WhatsappAPI.sendMessage(from, resultImage, image, {
 						caption: '.stikerin bang',
 						thumbnail: Buffer.alloc(0),
 						quoted: mek
@@ -2278,8 +1411,8 @@ Can request, if interested please contact the developer`
 					myText2 = args.join(' ');
 					var enmedialel = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
 					var mediia = await WhatsappAPI.downloadMediaMessage(enmedialel)
-					njay = await uploadImages(mediia);
-					resultImage = `https://api.memegen.link/images/custom/-/${myText2}.png?background=${njay}`;
+					imageBuffer = await uploadImages(mediia);
+					resultImage = `https://api.memegen.link/images/custom/-/${myText2}.png?background=${imageBuffer}`;
 					sendStickerFromUrl(from, `${resultImage}`)
 				} catch (e) {
 					reply(mess.eror)
@@ -2299,7 +1432,7 @@ Can request, if interested please contact the developer`
 				exif.create(packname, author, `takestick_${sender}`)
 				exec(`webpmux -set exif ./sticker/takestick_${sender}.exif ./sticker/${sender}.webp -o ./sticker/${sender}.webp`, async (error) => {
 					if (error) return reply(mess.error.api)
-					WhatsappAPI.sendMessage(from, fs.readFileSync(`./sticker/${sender}.webp`), sticker, {quoted: mek})
+					await WhatsappAPI.sendMessage(from, fs.readFileSync(`./sticker/${sender}.webp`), sticker, {quoted: mek})
 					fs.unlinkSync(media2)
 					fs.unlinkSync(`./sticker/takestick_${sender}.exif`)
 				})
@@ -2327,7 +1460,7 @@ Can request, if interested please contact the developer`
 							console.log('Finish')
 							exec(`webpmux -set exif ./sticker/stickwm_${sender}.exif ./sticker/${sender}.webp -o ./sticker/${sender}.webp`, async (error) => {
 								if (error) return reply(mess.error.api)
-								WhatsappAPI.sendMessage(from, fs.readFileSync(`./sticker/${sender}.webp`), sticker, {quoted: mek})
+								await WhatsappAPI.sendMessage(from, fs.readFileSync(`./sticker/${sender}.webp`), sticker, {quoted: mek})
 								fs.unlinkSync(media)
 								fs.unlinkSync(`./sticker/${sender}.webp`)
 								fs.unlinkSync(`./sticker/stickwm_${sender}.exif`)
@@ -2375,8 +1508,7 @@ Can request, if interested please contact the developer`
 				break
 			case 'semoji':
 				if (args === 0) return reply('Where is the emoji?')
-				aku4 = args.join(' ')
-				emoji.get(`${aku4}`).then(emoji => {
+				emoji.get(`${args.join(' ')}`).then(emoji => {
 					link = `${emoji.images[10].url}`
 					sendWebp(from, `${link}`).catch(() => reply('fail'))
 				})
@@ -2452,8 +1584,8 @@ Can request, if interested please contact the developer`
 					const imgbb = require('imgbb-uploader');
 					const enmediahe1 = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo;
 					media = await WhatsappAPI.downloadAndSaveMediaMessage(enmediahe1);
-					njay = await imgbb('520bd6f6209077d1777c2a4f20c509c2', media);
-					resultImage = await getBuffer(`https://api.memegen.link/images/custom/${myText1}/${myText2}.png?background=${njay.display_url}`);
+					imageBuffer = await imgbb('520bd6f6209077d1777c2a4f20c509c2', media);
+					resultImage = await getBuffer(`https://api.memegen.link/images/custom/${myText1}/${myText2}.png?background=${imageBuffer.display_url}`);
 					WhatsappAPI.sendMessage(from, resultImage, image, {quoted: mek})
 					fs.unlinkSync(media)
 				} catch (e) {
@@ -2465,10 +1597,10 @@ Can request, if interested please contact the developer`
 			//══════════[ FUN FEATURES ]══════════//
 			case 'rate':
 			case 'ship':
-				rate = body.slice(1)
+				let rate = body.slice(1)
 				const ra = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '100']
 				const te = ra[Math.floor(Math.random() * ra.length)]
-				WhatsappAPI.sendMessage(from, 'Question : *' + rate + '*\n\nAnswer : ' + te + '%', text, {quoted: mek})
+				await WhatsappAPI.sendMessage(from, 'Question : *' + rate + '*\n\nAnswer : ' + te + '%', text, {quoted: mek})
 				break
 			case 'can':
 				bisakah = body.slice(1)
@@ -2488,27 +1620,11 @@ Can request, if interested please contact the developer`
 				const kah = apa[Math.floor(Math.random() * apa.length)]
 				WhatsappAPI.sendMessage(from, 'Question : *' + apakah + '*\n\nAnswer : ' + kah, text, {quoted: mek})
 				break
-			case 'stupid':
-			case 'foolish':
-			case 'smart':
-			case 'ape':
-			case 'noob':
-			case 'great':
-			case 'horny':
-			case 'asshole':
-			case 'handsome':
-			case 'beautiful':
-			case 'cute':
-			case 'kind':
-			case 'ugly':
-			case 'pretty':
-			case 'chutiya':
-			case 'nibba':
-			case 'nibbi':
-			case 'bhosdiwala':
-			case 'randibaaz':
-			case 'topibaaz':
-			case 'nerd':
+			case 'stupid': case 'foolish': case 'smart': case 'ape': case 'noob':
+			case 'great': case 'horny': case 'asshole': case 'handsome':
+			case 'beautiful': case 'cute': case 'kind': case 'ugly': case 'pretty':
+			case 'chutiya': case 'nibba': case 'nibbi': case 'bhosdiwala':
+			case 'randibaaz': case 'topibaaz': case 'nerd':
 			case 'hot':
 				// case 'sexy':
 				if (!isGroup) return reply(mess.only.group)
@@ -2550,7 +1666,6 @@ Can request, if interested please contact the developer`
 				const tak = wa[Math.floor(Math.random() * wa.length)]
 				WhatsappAPI.sendMessage(from, 'Question : *' + watak + '*\n\nAnswer : ' + tak, text, {quoted: mek})
 				break
-
 			case "girl":
 				if (!isGroup) return reply(mess.only.group)
 				const proff = groupMembers
@@ -2573,7 +1688,6 @@ Can request, if interested please contact the developer`
 				break
 
 			//══════════[ OWNER FEATURES ]══════════//
-
 			case 'bc':
 
 				if (!isOwner && !mek.key.fromMe) return reply(mess.only.owner)
@@ -2606,7 +1720,7 @@ Can request, if interested please contact the developer`
 								locationMessage: {
 									degreesLatitude: '',
 									degreesLongitude: '',
-									jpegThumbnail: fakeimage,
+									jpegThumbnail: fakeImage,
 								}
 							}, MessageType.buttonsMessage)
 					}
@@ -2811,8 +1925,8 @@ Can request, if interested please contact the developer`
 					WhatsappAPI.groupLeave(id)
 				}
 				break
-			//══════════[ GROUP FEATURES ]══════════//
 
+			//══════════[ GROUP FEATURES ]══════════//
 			case 'creategroup':
 			case 'creategrup':
 				if (!isGroup) return reply(mess.only.group)
@@ -2946,14 +2060,14 @@ Can request, if interested please contact the developer`
 				if (!isGroupAdmins) return reply(mess.group)
 				if (!isBotGroupAdmins) return sticNotAdmin(from)
 				reply(`Successful opening group ${groupName}`)
-				WhatsappAPI.groupSettingChange(from, GroupSettingChange.messageSend, false)
+				await WhatsappAPI.groupSettingChange(from, GroupSettingChange.messageSend, false)
 				break
 			case 'closegc':
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins) return reply(mess.only.admin)
 				if (!isBotGroupAdmins) return sticNotAdmin(from)
 				reply(`Successfully closing the group ${groupName}`)
-				WhatsappAPI.groupSettingChange(from, GroupSettingChange.messageSend, true)
+				await WhatsappAPI.groupSettingChange(from, GroupSettingChange.messageSend, true)
 				break
 			case 'grouplink':
 			case 'gruplink':
@@ -2962,6 +2076,7 @@ Can request, if interested please contact the developer`
 			case 'linkgrup':
 			case 'linkgc':
 				if (!isGroup) return reply(mess.only.group)
+				if (!isGroupAdmins) return reply(mess.only.admin)
 				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
 				linkgc = await WhatsappAPI.groupInviteCode(from)
 				yeh = `https://chat.whatsapp.com/${linkgc}\n\n*${groupName}* group link`
@@ -3038,7 +2153,7 @@ Can request, if interested please contact the developer`
 				if (args[0].startsWith('08')) return reply('Use country code bro')
 				try {
 					num = `${args[0].replace(/ /g, '')}@s.whatsapp.net`
-					WhatsappAPI.groupAdd(from, [num])
+					await WhatsappAPI.groupAdd(from, [num])
 				} catch (e) {
 					console.log('Error :', e)
 					reply('Failed to add target, maybe because in private')
@@ -3132,7 +2247,6 @@ Can request, if interested please contact the developer`
 			case 'grupinfo':
 			case 'groupinfo':
 			case 'gcinfo':
-
 				if (!isGroup) return reply(mess.only.group)
 				try {
 					var pic = await WhatsappAPI.getProfilePicture(from)
@@ -3154,7 +2268,6 @@ Can request, if interested please contact the developer`
 			case 'resetgrouplink':
 			case 'resetgclink':
 			case 'resetgruplink':
-
 				if (!isGroup) return reply(mess.only.group)
 				if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.only.admin)
 				if (!isBotGroupAdmins) return reply(mess.only.BotAdmin)
@@ -3185,9 +2298,9 @@ Can request, if interested please contact the developer`
 				members_id = []
 				myText = (args.length > 1) ? body.slice(8).trim() : ''
 				myText += '\n\n'
-				for (let mem of groupMembers) {
-					myText += `🐶 @${mem.jid.split('@')[0]}\n`
-					members_id.push(mem.jid)
+				for (let member of groupMembers) {
+					myText += `🐶 @${member.jid.split('@')[0]}\n`
+					members_id.push(member.jid)
 				}
 				mentions(myText, members_id, true)
 				break
@@ -3355,30 +2468,6 @@ Can request, if interested please contact the developer`
 				break
 			case "hi":
 				reply("*Hi, how's your day goin!*")
-			case "bot":
-				myText =
-					`_Please Select Button Below_
-_Or Type ${prefix}command_`
-				WhatsappAPI.sendMessage(from, {
-					contentText: `${myText}`,
-					footerText: `${menu}`,
-					buttons: [{
-						buttonId: `${prefix}command`,
-						buttonText: {displayText: 'MENU 🗃️'},
-						type: 1
-					}, {
-						buttonId: `${prefix}sc`,
-						buttonText: {displayText: 'SCRIPT 📝'},
-						type: 1
-					}, {buttonId: `${prefix}developer`, buttonText: {displayText: 'DEVELOPER 👨🏼‍💻'}, type: 1}],
-					headerType: 'LOCATION',
-					locationMessage: {
-						degreesLatitude: '',
-						degreesLongitude: '',
-						jpegThumbnail: fakeimage,
-						contextInfo: {mentionedJid: [sender2, pemilik]}
-					}
-				}, 'buttonsMessage')
 
 			//━━━━━━━━━━━━━━━[ THE END OF ALL FEATURES ]━━━━━━━━━━━━━━━━━//
 
@@ -3429,7 +2518,3 @@ _Or Type ${prefix}command_`
 		// console.log(e)
 	}
 }
-
-
-
-
